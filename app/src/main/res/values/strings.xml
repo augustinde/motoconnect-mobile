@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">MotoConnect</string>
     <string name="web_client_id">446243219012-eltngk0brqagm7mom5eh895sic1ieekl.apps.googleusercontent.com</string>
+    <string name="homepage">homepage</string>
+    <string name="map">map</string>
+    <string name="moto">moto</string>
+    <string name="profile">profile</string>
+    <string name="signin">signin</string>
 </resources>

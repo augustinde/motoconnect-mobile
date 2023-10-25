@@ -50,7 +50,10 @@ android {
 }
 
 dependencies {
-    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.compose.material:material:1.3.1")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.4.0")
+    implementation("androidx.navigation:navigation-compose:2.4.0")
+    implementation("androidx.navigation:navigation-common-ktx:2.4.0")
     implementation("com.firebaseui:firebase-ui-auth:7.2.0")
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("androidx.core:core-ktx:1.9.0")
