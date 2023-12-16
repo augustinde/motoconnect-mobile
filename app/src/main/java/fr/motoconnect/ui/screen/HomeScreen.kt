@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -54,7 +53,7 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import fr.motoconnect.MainActivity
 import fr.motoconnect.R
-import fr.motoconnect.ui.navigation.MotoConnectNavigation
+import fr.motoconnect.ui.navigation.MotoConnectNavigationRoutes
 import fr.motoconnect.viewmodel.MapViewModel
 
 @SuppressLint("MissingPermission")
@@ -84,7 +83,13 @@ fun HomeScreen(
     var currentDevicePosition by remember {
         mutableStateOf(LatLng(0.0, 0.0))
     }
-    var distanceBetweenDeviceAndMoto by remember { mutableStateOf(context.applicationContext.getText(R.string.unknown).toString()) }
+    var distanceBetweenDeviceAndMoto by remember {
+        mutableStateOf(
+            context.applicationContext.getText(
+                R.string.unknown
+            ).toString()
+        )
+    }
 
     val locationResult = fusedLocationProviderClient.lastLocation
     locationResult.addOnCompleteListener(context as MainActivity) { task ->
@@ -93,7 +98,7 @@ fun HomeScreen(
             currentDevicePosition =
                 LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
         } else {
-            Log.e(TAG, "Exception: ${task.exception}" )
+            Log.e(TAG, "Exception: ${task.exception}")
         }
     }
 
@@ -127,22 +132,22 @@ fun HomeScreen(
     ) {
 
         if (currentMotoPosition != null) (
-            Marker(
-                state = MarkerState(
-                    position = currentMotoPosition
-                ),
-                icon = bitmapDescriptorFromVector(context, R.drawable.moto_position),
-            )
-        )
+                Marker(
+                    state = MarkerState(
+                        position = currentMotoPosition
+                    ),
+                    icon = bitmapDescriptorFromVector(context, R.drawable.moto_position),
+                )
+                )
 
         if (currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0) (
-            Marker(
-                state = MarkerState(
-                    position = currentDevicePosition
-                ),
-                icon = bitmapDescriptorFromVector(context, R.drawable.device_position),
-            )
-        )
+                Marker(
+                    state = MarkerState(
+                        position = currentDevicePosition
+                    ),
+                    icon = bitmapDescriptorFromVector(context, R.drawable.device_position),
+                )
+                )
 
     }
     if (mapUiState.value.currentMoto != null) {
@@ -162,9 +167,10 @@ fun MapInfoMoto(
     currentMoto: String,
     caseState: Boolean
 ) {
-    val caseStateString = if (caseState) stringResource(id = R.string.moto_in_motion) else stringResource(
-        id = R.string.moto_stationary
-    )
+    val caseStateString =
+        if (caseState) stringResource(id = R.string.moto_in_motion) else stringResource(
+            id = R.string.moto_stationary
+        )
     val color = if (caseState) Color(0xFF52CA5E) else Color(0xFFEC6D50)
 
     Box(
@@ -205,7 +211,7 @@ fun MapInfoMoto(
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     modifier = Modifier
                         .clickable {
-                            navController.navigate(MotoConnectNavigation.Moto.name)
+                            navController.navigate(MotoConnectNavigationRoutes.Moto.name)
                         }
                 )
                 Text(text = stringResource(R.string.distance, distanceBetweenDeviceAndMoto))
@@ -215,7 +221,7 @@ fun MapInfoMoto(
 }
 
 
-private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
+private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor {
     val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
     vectorDrawable!!.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
     val bitmap = Bitmap.createBitmap(

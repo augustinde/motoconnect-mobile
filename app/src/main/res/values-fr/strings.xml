@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="nav_homepage">Page d\'accueil</string>
-    <string name="nav_map">Trajets</string>
+    <string name="nav_journeys">Trajets</string>
     <string name="nav_moto">Moto</string>
     <string name="nav_profile">Profil</string>
     <string name="nav_signin">Connexion</string>

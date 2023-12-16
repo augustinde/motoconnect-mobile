@@ -22,14 +22,13 @@ import fr.motoconnect.data.model.UserData
 @Composable
 fun ProfileScreen(
     userData: UserData?,
-    onSignOut: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if(userData?.username != null) {
+        if (userData?.username != null) {
             Text(
                 text = userData.username,
                 textAlign = TextAlign.Center,
@@ -39,7 +38,9 @@ fun ProfileScreen(
             Text(text = userData.userId)
             Spacer(modifier = Modifier.height(16.dp))
         }
-        Button(onClick = onSignOut) {
+        Button(onClick = {
+            //googleAuthUiClient.signOut()
+        }) {
             Text(text = stringResource(id = R.string.sign_out))
         }
     }

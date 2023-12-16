@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">MotoConnect</string>
     <string name="web_client_id" translatable="false">446243219012-eltngk0brqagm7mom5eh895sic1ieekl.apps.googleusercontent.com</string>
     <string name="nav_homepage">homepage</string>
-    <string name="nav_map">Journeys</string>
+    <string name="nav_journeys">Journeys</string>
     <string name="nav_moto">Motorcycle</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_signin">SignIn</string>
