@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="nav_homepage">Page d\'accueil</string>
-    <string name="nav_homepage">Page d\'accueil</string>
     <string name="nav_map">Trajets</string>
     <string name="nav_moto">Moto</string>
     <string name="nav_profile">Profil</string>
@@ -10,4 +9,7 @@
     <string name="sign_out">Déconnexion</string>
     <string name="sign_in_success">Connexion en cours</string>
     <string name="sign_out_success">Déconnexion en cours</string>
+    <string name="moto_in_motion">En mouvement</string>
+    <string name="moto_stationary">A l\'arrêt</string>
+    <string name="unknown">Inconnue</string>
 </resources>

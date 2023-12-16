@@ -1,6 +1,7 @@
 package fr.motoconnect
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -19,8 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,15 +51,48 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
+    val TAG = "MainActivity"
+
     private val googleAuthUiClient by lazy {
         GoogleAuthUiClient(
             context = applicationContext,
             oneTapClient = Identity.getSignInClient(applicationContext)
         )
     }
-
+    //TODO: We need to refactor the permission request process to be more optimized
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val locationPermissionRequest = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            when {
+                permissions.getOrDefault(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    false
+                ) -> {
+                    Log.i(TAG, "Location permission ACCESS_FINE_LOCATION granted")
+                }
+
+                permissions.getOrDefault(
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    false
+                ) -> {
+                    Log.i(TAG, "Location permission ACCESS_COARSE_LOCATION granted")
+                }
+
+                else -> {
+                    Log.i(TAG, "Location permission denied")
+                }
+            }
+        }
+
+        locationPermissionRequest.launch(
+            arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        )
+
         setContent {
             MotoConnectTheme {
                 val navController = rememberNavController()
@@ -66,7 +101,7 @@ class MainActivity : ComponentActivity() {
                 val viewModel = viewModel<AuthViewModel>()
                 val state by viewModel.state.collectAsState()
 
-                if(googleAuthUiClient.getSignedInUser() != null) {
+                if (googleAuthUiClient.getSignedInUser() != null) {
                     MainScreen(
                         currentDestination = currentDestination,
                         navController = navController,
@@ -84,9 +119,9 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     )
-                }else{
+                } else {
                     LaunchedEffect(key1 = Unit) {
-                        if(googleAuthUiClient.getSignedInUser() != null) {
+                        if (googleAuthUiClient.getSignedInUser() != null) {
                             navController.navigate(MotoConnectNavigation.Homepage.name)
                         }
                     }
@@ -94,7 +129,7 @@ class MainActivity : ComponentActivity() {
                     val launcher = rememberLauncherForActivityResult(
                         contract = ActivityResultContracts.StartIntentSenderForResult(),
                         onResult = { result ->
-                            if(result.resultCode == RESULT_OK) {
+                            if (result.resultCode == RESULT_OK) {
                                 lifecycleScope.launch {
                                     val signInResult = googleAuthUiClient.signInWithIntent(
                                         intent = result.data ?: return@launch
@@ -106,7 +141,7 @@ class MainActivity : ComponentActivity() {
                     )
 
                     LaunchedEffect(key1 = state.isSignInSuccessful) {
-                        if(state.isSignInSuccessful) {
+                        if (state.isSignInSuccessful) {
                             Toast.makeText(
                                 applicationContext,
                                 applicationContext.getText(R.string.sign_in_success),
@@ -137,7 +172,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+//TODO: We need to refactor navigation
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
@@ -145,7 +180,7 @@ fun MainScreen(
     navController: NavHostController,
     googleAuthUiClient: GoogleAuthUiClient,
     onSignout: () -> Unit
-){
+) {
     Scaffold(
         bottomBar = {
             BottomNavigation(
@@ -156,8 +191,8 @@ fun MainScreen(
                         selected = currentDestination?.hierarchy?.any { it.route == item.name } == true,
                         selectedContentColor = MaterialTheme.colorScheme.secondary,
                         onClick = {
-                            navController.navigate(item.name){
-                                popUpTo(navController.graph.findStartDestination().id){
+                            navController.navigate(item.name) {
+                                popUpTo(navController.graph.findStartDestination().id) {
                                     saveState = true
                                 }
                                 launchSingleTop = true
@@ -178,8 +213,7 @@ fun MainScreen(
                 }
             }
         }
-    ) {
-        innerPadding ->
+    ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = MotoConnectNavigation.Homepage.name,
@@ -187,7 +221,7 @@ fun MainScreen(
                 .padding(innerPadding)
         ) {
             composable(MotoConnectNavigation.Homepage.name) {
-                HomeScreen()
+                HomeScreen(navController = navController)
             }
             composable(MotoConnectNavigation.Map.name) {
                 MapScreen()

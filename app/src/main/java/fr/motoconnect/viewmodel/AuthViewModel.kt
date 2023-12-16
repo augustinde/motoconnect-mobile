@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class AuthViewModel: ViewModel() {
-
+    //TODO: We need to refactor the authentication process to include google and simple email/password methods
     private val _state = MutableStateFlow(SignInState())
     val state = _state.asStateFlow()
 

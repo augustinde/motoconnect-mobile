@@ -10,4 +10,8 @@
     <string name="sign_out">Sign Out</string>
     <string name="sign_in_success">Sign in success</string>
     <string name="sign_out_success">Sign out success</string>
+    <string name="moto_in_motion">In motion</string>
+    <string name="moto_stationary">Stationary</string>
+    <string name="distance" translatable="false">Distance : %1$s</string>
+    <string name="unknown">Unknown</string>
 </resources>
