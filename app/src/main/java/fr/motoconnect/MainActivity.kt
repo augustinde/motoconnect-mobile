@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -75,7 +76,7 @@ class MainActivity : ComponentActivity() {
                                 googleAuthUiClient.signOut()
                                 Toast.makeText(
                                     applicationContext,
-                                    "Signed out",
+                                    applicationContext.getText(R.string.sign_out_success),
                                     Toast.LENGTH_LONG
                                 ).show()
 
@@ -108,7 +109,7 @@ class MainActivity : ComponentActivity() {
                         if(state.isSignInSuccessful) {
                             Toast.makeText(
                                 applicationContext,
-                                "Sign in successful",
+                                applicationContext.getText(R.string.sign_in_success),
                                 Toast.LENGTH_LONG
                             ).show()
 

@@ -1,9 +1,13 @@
 <resources>
-    <string name="app_name">MotoConnect</string>
-    <string name="web_client_id">446243219012-eltngk0brqagm7mom5eh895sic1ieekl.apps.googleusercontent.com</string>
-    <string name="homepage">homepage</string>
-    <string name="map">map</string>
-    <string name="moto">moto</string>
-    <string name="profile">profile</string>
-    <string name="signin">signin</string>
+    <string name="app_name" translatable="false">MotoConnect</string>
+    <string name="web_client_id" translatable="false">446243219012-eltngk0brqagm7mom5eh895sic1ieekl.apps.googleusercontent.com</string>
+    <string name="nav_homepage">homepage</string>
+    <string name="nav_map">Journeys</string>
+    <string name="nav_moto">Motorcycle</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_signin">SignIn</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="sign_in_success">Sign in success</string>
+    <string name="sign_out_success">Sign out success</string>
 </resources>
