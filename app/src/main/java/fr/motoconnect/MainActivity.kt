@@ -15,32 +15,28 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.android.gms.auth.api.identity.Identity
-import fr.motoconnect.data.service.GoogleAuthUiClient
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import fr.motoconnect.ui.navigation.AuthenticationNavigation
 import fr.motoconnect.ui.navigation.MotoConnectNavigation
 import fr.motoconnect.ui.navigation.MotoConnectNavigationRoutes
 import fr.motoconnect.ui.theme.MotoConnectTheme
+import fr.motoconnect.viewmodel.AuthenticationViewModel
 
 class MainActivity : ComponentActivity() {
 
     val TAG = "MainActivity"
-
-    private val googleAuthUiClient by lazy {
-        GoogleAuthUiClient(
-            context = applicationContext,
-            oneTapClient = Identity.getSignInClient(applicationContext)
-        )
-    }
 
     //TODO: We need to refactor the permission request process to be more optimized
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,15 +72,16 @@ class MainActivity : ComponentActivity() {
             )
         )
 
+        val auth = FirebaseAuth.getInstance()
+        val db = Firebase.firestore
+
+        val authenticationViewModel = AuthenticationViewModel(auth, db, applicationContext)
+
         setContent {
             MotoConnectTheme {
-                val navController = rememberNavController()
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-
                 MainScreen(
-                    currentDestination = currentDestination,
-                    googleAuthUiClient = googleAuthUiClient,
+                    auth = auth,
+                    authenticationViewModel = authenticationViewModel
                 )
             }
         }
@@ -94,12 +91,17 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    currentDestination: NavDestination?,
-    googleAuthUiClient: GoogleAuthUiClient,
+    auth: FirebaseAuth,
+    authenticationViewModel: AuthenticationViewModel
 ) {
     val navController = rememberNavController()
-    if (googleAuthUiClient.getSignedInUser() != null) { //connected
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    val authUIState by authenticationViewModel.authUiState.collectAsState()
 
+    Log.d("TAG", "MainScreen: " + auth.currentUser?.email + " " + authUIState.isLogged)
+
+    if (auth.currentUser != null && authUIState.isLogged) {
         Scaffold(
             bottomBar = {
                 BottomNavigation(
@@ -136,11 +138,12 @@ fun MainScreen(
             Box(modifier = Modifier.padding(innerPadding)) {
                 MotoConnectNavigation(
                     navController = navController,
-                    googleAuthUiClient = googleAuthUiClient,
+                    auth = auth,
+                    authenticationViewModel = authenticationViewModel
                 )
             }
         }
     } else {
-        //Not connected
+        AuthenticationNavigation(authenticationViewModel = authenticationViewModel)
     }
 }

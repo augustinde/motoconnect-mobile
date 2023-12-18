@@ -15,31 +15,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.FirebaseAuth
 import fr.motoconnect.R
-import fr.motoconnect.data.model.UserData
+import fr.motoconnect.viewmodel.AuthenticationViewModel
 
 
 @Composable
 fun ProfileScreen(
-    userData: UserData?,
+    auth: FirebaseAuth,
+    authenticationViewModel: AuthenticationViewModel
 ) {
+    val currentUser = auth.currentUser
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (userData?.username != null) {
+        if (currentUser?.email != null) {
             Text(
-                text = userData.username,
+                text = currentUser.email!!,
                 textAlign = TextAlign.Center,
                 fontSize = 36.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            Text(text = userData.userId)
+            Text(text = currentUser.uid)
             Spacer(modifier = Modifier.height(16.dp))
         }
         Button(onClick = {
-            //googleAuthUiClient.signOut()
+            authenticationViewModel.signOut()
         }) {
             Text(text = stringResource(id = R.string.sign_out))
         }

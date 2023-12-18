@@ -6,24 +6,26 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 import fr.motoconnect.R
-import fr.motoconnect.data.service.GoogleAuthUiClient
 import fr.motoconnect.ui.screen.HomeScreen
 import fr.motoconnect.ui.screen.JourneysScreen
 import fr.motoconnect.ui.screen.MotoScreen
 import fr.motoconnect.ui.screen.ProfileScreen
+import fr.motoconnect.viewmodel.AuthenticationViewModel
 
 enum class MotoConnectNavigationRoutes(@DrawableRes val icon: Int) {
     Homepage(icon = R.drawable.homepage),
     Journeys(icon = R.drawable.map),
-    Moto(R.drawable.moto),
+    Moto(icon = R.drawable.moto),
     Profile(icon = R.drawable.profile)
 }
 
 @Composable
 fun MotoConnectNavigation(
     navController: NavHostController = rememberNavController(),
-    googleAuthUiClient: GoogleAuthUiClient,
+    auth: FirebaseAuth,
+    authenticationViewModel: AuthenticationViewModel
 ) {
 
     NavHost(
@@ -43,7 +45,9 @@ fun MotoConnectNavigation(
         }
 
         composable(MotoConnectNavigationRoutes.Profile.name) {
-            ProfileScreen(userData = googleAuthUiClient.getSignedInUser())
+            ProfileScreen(
+                auth = auth,
+                authenticationViewModel = authenticationViewModel)
         }
     }
 

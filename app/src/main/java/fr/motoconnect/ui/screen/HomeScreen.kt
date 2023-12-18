@@ -132,22 +132,22 @@ fun HomeScreen(
     ) {
 
         if (currentMotoPosition != null) (
-                Marker(
-                    state = MarkerState(
-                        position = currentMotoPosition
-                    ),
-                    icon = bitmapDescriptorFromVector(context, R.drawable.moto_position),
-                )
-                )
+            Marker(
+                state = MarkerState(
+                    position = currentMotoPosition
+                ),
+                icon = bitmapDescriptorFromVector(context, R.drawable.moto_position),
+            )
+        )
 
         if (currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0) (
-                Marker(
-                    state = MarkerState(
-                        position = currentDevicePosition
-                    ),
-                    icon = bitmapDescriptorFromVector(context, R.drawable.device_position),
-                )
-                )
+            Marker(
+                state = MarkerState(
+                    position = currentDevicePosition
+                ),
+                icon = bitmapDescriptorFromVector(context, R.drawable.device_position),
+            )
+        )
 
     }
     if (mapUiState.value.currentMoto != null) {

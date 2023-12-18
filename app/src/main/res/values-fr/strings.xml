@@ -12,4 +12,16 @@
     <string name="moto_in_motion">En mouvement</string>
     <string name="moto_stationary">A l\'arrêt</string>
     <string name="unknown">Inconnue</string>
+    <string name="reset_password_button">Réinitialiser le mot de passe</string>
+    <string name="reset_password_title">Recevoir un nouveau mot de passe</string>
+    <string name="back_to_sign_in">Retour à la connexion</string>
+    <string name="already_have_an_account">Vous avez déjà un compte ? Connectez vous.</string>
+    <string name="sign_up_button">S\'inscrire</string>
+    <string name="password_textfield_label">Mot de passe</string>
+    <string name="sign_up_title">Créé un compte sur MotoConnect</string>
+    <string name="no_account">Vous n\'avez pas de compte ? Créez-en un.</string>
+    <string name="forgot_password_link">Mot de passe oublié ?</string>
+    <string name="sign_in_title">Se connecter à MotoConnect</string>
+    <string name="mandatory_fields_not_filled">Veuillez remplir tous les champs</string>
+    <string name="reset_password_email_sent">Un mail de réinitialisation vous a été envoyé</string>
 </resources>

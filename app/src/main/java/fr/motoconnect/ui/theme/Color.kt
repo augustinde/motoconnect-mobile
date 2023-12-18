@@ -12,3 +12,5 @@ val Tertiary2 = Color(0xFFFFF7EC)
 
 val Red = Color(0xFFEC6D50)
 val Green = Color(0xFF52CA5E)
+
+val Test = Color(0xFFEBA99A)

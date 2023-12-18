@@ -14,4 +14,17 @@
     <string name="moto_stationary">Stationary</string>
     <string name="distance" translatable="false">Distance : %1$s</string>
     <string name="unknown">Unknown</string>
+    <string name="reset_password_button">Reset password</string>
+    <string name="reset_password_title">Receive new password</string>
+    <string name="back_to_sign_in">Back to sign in</string>
+    <string name="email_textfield_label" translatable="false">E-mail</string>
+    <string name="already_have_an_account">Already have an account? Sign in.</string>
+    <string name="sign_up_button">Sign Up</string>
+    <string name="password_textfield_label">Password</string>
+    <string name="sign_up_title">Sign Up to MotoConnect</string>
+    <string name="no_account">Don\'t have an account? Create one.</string>
+    <string name="forgot_password_link">Forgot password ?</string>
+    <string name="sign_in_title">Sign In to MotoConnect</string>
+    <string name="mandatory_fields_not_filled">Please fill in all fields</string>
+    <string name="reset_password_email_sent">A reset email has been sent to you</string>
 </resources>
