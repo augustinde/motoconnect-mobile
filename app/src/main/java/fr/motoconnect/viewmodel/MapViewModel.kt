@@ -2,21 +2,32 @@ package fr.motoconnect.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import fr.motoconnect.architecture.MotoConnectApplication
+import fr.motoconnect.data.model.WeatherObject
+import fr.motoconnect.data.repository.WeatherRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.lang.Math.atan2
 import java.lang.Math.cos
 import java.lang.Math.round
 import java.lang.Math.sin
 import java.lang.Math.sqrt
 
-class MapViewModel : ViewModel() {
+class MapViewModel(
+    private val weatherRepository: WeatherRepository
+) : ViewModel() {
 
     private val TAG = "MapViewModel"
 
@@ -72,10 +83,31 @@ class MapViewModel : ViewModel() {
         return round(R * c)
     }
 
+     fun getWeather() {
+        viewModelScope.launch {
+            val weather = weatherRepository.getCurrentWeather(mapUiState.value.currentPosition?.latitude.toString(), mapUiState.value.currentPosition?.longitude.toString())
+            _mapUiState.value = _mapUiState.value.copy(weather = WeatherObject(
+                temp = weather.current.tempC,
+                condition = weather.current.condition.text,
+                icon = weather.current.condition.icon
+            ))
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as MotoConnectApplication)
+                val weatherRepository = application.container.weatherRepository
+                MapViewModel(weatherRepository = weatherRepository)
+            }
+        }
+    }
 }
 
 data class MapUIState(
     val currentPosition: GeoPoint? = null,
     val currentMoto: String? = null,
-    val caseState: Boolean = false
+    val caseState: Boolean = false,
+    val weather: WeatherObject? = null
 )

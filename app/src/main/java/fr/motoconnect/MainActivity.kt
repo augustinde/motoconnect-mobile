@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -33,6 +34,7 @@ import fr.motoconnect.ui.navigation.MotoConnectNavigation
 import fr.motoconnect.ui.navigation.MotoConnectNavigationRoutes
 import fr.motoconnect.ui.theme.MotoConnectTheme
 import fr.motoconnect.viewmodel.AuthenticationViewModel
+import fr.motoconnect.viewmodel.MapViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -95,6 +97,8 @@ fun MainScreen(
     authenticationViewModel: AuthenticationViewModel
 ) {
     val navController = rememberNavController()
+    val mapViewModel: MapViewModel = viewModel(factory = MapViewModel.Factory)
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val authUIState by authenticationViewModel.authUiState.collectAsState()
@@ -139,7 +143,8 @@ fun MainScreen(
                 MotoConnectNavigation(
                     navController = navController,
                     auth = auth,
-                    authenticationViewModel = authenticationViewModel
+                    authenticationViewModel = authenticationViewModel,
+                    mapViewModel = mapViewModel
                 )
             }
         }

@@ -31,8 +31,11 @@ jobs:
       run: cat /home/runner/work/motoconnect-mobile/motoconnect-mobile/app/local.properties | base64
     - name: Putting data local.properties
       env:
-        DATA: ${{ secrets.MAPS_API_KEY }}
-      run: echo MAPS_API_KEY="$MAPS_API_KEY" > ./local.properties
+        MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+        WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
+      run: |
+        echo "MAPS_API_KEY=$MAPS_API_KEY" > ./local.properties
+        echo "WEATHER_API_KEY=$WEATHER_API_KEY" >> ./local.properties
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew

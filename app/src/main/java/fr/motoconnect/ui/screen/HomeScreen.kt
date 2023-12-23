@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,8 +39,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -59,13 +61,13 @@ import fr.motoconnect.viewmodel.MapViewModel
 @SuppressLint("MissingPermission")
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
+    mapViewModel: MapViewModel,
 ) {
 
     val TAG = "HomeScreen"
     val context = LocalContext.current
 
-    val mapViewModel: MapViewModel = viewModel()
     val mapUiState = mapViewModel.mapUiState.collectAsState()
 
     val currentMotoPosition = mapUiState.value.currentPosition?.let {
@@ -91,23 +93,27 @@ fun HomeScreen(
         )
     }
 
+    //Get device position and get weather
     val locationResult = fusedLocationProviderClient.lastLocation
     locationResult.addOnCompleteListener(context as MainActivity) { task ->
         if (task.isSuccessful) {
             lastKnownLocation = task.result
             currentDevicePosition =
                 LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+            mapViewModel.getWeather()
         } else {
             Log.e(TAG, "Exception: ${task.exception}")
         }
     }
 
+    //Set camera position to moto position
     LaunchedEffect(currentMotoPosition) {
         if (currentMotoPosition != null) {
             cameraPositionState.position = CameraPosition.fromLatLngZoom(currentMotoPosition, 16f)
         }
     }
 
+    //Calculate distance between device and moto
     LaunchedEffect(currentDevicePosition) {
         if (currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0 && currentMotoPosition != null) {
             distanceBetweenDeviceAndMoto = mapViewModel.calculateDistanceBetweenTwoPoints(
@@ -132,24 +138,32 @@ fun HomeScreen(
     ) {
 
         if (currentMotoPosition != null) (
-            Marker(
-                state = MarkerState(
-                    position = currentMotoPosition
-                ),
-                icon = bitmapDescriptorFromVector(context, R.drawable.moto_position),
-            )
-        )
+                Marker(
+                    state = MarkerState(
+                        position = currentMotoPosition
+                    ),
+                    icon = bitmapDescriptorFromVector(context, R.drawable.moto_position),
+                )
+                )
 
         if (currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0) (
-            Marker(
-                state = MarkerState(
-                    position = currentDevicePosition
-                ),
-                icon = bitmapDescriptorFromVector(context, R.drawable.device_position),
-            )
-        )
+                Marker(
+                    state = MarkerState(
+                        position = currentDevicePosition
+                    ),
+                    icon = bitmapDescriptorFromVector(context, R.drawable.device_position),
+                )
+                )
 
     }
+
+    if (mapUiState.value.weather != null) {
+        WeatherInfo(
+            temp = mapUiState.value.weather!!.temp.toString(),
+            icon = "http:" + mapUiState.value.weather!!.icon
+        )
+    }
+
     if (mapUiState.value.currentMoto != null) {
         MapInfoMoto(
             navController = navController,
@@ -157,6 +171,43 @@ fun HomeScreen(
             currentMoto = mapUiState.value.currentMoto!!,
             caseState = mapUiState.value.caseState
         )
+    }
+}
+
+@Composable
+fun WeatherInfo(
+    temp: String,
+    icon: String,
+) {
+    val painter = rememberAsyncImagePainter(
+        ImageRequest
+            .Builder(LocalContext.current)
+            .data(data = icon)
+            .build()
+    )
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .height(40.dp)
+                .clip(RoundedCornerShape(20))
+                .background(MaterialTheme.colorScheme.tertiary)
+                .padding(8.dp),
+        ) {
+            Image(
+                modifier = Modifier
+                    .width(20.dp)
+                    .height(20.dp),
+                painter = painter,
+                contentDescription = "",
+            )
+            Text(text = "$temp°C")
+        }
     }
 }
 

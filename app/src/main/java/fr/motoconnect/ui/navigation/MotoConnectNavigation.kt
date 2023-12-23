@@ -13,6 +13,7 @@ import fr.motoconnect.ui.screen.JourneysScreen
 import fr.motoconnect.ui.screen.MotoScreen
 import fr.motoconnect.ui.screen.ProfileScreen
 import fr.motoconnect.viewmodel.AuthenticationViewModel
+import fr.motoconnect.viewmodel.MapViewModel
 
 enum class MotoConnectNavigationRoutes(@DrawableRes val icon: Int) {
     Homepage(icon = R.drawable.homepage),
@@ -25,7 +26,8 @@ enum class MotoConnectNavigationRoutes(@DrawableRes val icon: Int) {
 fun MotoConnectNavigation(
     navController: NavHostController = rememberNavController(),
     auth: FirebaseAuth,
-    authenticationViewModel: AuthenticationViewModel
+    authenticationViewModel: AuthenticationViewModel,
+    mapViewModel: MapViewModel
 ) {
 
     NavHost(
@@ -33,7 +35,7 @@ fun MotoConnectNavigation(
         startDestination = MotoConnectNavigationRoutes.Homepage.name,
     ) {
         composable(MotoConnectNavigationRoutes.Homepage.name) {
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController, mapViewModel = mapViewModel)
         }
 
         composable(MotoConnectNavigationRoutes.Journeys.name) {
