@@ -165,7 +165,6 @@ fun HomeScreen(
 
     }
 
-    Log.d(TAG, "HomeScreen: " + mapUiState.value.weather + "°C")
     if (mapUiState.value.weather != null) {
         WeatherInfo(
             temp = mapUiState.value.weather!!.temp.toString(),
