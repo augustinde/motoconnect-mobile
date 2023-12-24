@@ -1,5 +1,6 @@
 package fr.motoconnect.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -23,6 +24,7 @@ class MotoViewModel: ViewModel() {
 
     private fun getCurrentMoto(){
         try {
+            Log.d("TAG", "user : ${auth.currentUser?.uid.toString()}")
             db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .collection("motos")

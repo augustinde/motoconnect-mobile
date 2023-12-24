@@ -70,21 +70,25 @@ fun HomeScreen(
 
     val mapUiState = mapViewModel.mapUiState.collectAsState()
 
-    val currentMotoPosition = mapUiState.value.currentPosition?.let {
+    val currentMotoPosition = mapUiState.value.currentMotoPosition?.let {
         LatLng(it.latitude, it.longitude)
     }
+
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(48.866667, 2.333333), 16f)
     }
 
     val fusedLocationProviderClient =
         remember { LocationServices.getFusedLocationProviderClient(context) }
+
     var lastKnownLocation by remember {
         mutableStateOf<Location?>(null)
     }
+
     var currentDevicePosition by remember {
         mutableStateOf(LatLng(0.0, 0.0))
     }
+
     var distanceBetweenDeviceAndMoto by remember {
         mutableStateOf(
             context.applicationContext.getText(
@@ -101,13 +105,14 @@ fun HomeScreen(
             currentDevicePosition =
                 LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
             if(currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0){
-                Log.d(TAG, "HomeScreen: $currentDevicePosition")
-                mapViewModel.getWeather()
+                mapViewModel.getWeather(currentDevicePosition)
+                cameraPositionState.position = CameraPosition.fromLatLngZoom(currentDevicePosition, 16f)
             }
         } else {
             Log.e(TAG, "Exception: ${task.exception}")
         }
     }
+
 
     //Set camera position to moto position
     LaunchedEffect(currentMotoPosition) {
@@ -160,6 +165,7 @@ fun HomeScreen(
 
     }
 
+    Log.d(TAG, "HomeScreen: " + mapUiState.value.weather + "°C")
     if (mapUiState.value.weather != null) {
         WeatherInfo(
             temp = mapUiState.value.weather!!.temp.toString(),

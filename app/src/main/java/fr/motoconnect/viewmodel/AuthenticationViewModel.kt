@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import fr.motoconnect.R
+import fr.motoconnect.data.model.UserObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,8 +20,6 @@ class AuthenticationViewModel(
     private val db: FirebaseFirestore,
     private val context: Context
 ) : ViewModel() {
-
-    val TAG = "AuthenticationViewModel"
 
     private val _authUiState = MutableStateFlow(AuthUIState())
     val authUiState: StateFlow<AuthUIState> = _authUiState.asStateFlow()
@@ -79,6 +78,9 @@ class AuthenticationViewModel(
                     withContext(Dispatchers.Main) {
                         if (task.isSuccessful) {
                             _authUiState.value = AuthUIState(isLogged = true, errorMessage = null)
+                            db.collection("users")
+                                .document(auth.currentUser!!.uid)
+                                .set(UserObject())
                         }
                     }
                 }

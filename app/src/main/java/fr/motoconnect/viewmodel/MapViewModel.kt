@@ -54,7 +54,7 @@ class MapViewModel(
                 Log.d(TAG, "Current data: ${snapshot.data}")
                 _mapUiState.value =
                     MapUIState(
-                        currentPosition = snapshot.data?.get("currentPosition") as GeoPoint?,
+                        currentMotoPosition = snapshot.data?.get("currentMotoPosition") as GeoPoint?,
                         currentMoto = snapshot.data?.get("currentMoto") as String?,
                         caseState = snapshot.data?.get("caseState") as Boolean?
                     )
@@ -83,21 +83,19 @@ class MapViewModel(
         return round(R * c)
     }
 
-    fun getWeather() {
+    fun getWeather(currentDevicePosition: LatLng) {
         viewModelScope.launch {
-            if(mapUiState.value.currentPosition != null){
-                val weather = weatherRepository.getCurrentWeather(
-                    mapUiState.value.currentPosition?.latitude.toString(),
-                    mapUiState.value.currentPosition?.longitude.toString()
+            val weather = weatherRepository.getCurrentWeather(
+                currentDevicePosition.latitude,
+                currentDevicePosition.longitude
+            )
+            _mapUiState.value = _mapUiState.value.copy(
+                weather = WeatherObject(
+                    temp = weather.current.tempC,
+                    condition = weather.current.condition.text,
+                    icon = weather.current.condition.icon
                 )
-                _mapUiState.value = _mapUiState.value.copy(
-                    weather = WeatherObject(
-                        temp = weather.current.tempC,
-                        condition = weather.current.condition.text,
-                        icon = weather.current.condition.icon
-                    )
-                )
-            }
+            )
         }
     }
 
@@ -113,7 +111,7 @@ class MapViewModel(
 }
 
 data class MapUIState(
-    val currentPosition: GeoPoint? = null,
+    val currentMotoPosition: GeoPoint? = null,
     val currentMoto: String? = null,
     val caseState: Boolean? = false,
     val weather: WeatherObject? = null

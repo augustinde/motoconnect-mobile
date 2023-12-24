@@ -5,7 +5,7 @@ import fr.motoconnect.architecture.WeatherEndpoint
 import fr.motoconnect.data.model.WeatherDto
 
 interface WeatherRepository {
-    suspend fun getCurrentWeather(lat: String, long: String): WeatherDto
+    suspend fun getCurrentWeather(lat: Double, long: Double): WeatherDto
 }
 
 class WeatherRepositoryImpl(
@@ -14,7 +14,7 @@ class WeatherRepositoryImpl(
 
     private val apiKey: String = BuildConfig.WEATHER_API_KEY
 
-    override suspend fun getCurrentWeather(lat: String, long: String): WeatherDto {
+    override suspend fun getCurrentWeather(lat: Double, long: Double): WeatherDto {
         val coords = "$lat,$long"
         try {
             return weatherEndpoint.getCurrentWeather(apiKey, coords)
