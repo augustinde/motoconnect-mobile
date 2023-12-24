@@ -100,7 +100,10 @@ fun HomeScreen(
             lastKnownLocation = task.result
             currentDevicePosition =
                 LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
-            mapViewModel.getWeather()
+            if(currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0){
+                Log.d(TAG, "HomeScreen: $currentDevicePosition")
+                mapViewModel.getWeather()
+            }
         } else {
             Log.e(TAG, "Exception: ${task.exception}")
         }
@@ -138,22 +141,22 @@ fun HomeScreen(
     ) {
 
         if (currentMotoPosition != null) (
-                Marker(
-                    state = MarkerState(
-                        position = currentMotoPosition
-                    ),
-                    icon = bitmapDescriptorFromVector(context, R.drawable.moto_position),
-                )
-                )
+            Marker(
+                state = MarkerState(
+                    position = currentMotoPosition
+                ),
+                icon = bitmapDescriptorFromVector(context, R.drawable.moto_position),
+            )
+        )
 
         if (currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0) (
-                Marker(
-                    state = MarkerState(
-                        position = currentDevicePosition
-                    ),
-                    icon = bitmapDescriptorFromVector(context, R.drawable.device_position),
-                )
-                )
+            Marker(
+                state = MarkerState(
+                    position = currentDevicePosition
+                ),
+                icon = bitmapDescriptorFromVector(context, R.drawable.device_position),
+            )
+        )
 
     }
 
@@ -169,7 +172,7 @@ fun HomeScreen(
             navController = navController,
             distanceBetweenDeviceAndMoto = distanceBetweenDeviceAndMoto,
             currentMoto = mapUiState.value.currentMoto!!,
-            caseState = mapUiState.value.caseState
+            caseState = mapUiState.value.caseState!!
         )
     }
 }

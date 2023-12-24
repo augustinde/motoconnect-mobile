@@ -56,7 +56,7 @@ class MapViewModel(
                     MapUIState(
                         currentPosition = snapshot.data?.get("currentPosition") as GeoPoint?,
                         currentMoto = snapshot.data?.get("currentMoto") as String?,
-                        caseState = snapshot.data?.get("caseState") as Boolean
+                        caseState = snapshot.data?.get("caseState") as Boolean?
                     )
             } else {
                 Log.d(TAG, "Current data: null")
@@ -83,14 +83,21 @@ class MapViewModel(
         return round(R * c)
     }
 
-     fun getWeather() {
+    fun getWeather() {
         viewModelScope.launch {
-            val weather = weatherRepository.getCurrentWeather(mapUiState.value.currentPosition?.latitude.toString(), mapUiState.value.currentPosition?.longitude.toString())
-            _mapUiState.value = _mapUiState.value.copy(weather = WeatherObject(
-                temp = weather.current.tempC,
-                condition = weather.current.condition.text,
-                icon = weather.current.condition.icon
-            ))
+            if(mapUiState.value.currentPosition != null){
+                val weather = weatherRepository.getCurrentWeather(
+                    mapUiState.value.currentPosition?.latitude.toString(),
+                    mapUiState.value.currentPosition?.longitude.toString()
+                )
+                _mapUiState.value = _mapUiState.value.copy(
+                    weather = WeatherObject(
+                        temp = weather.current.tempC,
+                        condition = weather.current.condition.text,
+                        icon = weather.current.condition.icon
+                    )
+                )
+            }
         }
     }
 
@@ -108,6 +115,6 @@ class MapViewModel(
 data class MapUIState(
     val currentPosition: GeoPoint? = null,
     val currentMoto: String? = null,
-    val caseState: Boolean = false,
+    val caseState: Boolean? = false,
     val weather: WeatherObject? = null
 )

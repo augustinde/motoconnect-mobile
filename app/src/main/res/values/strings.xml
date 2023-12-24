@@ -27,4 +27,7 @@
     <string name="sign_in_title">Sign In to MotoConnect</string>
     <string name="mandatory_fields_not_filled">Please fill in all fields</string>
     <string name="reset_password_email_sent">A reset email has been sent to you</string>
+    <string name="add_moto_title">Add your motorcycle</string>
+    <string name="add_button">Add</string>
+    <string name="name_moto_label">Motorcycle name</string>
 </resources>
