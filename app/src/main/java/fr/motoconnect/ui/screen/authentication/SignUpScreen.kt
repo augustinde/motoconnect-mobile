@@ -48,6 +48,7 @@ fun SignUpScreen(
 
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val displayName = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.tertiary),
@@ -61,6 +62,19 @@ fun SignUpScreen(
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.padding(16.dp))
+
+        TextField(
+            label = { Text(text = stringResource(id = R.string.displayname_textfield_label)) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            ),
+            value = displayName.value,
+            isError = authUiState.errorMessage != null,
+            onValueChange = { displayName.value = it },
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
             label = { Text(text = stringResource(id = R.string.email_textfield_label)) },
@@ -85,7 +99,7 @@ fun SignUpScreen(
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    authenticationViewModel.signUp(email.value, password.value)
+                    authenticationViewModel.signUp(email.value, password.value, displayName.value)
                 }
             ),
             onValueChange = { password.value = it },
@@ -95,7 +109,7 @@ fun SignUpScreen(
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
-                    authenticationViewModel.signUp(email.value, password.value)
+                    authenticationViewModel.signUp(email.value, password.value, displayName.value)
                 },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier

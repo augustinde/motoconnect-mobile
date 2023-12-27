@@ -30,4 +30,5 @@
     <string name="add_moto_title">Add your motorcycle</string>
     <string name="add_button">Add</string>
     <string name="name_moto_label">Motorcycle name</string>
+    <string name="displayname_textfield_label">Username</string>
 </resources>

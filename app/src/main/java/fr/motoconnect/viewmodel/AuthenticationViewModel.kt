@@ -58,7 +58,7 @@ class AuthenticationViewModel(
             }
     }
 
-    fun signUp(email: String, password: String) {
+    fun signUp(email: String, password: String, displayName: String) {
         if (!isMandatoryFieldsFilled(email, password)) {
             _authUiState.value = AuthUIState(
                 isLogged = false,
@@ -78,9 +78,10 @@ class AuthenticationViewModel(
                     withContext(Dispatchers.Main) {
                         if (task.isSuccessful) {
                             _authUiState.value = AuthUIState(isLogged = true, errorMessage = null)
+                            val user = UserObject(displayName = displayName)
                             db.collection("users")
                                 .document(auth.currentUser!!.uid)
-                                .set(UserObject())
+                                .set(user)
                         }
                     }
                 }

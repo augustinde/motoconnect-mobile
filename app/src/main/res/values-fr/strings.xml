@@ -27,4 +27,5 @@
     <string name="add_moto_title">Ajouter votre moto</string>
     <string name="add_button">Ajouter</string>
     <string name="name_moto_label">Nom de la moto</string>
+    <string name="displayname_textfield_label">Nom d\'utilisateur</string>
 </resources>
