@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class AuthenticationViewModel(
@@ -27,16 +28,28 @@ class AuthenticationViewModel(
     init {
         if (auth.currentUser != null) {
             _authUiState.value = AuthUIState(isLogged = true)
+            viewModelScope.launch {
+                getCurrentUser()
+            }
         } else {
             _authUiState.value = AuthUIState(isLogged = false)
         }
+    }
+
+    private suspend fun getCurrentUser() {
+        val user = db.collection("users")
+            .document(auth.currentUser!!.uid)
+            .get().await()
+            .toObject(UserObject::class.java)
+        _authUiState.value = AuthUIState(isLogged = true, errorMessage = null, user = user)
     }
 
     fun signIn(email: String, password: String) {
         if (!isMandatoryFieldsFilled(email, password)) {
             _authUiState.value = AuthUIState(
                 isLogged = false,
-                errorMessage = context.getString(R.string.mandatory_fields_not_filled)
+                errorMessage = context.getString(R.string.mandatory_fields_not_filled),
+                user = null
             )
             return
         }
@@ -44,14 +57,17 @@ class AuthenticationViewModel(
             .addOnFailureListener() { exception ->
                 _authUiState.value = AuthUIState(
                     isLogged = false,
-                    errorMessage = exception.message
+                    errorMessage = exception.message,
+                    user = null
                 )
             }
             .addOnCompleteListener { task ->
                 viewModelScope.launch {
                     withContext(Dispatchers.Main) {
                         if (task.isSuccessful) {
-                            _authUiState.value = AuthUIState(isLogged = true, errorMessage = null)
+                            viewModelScope.launch {
+                                getCurrentUser()
+                            }
                         }
                     }
                 }
@@ -62,7 +78,8 @@ class AuthenticationViewModel(
         if (!isMandatoryFieldsFilled(email, password)) {
             _authUiState.value = AuthUIState(
                 isLogged = false,
-                errorMessage = context.getString(R.string.mandatory_fields_not_filled)
+                errorMessage = context.getString(R.string.mandatory_fields_not_filled),
+                user = null
             )
             return
         }
@@ -70,18 +87,20 @@ class AuthenticationViewModel(
             .addOnFailureListener() { exception ->
                 _authUiState.value = AuthUIState(
                     isLogged = false,
-                    errorMessage = exception.message
+                    errorMessage = exception.message,
+                    user = null
                 )
             }
             .addOnCompleteListener { task ->
                 viewModelScope.launch {
                     withContext(Dispatchers.Main) {
                         if (task.isSuccessful) {
-                            _authUiState.value = AuthUIState(isLogged = true, errorMessage = null)
-                            val user = UserObject(displayName = displayName)
                             db.collection("users")
                                 .document(auth.currentUser!!.uid)
-                                .set(user)
+                                .set(UserObject(displayName = displayName))
+                            viewModelScope.launch {
+                                getCurrentUser()
+                            }
                         }
                     }
                 }
@@ -116,11 +135,11 @@ class AuthenticationViewModel(
 
     fun signOut() {
         auth.signOut()
-        _authUiState.update { AuthUIState(isLogged = false, errorMessage = null) }
+        _authUiState.update { AuthUIState(isLogged = false, errorMessage = null, user = null) }
     }
 
     fun resetErrorMessage() {
-        _authUiState.update { AuthUIState(errorMessage = null) }
+        _authUiState.update { AuthUIState(errorMessage = null, user = null) }
     }
 
     private fun isMandatoryFieldsFilled(email: String, password: String): Boolean {
@@ -130,6 +149,7 @@ class AuthenticationViewModel(
 }
 
 data class AuthUIState(
+    val user: UserObject? = null,
     val isLogged: Boolean = false,
     val errorMessage: String? = null
 )
