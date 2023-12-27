@@ -27,5 +27,13 @@
     <string name="add_moto_title">Ajouter votre moto</string>
     <string name="add_button">Ajouter</string>
     <string name="name_moto_label">Nom de la moto</string>
+    <string name="moto_maintenance">Entretien</string>
+    <string name="moto_engine_oil">Huile moteur</string>
+    <string name="moto_reset">Réinitialiser</string>
+    <string name="moto_break_fluid">Liquide de frein</string>
+    <string name="moto_chain_greasing">Graissage chaîne</string>
+    <string name="moto_journeys">Trajets</string>
+    <string name="moto_number_of_journeys">"Nombre de trajets : "</string>
+    <string name="moto_total_distance">"Distance totale : "</string>
     <string name="displayname_textfield_label">Nom d\'utilisateur</string>
 </resources>

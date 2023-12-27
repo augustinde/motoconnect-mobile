@@ -140,7 +140,6 @@ fun HomeScreen(
         cameraPositionState = cameraPositionState,
         properties = MapProperties(
             isTrafficEnabled = true,
-            isIndoorEnabled = true,
             mapType = MapType.NORMAL,
         ),
     ) {

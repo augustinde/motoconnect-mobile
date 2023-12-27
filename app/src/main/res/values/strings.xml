@@ -30,5 +30,13 @@
     <string name="add_moto_title">Add your motorcycle</string>
     <string name="add_button">Add</string>
     <string name="name_moto_label">Motorcycle name</string>
+    <string name="moto_maintenance">Maintenance</string>
+    <string name="moto_engine_oil">Engine oil</string>
+    <string name="moto_reset">Reset</string>
+    <string name="moto_break_fluid">Break fluid</string>
+    <string name="moto_chain_greasing">Chain greasing</string>
+    <string name="moto_journeys">Journeys</string>
+    <string name="moto_number_of_journeys">"Number of journeys: "</string>
+    <string name="moto_total_distance">"Total distance : "</string>
     <string name="displayname_textfield_label">Username</string>
 </resources>

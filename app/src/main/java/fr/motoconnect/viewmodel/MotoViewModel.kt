@@ -22,23 +22,26 @@ class MotoViewModel: ViewModel() {
         getCurrentMoto()
     }
 
-    private fun getCurrentMoto(){
+    fun getCurrentMoto(){
         try {
-            Log.d("TAG", "user : ${auth.currentUser?.uid.toString()}")
-            db.collection("users")
+            val dbRef = db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .collection("motos")
                 .whereEqualTo("current", true)
-                .get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        val moto = document.toObject(MotoObject::class.java)
-                        _motoUiState.value = MotoUIState(moto = moto, errorMsg = null)
-                    }
+            dbRef.addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w("MotoViewModel", "Listen failed.", e)
+                    return@addSnapshotListener
                 }
-                .addOnFailureListener { exception ->
-                    _motoUiState.value = MotoUIState(errorMsg = exception.message)
+
+                if (snapshot != null && snapshot.documents.isNotEmpty()) {
+                    Log.d("MotoViewModel", "Current data: ${snapshot.documents}")
+                    val moto = snapshot.documents[0].toObject(MotoObject::class.java)
+                    _motoUiState.value = MotoUIState(moto = moto, errorMsg = null)
+                } else {
+                    Log.d("MotoViewModel", "Current data: null")
                 }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             _motoUiState.value = MotoUIState(errorMsg = e.message)
@@ -51,7 +54,8 @@ class MotoViewModel: ViewModel() {
             db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .collection("motos")
-                .add(moto)
+                .document(motoName)
+                .set(moto)
             db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .update(
@@ -59,6 +63,51 @@ class MotoViewModel: ViewModel() {
                 )
 
             _motoUiState.value = MotoUIState(moto = moto, errorMsg = null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _motoUiState.value = MotoUIState(errorMsg = e.message)
+        }
+    }
+
+    fun resetEngineOil() {
+        try {
+            db.collection("users")
+                .document(auth.currentUser?.uid.toString())
+                .collection("motos")
+                .document(motoUiState.value.moto?.name.toString())
+                .update(
+                    "engineOil", 0
+                )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _motoUiState.value = MotoUIState(errorMsg = e.message)
+        }
+    }
+
+    fun resetBreakFluid() {
+        try {
+            db.collection("users")
+                .document(auth.currentUser?.uid.toString())
+                .collection("motos")
+                .document(motoUiState.value.moto?.name.toString())
+                .update(
+                    "breakFluid", 0
+                )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _motoUiState.value = MotoUIState(errorMsg = e.message)
+        }
+    }
+
+    fun resetChainLubrication() {
+        try {
+            db.collection("users")
+                .document(auth.currentUser?.uid.toString())
+                .collection("motos")
+                .document(motoUiState.value.moto?.name.toString())
+                .update(
+                    "chainLubrication", 0
+                )
         } catch (e: Exception) {
             e.printStackTrace()
             _motoUiState.value = MotoUIState(errorMsg = e.message)
