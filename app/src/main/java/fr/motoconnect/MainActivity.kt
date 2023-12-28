@@ -1,5 +1,6 @@
 package fr.motoconnect
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -32,6 +33,7 @@ import com.google.firebase.ktx.Firebase
 import fr.motoconnect.ui.navigation.AuthenticationNavigation
 import fr.motoconnect.ui.navigation.MotoConnectNavigation
 import fr.motoconnect.ui.navigation.MotoConnectNavigationRoutes
+import fr.motoconnect.ui.store.DisplayStore
 import fr.motoconnect.ui.theme.MotoConnectTheme
 import fr.motoconnect.viewmodel.AuthenticationViewModel
 import fr.motoconnect.viewmodel.MapViewModel
@@ -73,14 +75,13 @@ class MainActivity : ComponentActivity() {
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
             )
         )
-
         val auth = FirebaseAuth.getInstance()
         val db = Firebase.firestore
 
         val authenticationViewModel = AuthenticationViewModel(auth, db, applicationContext)
 
         setContent {
-            MotoConnectTheme {
+            MotoConnectTheme(activated = getDisplayStore(applicationContext)) {
                 MainScreen(
                     auth = auth,
                     authenticationViewModel = authenticationViewModel
@@ -151,4 +152,13 @@ fun MainScreen(
     } else {
         AuthenticationNavigation(authenticationViewModel = authenticationViewModel)
     }
+}
+
+@Composable
+fun getDisplayStore(context: Context): Boolean {
+
+    val store = DisplayStore(context)
+    val darkmode = store.getDarkMode.collectAsState(initial =false)
+    return darkmode.value
+
 }

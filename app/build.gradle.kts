@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "fr.motoconnect"
-        minSdk = 31
+        minSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -30,6 +30,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("long", "VERSION_CODE", "${defaultConfig.versionCode}")
+            buildConfigField("String","VERSION_NAME","\"${defaultConfig.versionName}\"")
         }
     }
     compileOptions {
@@ -78,6 +80,8 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx:24.10.0")
     implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
     implementation("androidx.compose.ui:ui-android:1.5.4")
+    implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

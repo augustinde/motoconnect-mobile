@@ -38,5 +38,31 @@
     <string name="moto_journeys">Journeys</string>
     <string name="moto_number_of_journeys">"Number of journeys: "</string>
     <string name="moto_total_distance">"Total distance : "</string>
+    <string name="settings">Settings</string>
+    <string name="profile">Profile</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="username">Username</string>
+    <string name="preferences">Preferences</string>
+    <string name="location">Location</string>
+    <string name="location_activated">Location activated</string>
+    <string name="notification" translatable="false">Notification</string>
+    <string name="notification_activated">Notification activated</string>
+    <string name="Authorization">Authorize</string>
+    <string name="display">Display</string>
+    <string name="actions" translatable="false">Actions</string>
+    <string name="account_deletion">Account deletion</string>
+    <string name="delete">Delete</string>
+    <string name="about">About</string>
+    <string name="application_infos">Application infos</string>
+    <string name="application_version">Application version</string>
+    <string name="app_info">This is the app info.</string>
+    <string name="close">Close</string>
+    <string name="version_name">"Version Name"</string>
+    <string name="version_code">"Version Code"</string>
     <string name="displayname_textfield_label">Username</string>
+    <string name="coarse_location_warning">Activate fine location</string>
+    <string name="AskNotificiation">Asking for notifications</string>
+    <string name="AcceptedNotification">Accepted the notifications</string>
+    <string name="askLocation">Asking for location</string>
+    <string name="acceptedLocation">Has accepted location</string>
 </resources>
