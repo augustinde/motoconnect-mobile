@@ -65,4 +65,9 @@
     <string name="AcceptedNotification">Accepted the notifications</string>
     <string name="askLocation">Asking for location</string>
     <string name="acceptedLocation">Has accepted location</string>
+    <string name="journeys">Journeys</string>
+    <string name="no_journeys_yet">No journeys yet</string>
+    <string name="distance_km" translatable="false">Distance: %1$skm</string>
+    <string name="duration">Duration: %1$s</string>
+    <string name="see_more">See more</string>
 </resources>

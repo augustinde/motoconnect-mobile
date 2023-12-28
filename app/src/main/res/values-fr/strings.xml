@@ -60,4 +60,8 @@
     <string name="AcceptedNotification">A accepté les notifications</string>
     <string name="askLocation">Demande la position</string>
     <string name="acceptedLocation">A accepté la position</string>
+    <string name="journeys">Journeys</string>
+    <string name="no_journeys_yet">No journeys yet</string>
+    <string name="duration">Durée: %1$s</string>
+    <string name="see_more">Voir plus</string>
 </resources>
