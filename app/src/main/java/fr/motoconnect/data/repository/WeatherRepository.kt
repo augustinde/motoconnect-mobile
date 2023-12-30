@@ -1,7 +1,7 @@
 package fr.motoconnect.data.repository
 
 import fr.motoconnect.BuildConfig
-import fr.motoconnect.architecture.WeatherEndpoint
+import fr.motoconnect.architecture.endpoints.WeatherEndpoint
 import fr.motoconnect.data.model.WeatherDto
 
 interface WeatherRepository {

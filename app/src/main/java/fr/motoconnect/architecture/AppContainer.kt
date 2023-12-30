@@ -1,5 +1,6 @@
 package fr.motoconnect.architecture
 
+import fr.motoconnect.architecture.endpoints.WeatherEndpoint
 import fr.motoconnect.data.repository.WeatherRepository
 import fr.motoconnect.data.repository.WeatherRepositoryImpl
 import retrofit2.Retrofit
@@ -11,15 +12,15 @@ interface AppContainer {
 
 class DefaultAppContainer: AppContainer {
 
-    private val baseUrl = "http://api.weatherapi.com/v1/"
+    private val baseUrlWeather = "http://api.weatherapi.com/v1/"
 
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
+    private val retrofitWeather: Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrlWeather)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     private val retrofitWeatherEndpoint: WeatherEndpoint by lazy {
-        retrofit.create(WeatherEndpoint::class.java)
+        retrofitWeather.create(WeatherEndpoint::class.java)
     }
 
     override val weatherRepository: WeatherRepository by lazy {

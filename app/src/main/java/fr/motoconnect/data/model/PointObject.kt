@@ -1,9 +1,11 @@
 package fr.motoconnect.data.model
 
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.GeoPoint
+
 data class PointObject(
-    val latitude: Double,
-    val longitude: Double,
-    val speed: Double,
-    val time: Long,
-    val tilt: Double,
+    val geoPoint: GeoPoint,
+    val speed: Long,
+    val time: Timestamp,
+    val tilt: Long,
 )

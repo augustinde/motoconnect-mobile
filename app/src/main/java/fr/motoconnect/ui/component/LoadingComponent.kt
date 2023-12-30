@@ -12,8 +12,9 @@ import androidx.compose.ui.unit.dp
 fun Loading(){
     CircularProgressIndicator(
         modifier = Modifier
-            .size(50.dp)
+            .size(100.dp)
             .padding(16.dp),
-        color = MaterialTheme.colorScheme.primary,
+        strokeWidth = 8.dp,
+        color = MaterialTheme.colorScheme.tertiary,
     )
 }

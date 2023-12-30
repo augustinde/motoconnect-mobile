@@ -1,4 +1,4 @@
-package fr.motoconnect.architecture
+package fr.motoconnect.architecture.endpoints
 
 import fr.motoconnect.data.model.WeatherDto
 import retrofit2.http.GET

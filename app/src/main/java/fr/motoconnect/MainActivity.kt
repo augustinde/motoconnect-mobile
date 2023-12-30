@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 else -> {
-                    Log.i(TAG, "Location permission denied")
+                    Log.i(TAG, "Some permissions denied")
                 }
             }
         }
@@ -72,9 +72,10 @@ class MainActivity : ComponentActivity() {
         locationPermissionRequest.launch(
             arrayOf(
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
             )
         )
+
         val auth = FirebaseAuth.getInstance()
         val db = Firebase.firestore
 
@@ -113,29 +114,32 @@ fun MainScreen(
                     backgroundColor = MaterialTheme.colorScheme.primary,
                 ) {
                     MotoConnectNavigationRoutes.values().forEach { item ->
-                        BottomNavigationItem(
-                            selected = currentDestination?.hierarchy?.any { it.route == item.name } == true,
-                            selectedContentColor = MaterialTheme.colorScheme.tertiary,
-                            onClick = {
-                                navController.navigate(item.name) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+                        if (item.displayInBar) {
+                            BottomNavigationItem(
+                                selected = currentDestination?.hierarchy?.any { it.route == item.name } == true,
+                                selectedContentColor = MaterialTheme.colorScheme.tertiary,
+                                onClick = {
+                                    navController.navigate(item.name) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
+                                },
+                                icon = {
+                                    Icon(
+                                        painter = painterResource(id = item.icon),
+                                        contentDescription = "Icon ${item.name}",
+                                        modifier = Modifier
+                                            .size(30.dp)
+                                            .padding(0.dp, 0.dp, 0.dp, 0.dp),
+                                        colorResource(id = R.color.black)
+                                    )
                                 }
-                            },
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = item.icon),
-                                    contentDescription = "Icon ${item.name}",
-                                    modifier = Modifier
-                                        .size(30.dp)
-                                        .padding(0.dp, 0.dp, 0.dp, 0.dp),
-                                    colorResource(id = R.color.black)
-                                )
-                            }
-                        )
+                            )
+                        }
+
                     }
                 }
             }
@@ -158,7 +162,7 @@ fun MainScreen(
 fun getDisplayStore(context: Context): Boolean {
 
     val store = DisplayStore(context)
-    val darkmode = store.getDarkMode.collectAsState(initial =false)
+    val darkmode = store.getDarkMode.collectAsState(initial = false)
     return darkmode.value
 
 }

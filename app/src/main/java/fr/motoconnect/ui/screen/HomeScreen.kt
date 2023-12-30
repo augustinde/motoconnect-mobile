@@ -1,9 +1,6 @@
 package fr.motoconnect.ui.screen
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.location.Location
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -31,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
@@ -38,24 +36,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import fr.motoconnect.MainActivity
 import fr.motoconnect.R
 import fr.motoconnect.ui.navigation.MotoConnectNavigationRoutes
+import fr.motoconnect.data.utils.MarkerCustomUtils
 import fr.motoconnect.viewmodel.MapViewModel
 
 @SuppressLint("MissingPermission")
@@ -104,9 +102,10 @@ fun HomeScreen(
             lastKnownLocation = task.result
             currentDevicePosition =
                 LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
-            if(currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0){
+            if (currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0) {
                 mapViewModel.getWeather(currentDevicePosition)
-                cameraPositionState.position = CameraPosition.fromLatLngZoom(currentDevicePosition, 16f)
+                cameraPositionState.position =
+                    CameraPosition.fromLatLngZoom(currentDevicePosition, 16f)
             }
         } else {
             Log.e(TAG, "Exception: ${task.exception}")
@@ -141,26 +140,40 @@ fun HomeScreen(
         properties = MapProperties(
             isTrafficEnabled = true,
             mapType = MapType.NORMAL,
+            mapStyleOptions = MapStyleOptions.loadRawResourceStyle(
+                LocalContext.current,
+                R.raw.map_style
+            ),
         ),
+        uiSettings = MapUiSettings(
+            mapToolbarEnabled = false,
+        )
     ) {
-
-        if (currentMotoPosition != null) (
+        if (currentMotoPosition != null) {
             Marker(
                 state = MarkerState(
                     position = currentMotoPosition
                 ),
-                icon = bitmapDescriptorFromVector(context, R.drawable.moto_position),
+                icon = MarkerCustomUtils().bitmapDescriptorFromVector(
+                    context,
+                    R.drawable.moto_position
+                ),
+                anchor = Offset(0.5f, 0.5f)
             )
-        )
+        }
 
-        if (currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0) (
+        if (currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0) {
             Marker(
                 state = MarkerState(
                     position = currentDevicePosition
                 ),
-                icon = bitmapDescriptorFromVector(context, R.drawable.device_position),
+                icon = MarkerCustomUtils().bitmapDescriptorFromVector(
+                    context,
+                    R.drawable.device_position
+                ),
+                anchor = Offset(0.5f, 0.5f)
             )
-        )
+        }
 
     }
 
@@ -278,16 +291,3 @@ fun MapInfoMoto(
     }
 }
 
-
-private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor {
-    val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
-    vectorDrawable!!.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
-    val bitmap = Bitmap.createBitmap(
-        vectorDrawable.intrinsicWidth,
-        vectorDrawable.intrinsicHeight,
-        Bitmap.Config.ARGB_8888
-    )
-    val canvas = Canvas(bitmap)
-    vectorDrawable.draw(canvas)
-    return BitmapDescriptorFactory.fromBitmap(bitmap)
-}

@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class JourneyViewModel: ViewModel() {
 
@@ -36,7 +35,7 @@ class JourneyViewModel: ViewModel() {
         val dbRef = db.collection("users")
             .document(auth.currentUser?.uid.toString())
             .collection("journeys")
-        dbRef.addSnapshotListener() { snapshot, e ->
+        dbRef.addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Log.w(TAG, "Listen failed.", e)
                 return@addSnapshotListener
@@ -51,6 +50,7 @@ class JourneyViewModel: ViewModel() {
                     if (document != null) {
                         journeys.add(
                             JourneyObject(
+                                id = document.id,
                                 startDateTime = document.get("startDateTime") as Timestamp?,
                                 distance = document.get("distance") as Long?,
                                 duration = document.get("duration") as Long?,
