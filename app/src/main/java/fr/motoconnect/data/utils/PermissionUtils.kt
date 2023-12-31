@@ -11,6 +11,12 @@ class PermissionUtils {
 
     private val TAG = "PermissionUtils"
 
+    /**
+     * Ask permission to user
+     * @param permission PermissionState [PermissionState]
+     * @param context Context [Context]
+     * @param permissionName String
+     */
     @OptIn(ExperimentalPermissionsApi::class)
     fun askPermission(permission: PermissionState, context: Context, permissionName: String) {
         if (!permission.status.isGranted) {

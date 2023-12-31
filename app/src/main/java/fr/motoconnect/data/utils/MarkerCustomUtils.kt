@@ -8,6 +8,13 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 class MarkerCustomUtils {
+
+    /**
+     * Convert a vector to a bitmap
+     * @param context [Context]
+     * @param vectorResId [Int]
+     * @return BitmapDescriptor [BitmapDescriptor]
+     */
     fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
         vectorDrawable!!.setBounds(

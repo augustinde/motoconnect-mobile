@@ -2,11 +2,13 @@ package fr.motoconnect.ui.screen.journey.journeyDetails.components
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
@@ -19,6 +21,7 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import fr.motoconnect.R
 import fr.motoconnect.data.model.JourneyObject
+import fr.motoconnect.data.utils.MapUtils
 import fr.motoconnect.data.utils.MarkerCustomUtils
 import fr.motoconnect.viewmodel.JourneyDetailsViewModel
 
@@ -35,12 +38,34 @@ fun JourneyDetailsContent(
     val cameraPositionState = rememberCameraPositionState {
         position = journeyDetailsUIState.journey?.points?.first()?.geoPoint?.let {
             CameraPosition.fromLatLngZoom(
-                LatLng(
-                    it.latitude,
-                    it.longitude
+                MapUtils().calculateMidPoint(
+                    LatLng(
+                        journeyDetailsUIState.journey?.points?.first()?.geoPoint!!.latitude,
+                        journeyDetailsUIState.journey?.points?.first()?.geoPoint!!.longitude
+                    ),
+                    LatLng(
+                        journeyDetailsUIState.journey?.points?.last()?.geoPoint!!.latitude,
+                        journeyDetailsUIState.journey?.points?.last()?.geoPoint!!.longitude
+                    ),
                 ), 15f
             )
         }!!
+    }
+
+    LaunchedEffect(cameraPositionState){
+        cameraPositionState.move(
+            CameraUpdateFactory.newLatLngBounds(
+                MapUtils().calculateZoomLevel(
+                    LatLng(
+                        journeyDetailsUIState.journey?.points?.first()?.geoPoint!!.latitude,
+                        journeyDetailsUIState.journey?.points?.first()?.geoPoint!!.longitude
+                    ),
+                    LatLng(
+                        journeyDetailsUIState.journey?.points?.last()?.geoPoint!!.latitude,
+                        journeyDetailsUIState.journey?.points?.last()?.geoPoint!!.longitude
+                    ),
+                ), 300
+        ))
     }
 
     GoogleMap(

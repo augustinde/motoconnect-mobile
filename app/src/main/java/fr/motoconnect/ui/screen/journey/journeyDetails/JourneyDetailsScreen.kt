@@ -141,7 +141,6 @@ fun JourneyDetailsScreen(
                 .fillMaxSize(),
         ) {
 
-
             when {
 
                 journeyDetailsUIState.isLoading -> {

@@ -4,6 +4,11 @@ import fr.motoconnect.data.model.JourneyObject
 
 class ConverterGpxUtils {
 
+    /**
+     * Convert a journey to a gpx file
+     * @param journey [JourneyObject]
+     * @return String
+     */
     fun convertGpxAndReturnString(journey: JourneyObject): String {
         val builder = StringBuilder()
 
