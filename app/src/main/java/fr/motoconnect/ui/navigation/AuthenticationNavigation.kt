@@ -1,6 +1,5 @@
 package fr.motoconnect.ui.navigation
 
-import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,13 +26,22 @@ fun AuthenticationNavigation(
         startDestination = AuthenticationNavigationRoutes.SignIn.name,
     ) {
         composable(route = AuthenticationNavigationRoutes.SignIn.name) {
-            SignInScreen(authenticationViewModel = authenticationViewModel, navController = navController)
+            SignInScreen(
+                authenticationViewModel = authenticationViewModel,
+                navController = navController
+            )
         }
         composable(route = AuthenticationNavigationRoutes.SignUp.name) {
-            SignUpScreen(authenticationViewModel = authenticationViewModel, navController = navController)
+            SignUpScreen(
+                authenticationViewModel = authenticationViewModel,
+                navController = navController
+            )
         }
         composable(route = AuthenticationNavigationRoutes.ResetPassword.name) {
-            ResetPasswordScreen(authenticationViewModel = authenticationViewModel, navController = navController)
+            ResetPasswordScreen(
+                authenticationViewModel = authenticationViewModel,
+                navController = navController
+            )
         }
     }
 }

@@ -61,10 +61,6 @@
     <string name="version_code">"Version Code"</string>
     <string name="displayname_textfield_label">Username</string>
     <string name="coarse_location_warning">Activate fine location</string>
-    <string name="AskNotificiation">Asking for notifications</string>
-    <string name="AcceptedNotification">Accepted the notifications</string>
-    <string name="askLocation">Asking for location</string>
-    <string name="acceptedLocation">Has accepted location</string>
     <string name="journeys">Journeys</string>
     <string name="no_journeys_yet">No journeys yet</string>
     <string name="distance_km" translatable="false">Distance: %1$skm</string>
@@ -75,4 +71,5 @@
     <string name="cancel">Cancel</string>
     <string name="export_as_gpx">Export as GPX</string>
     <string name="trajet_du">Journey of %1$s</string>
+    <string name="ask_permission">Ask permission %1$s</string>
 </resources>

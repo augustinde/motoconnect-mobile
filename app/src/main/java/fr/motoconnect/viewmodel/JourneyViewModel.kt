@@ -8,12 +8,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import fr.motoconnect.data.model.JourneyObject
+import fr.motoconnect.viewmodel.uiState.JourneyUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class JourneyViewModel: ViewModel() {
+class JourneyViewModel : ViewModel() {
 
     private val TAG = "JourneyViewModel"
 
@@ -45,8 +46,6 @@ class JourneyViewModel: ViewModel() {
                 Log.d(TAG, "Current data: ${snapshot.documents}")
                 val journeys = mutableListOf<JourneyObject>()
                 for (document in snapshot.documents) {
-                    Log.d(TAG, "getJourneys: " + document.data)
-
                     if (document != null) {
                         journeys.add(
                             JourneyObject(
@@ -72,10 +71,3 @@ class JourneyViewModel: ViewModel() {
     }
 
 }
-
-
-data class JourneyUIState(
-    val journeys: List<JourneyObject> = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMsg: String? = null,
-)

@@ -56,10 +56,6 @@
     <string name="version_code">Code de la version</string>
     <string name="displayname_textfield_label">Nom d\'utilisateur</string>
     <string name="coarse_location_warning">Activer position exacte</string>
-    <string name="AskNotificiation">Demande les notifications</string>
-    <string name="AcceptedNotification">A accepté les notifications</string>
-    <string name="askLocation">Demande la position</string>
-    <string name="acceptedLocation">A accepté la position</string>
     <string name="journeys">Journeys</string>
     <string name="no_journeys_yet">No journeys yet</string>
     <string name="duration">Durée: %1$s</string>
@@ -69,4 +65,5 @@
     <string name="cancel">Annuler</string>
     <string name="export_as_gpx">Exporter en GPX</string>
     <string name="trajet_du">Trajet du %1$s</string>
+    <string name="ask_permission">Ask permission %1$s</string>
 </resources>

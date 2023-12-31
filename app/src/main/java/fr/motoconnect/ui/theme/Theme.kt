@@ -29,7 +29,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun MotoConnectTheme(activated: Boolean,content: @Composable () -> Unit){
+fun MotoConnectTheme(activated: Boolean, content: @Composable () -> Unit){
 
     val colorScheme = if(activated){
         LightColorScheme

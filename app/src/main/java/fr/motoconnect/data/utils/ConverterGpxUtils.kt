@@ -10,7 +10,7 @@ class ConverterGpxUtils {
         builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
         builder.append("<gpx version=\"1.1\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n")
         builder.append("  <metadata>\n")
-        builder.append("    <name>${TimestampUtils().toDateTimeString(journey.startDateTime!!)}</name>\n")
+        builder.append("    <name>${TimeUtils().toDateTimeString(journey.startDateTime!!)}</name>\n")
         builder.append("  </metadata>\n")
         builder.append("  <trk>\n")
         builder.append("    <trkseg>\n")

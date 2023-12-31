@@ -10,11 +10,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import fr.motoconnect.R
-import fr.motoconnect.ui.screen.HomeScreen
-import fr.motoconnect.ui.screen.journey.JourneysScreen
-import fr.motoconnect.ui.screen.MotoScreen
-import fr.motoconnect.ui.screen.ProfileScreen
+import fr.motoconnect.ui.screen.home.HomeScreen
 import fr.motoconnect.ui.screen.journey.journeyDetails.JourneyDetailsScreen
+import fr.motoconnect.ui.screen.journey.journeyList.JourneyListScreen
+import fr.motoconnect.ui.screen.moto.MotoScreen
+import fr.motoconnect.ui.screen.profile.ProfileScreen
 import fr.motoconnect.viewmodel.AuthenticationViewModel
 import fr.motoconnect.viewmodel.MapViewModel
 
@@ -43,11 +43,16 @@ fun MotoConnectNavigation(
         }
 
         composable(MotoConnectNavigationRoutes.Journeys.name) {
-            JourneysScreen(navController = navController)
+            JourneyListScreen(navController = navController)
         }
 
-        composable(MotoConnectNavigationRoutes.JourneyDetails.name + "/{journeyId}", arguments = listOf(navArgument("journeyId") { type = NavType.StringType })) {
-            JourneyDetailsScreen(it.arguments?.getString("journeyId"), navController = navController)
+        composable(
+            MotoConnectNavigationRoutes.JourneyDetails.name + "/{journeyId}",
+            arguments = listOf(navArgument("journeyId") { type = NavType.StringType })
+        ) {
+            JourneyDetailsScreen(
+                it.arguments?.getString("journeyId"), navController = navController
+            )
         }
 
         composable(MotoConnectNavigationRoutes.Moto.name) {
@@ -56,8 +61,8 @@ fun MotoConnectNavigation(
 
         composable(MotoConnectNavigationRoutes.Profile.name) {
             ProfileScreen(
-                auth = auth,
-                authenticationViewModel = authenticationViewModel)
+                auth = auth, authenticationViewModel = authenticationViewModel
+            )
         }
     }
 

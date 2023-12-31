@@ -4,9 +4,7 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -37,7 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import fr.motoconnect.R
 import fr.motoconnect.data.utils.ConverterGpxUtils
-import fr.motoconnect.data.utils.TimestampUtils
+import fr.motoconnect.data.utils.TimeUtils
 import fr.motoconnect.ui.component.Loading
 import fr.motoconnect.ui.screen.journey.journeyDetails.components.JourneyDetailsContent
 import fr.motoconnect.ui.screen.journey.journeyDetails.components.TravelNotFound
@@ -82,7 +79,7 @@ fun JourneyDetailsScreen(
                 else -> {
                     Text(
                         text = stringResource(
-                            R.string.trajet_du, TimestampUtils().toDateString(
+                            R.string.trajet_du, TimeUtils().toDateString(
                                 journeyDetailsUIState.journey?.startDateTime!!
                             )
                         ),
@@ -117,7 +114,7 @@ fun JourneyDetailsScreen(
                         expanded = false
                         launcher.launch(
                             "motoConnect-${
-                                TimestampUtils().toDateTimeString(
+                                TimeUtils().toDateTimeString(
                                     journeyDetailsUIState.journey?.startDateTime!!
                                 )
                             }.gpx"
@@ -148,13 +145,7 @@ fun JourneyDetailsScreen(
             when {
 
                 journeyDetailsUIState.isLoading -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Loading()
-                    }
+                    Loading()
                 }
 
                 journeyDetailsUIState.journey == null -> {

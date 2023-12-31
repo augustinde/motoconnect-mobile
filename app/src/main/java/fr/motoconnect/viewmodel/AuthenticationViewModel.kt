@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import fr.motoconnect.R
 import fr.motoconnect.data.model.UserObject
+import fr.motoconnect.viewmodel.uiState.AuthUIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -147,9 +148,3 @@ class AuthenticationViewModel(
     }
 
 }
-
-data class AuthUIState(
-    val user: UserObject? = null,
-    val isLogged: Boolean = false,
-    val errorMessage: String? = null
-)

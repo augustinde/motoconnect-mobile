@@ -6,6 +6,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import fr.motoconnect.data.model.MotoObject
+import fr.motoconnect.viewmodel.uiState.MotoUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -115,8 +116,3 @@ class MotoViewModel: ViewModel() {
     }
 
 }
-
-data class MotoUIState(
-    val moto: MotoObject? = null,
-    val errorMsg: String? = null,
-)

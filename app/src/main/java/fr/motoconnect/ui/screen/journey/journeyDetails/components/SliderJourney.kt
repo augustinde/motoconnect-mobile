@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import fr.motoconnect.R
 import fr.motoconnect.data.model.JourneyObject
 import fr.motoconnect.data.model.JourneyPlayerState
-import fr.motoconnect.data.utils.TimestampUtils
+import fr.motoconnect.data.utils.TimeUtils
 import fr.motoconnect.viewmodel.JourneyDetailsViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -78,7 +78,7 @@ fun SliderJourney(
         }
         Text(
             color = MaterialTheme.colorScheme.primary,
-            text = TimestampUtils().toTime(journeyDetailsUIState.currentPoint?.time?.seconds!!),
+            text = TimeUtils().toTime(journeyDetailsUIState.currentPoint?.time?.seconds!!),
             fontSize = 18.sp,
         )
 

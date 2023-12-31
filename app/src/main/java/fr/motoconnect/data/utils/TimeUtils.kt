@@ -4,7 +4,7 @@ import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class TimestampUtils {
+class TimeUtils {
 
     fun toDateTimeString(timestamp: Timestamp): String {
         val date = Date(timestamp.seconds * 1000)
@@ -22,5 +22,12 @@ class TimestampUtils {
         val date = Date(timeStamp * 1000L)
         val sdf = SimpleDateFormat("HH:mm")
         return sdf.format(date)
+    }
+
+    fun toHourMinute(duration: Long): String {
+        val hour = duration / 60
+        val minute = duration % 60
+        if (hour == 0L) return "${minute}min"
+        return "${hour}h ${minute}min"
     }
 }

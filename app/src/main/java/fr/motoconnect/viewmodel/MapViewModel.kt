@@ -15,15 +15,11 @@ import com.google.firebase.ktx.Firebase
 import fr.motoconnect.architecture.MotoConnectApplication
 import fr.motoconnect.data.model.WeatherObject
 import fr.motoconnect.data.repository.WeatherRepository
+import fr.motoconnect.viewmodel.uiState.MapUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.lang.Math.atan2
-import java.lang.Math.cos
-import java.lang.Math.round
-import java.lang.Math.sin
-import java.lang.Math.sqrt
 
 class MapViewModel(
     private val weatherRepository: WeatherRepository
@@ -64,24 +60,6 @@ class MapViewModel(
         }
     }
 
-    fun calculateDistanceBetweenTwoPoints(
-        currentDevicePosition: LatLng,
-        currentMotoPosition: LatLng
-    ): Long {
-        val R = 6371
-
-        val dLat = Math.toRadians(currentMotoPosition.latitude - currentDevicePosition.latitude)
-        val dLon = Math.toRadians(currentMotoPosition.longitude - currentDevicePosition.longitude)
-
-        val a =
-            sin(dLat / 2) * sin(dLat / 2) + cos(Math.toRadians(currentDevicePosition.latitude)) * cos(
-                Math.toRadians(currentMotoPosition.latitude)
-            ) * sin(dLon / 2) * sin(dLon / 2)
-
-        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-        return round(R * c)
-    }
 
     fun getWeather(currentDevicePosition: LatLng) {
         viewModelScope.launch {
@@ -109,10 +87,3 @@ class MapViewModel(
         }
     }
 }
-
-data class MapUIState(
-    val currentMotoPosition: GeoPoint? = null,
-    val currentMoto: String? = null,
-    val caseState: Boolean? = false,
-    val weather: WeatherObject? = null
-)
