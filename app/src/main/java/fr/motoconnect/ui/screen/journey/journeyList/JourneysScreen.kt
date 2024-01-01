@@ -10,7 +10,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,8 +31,13 @@ fun JourneyListScreen(
     navController: NavController,
 ) {
 
-    val journeyViewModel: JourneyViewModel = viewModel()
-    val journeyUIState = journeyViewModel.journeyUiState.collectAsState()
+    val journeyViewModel: JourneyViewModel = viewModel(factory = JourneyViewModel.Factory)
+    val journeyUIState by journeyViewModel.journeyUiState.collectAsState()
+
+    LaunchedEffect(true) {
+        journeyViewModel.getJourneys()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,19 +59,28 @@ fun JourneyListScreen(
                 fontSize = 24.sp,
             )
         }
-        if (journeyUIState.value.errorMsg != null) {
-            Text(
-                journeyUIState.value.errorMsg!!,
-                color = MaterialTheme.colorScheme.error,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp)
-            )
-        } else {
-            if (journeyUIState.value.isLoading) {
+        when {
+
+            journeyUIState.isLoading -> {
                 Loading()
-            } else {
+            }
+
+            journeyUIState.errorMsg != null -> {
+                Text(
+                    journeyUIState.errorMsg!!,
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp)
+                )
+            }
+
+            journeyUIState.journeys.isEmpty() -> {
+                Loading()
+            }
+
+            else -> {
                 JourneyListComponent(
-                    journeys = journeyUIState.value.journeys,
+                    journeyUIState = journeyUIState,
                     navController = navController
                 )
             }

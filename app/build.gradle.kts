@@ -21,6 +21,7 @@ android {
         }
 
         buildConfigField("String", "WEATHER_API_KEY", "\"${System.getenv("WEATHER_API_KEY")}\"")
+        buildConfigField("String", "GEOCODING_API_KEY", "\"${System.getenv("GEOCODING_API_KEY")}\"")
     }
 
     buildTypes {
@@ -31,7 +32,7 @@ android {
                 "proguard-rules.pro"
             )
             buildConfigField("long", "VERSION_CODE", "${defaultConfig.versionCode}")
-            buildConfigField("String","VERSION_NAME","\"${defaultConfig.versionName}\"")
+            buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
         }
     }
     compileOptions {

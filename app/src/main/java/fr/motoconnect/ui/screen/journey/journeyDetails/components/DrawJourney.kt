@@ -9,12 +9,12 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import fr.motoconnect.data.model.JourneyObject
 
-
 @Composable
 fun DrawJourney(
     journey: JourneyObject
 ) {
     for (i in 0 until journey.points.size - 1) {
+
         Polyline(
             points = listOf(
                 LatLng(
@@ -30,6 +30,7 @@ fun DrawJourney(
             width = 15f,
         )
     }
+
     Marker(
         state = MarkerState(
             LatLng(
@@ -38,8 +39,7 @@ fun DrawJourney(
             )
         ),
         icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN),
-
-        )
+    )
     Marker(
         state = MarkerState(
             LatLng(

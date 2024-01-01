@@ -6,7 +6,6 @@ import java.util.Date
 
 class TimeUtils {
 
-
     /**
      * Convert a timestamp to a date string "dd MMMM yyyy HH:mm"
      * @param timestamp [Timestamp]
@@ -16,6 +15,17 @@ class TimeUtils {
         val date = Date(timestamp.seconds * 1000)
         val format = SimpleDateFormat("dd MMMM yyyy HH:mm")
         return format.format(date)
+    }
+
+    /**
+     * Convert a timestamp to a date string "EEE dd MMMM yyyy"
+     * @param timestamp [Timestamp]
+     * @return date string
+     */
+    fun toDateDayString(timestamp: Timestamp): String {
+        val date = Date(timestamp.seconds * 1000L)
+        val sdf = SimpleDateFormat("EEEE dd MMMM yyyy")
+        return sdf.format(date)
     }
 
     /**
@@ -48,7 +58,7 @@ class TimeUtils {
     fun toHourMinute(duration: Long): String {
         val hour = duration / 60
         val minute = duration % 60
-        if (hour == 0L) return "${minute}min"
-        return "${hour}h ${minute}min"
+        if (hour == 0L) return "$minute min"
+        return "${hour}h $minute min"
     }
 }

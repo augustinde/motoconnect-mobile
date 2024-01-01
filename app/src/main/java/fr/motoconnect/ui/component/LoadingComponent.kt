@@ -24,7 +24,7 @@ fun Loading(){
                 .size(100.dp)
                 .padding(16.dp),
             strokeWidth = 8.dp,
-            color = MaterialTheme.colorScheme.tertiary,
+            color = MaterialTheme.colorScheme.secondary,
         )
     }
 }

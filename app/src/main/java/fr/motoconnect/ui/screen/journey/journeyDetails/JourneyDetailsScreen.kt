@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import fr.motoconnect.R
@@ -42,7 +43,8 @@ import fr.motoconnect.viewmodel.JourneyDetailsViewModel
 
 @Composable
 fun JourneyDetailsScreen(
-    journeyId: String?, navController: NavController
+    journeyId: String?,
+    navController: NavController
 ) {
 
     val journeyDetailsViewModel: JourneyDetailsViewModel = viewModel()
@@ -56,7 +58,7 @@ fun JourneyDetailsScreen(
 
     val contentResolver = context.contentResolver
 
-    val launcher =
+    val launcherGpx =
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/gpx+xml")) { selectedUri ->
             if (selectedUri != null) {
                 contentResolver.openOutputStream(selectedUri)?.use {
@@ -67,6 +69,20 @@ fun JourneyDetailsScreen(
                 }
             } else {
                 Log.d("GenerateGpx", "Uri is null")
+            }
+        }
+
+    val launcherKml =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.google-earth.kml+xml")) { selectedUri ->
+            if (selectedUri != null) {
+                contentResolver.openOutputStream(selectedUri)?.use {
+                    val bytes =
+                        ConverterGpxUtils().convertKmlAndReturnString(journeyDetailsUIState.journey!!)
+                            .toByteArray()
+                    it.write(bytes)
+                }
+            } else {
+                Log.d("GenerateKml", "Uri is null")
             }
         }
     Scaffold(topBar = {
@@ -112,7 +128,7 @@ fun JourneyDetailsScreen(
                 DropdownMenuItem(
                     onClick = {
                         expanded = false
-                        launcher.launch(
+                        launcherGpx.launch(
                             "motoConnect-${
                                 TimeUtils().toDateTimeString(
                                     journeyDetailsUIState.journey?.startDateTime!!
@@ -123,6 +139,23 @@ fun JourneyDetailsScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.export_as_gpx),
+                        color = MaterialTheme.colorScheme.tertiary,
+                    )
+                }
+                DropdownMenuItem(
+                    onClick = {
+                        expanded = false
+                        launcherKml.launch(
+                            "motoConnect-${
+                                TimeUtils().toDateTimeString(
+                                    journeyDetailsUIState.journey?.startDateTime!!
+                                )
+                            }.kml"
+                        )
+                    },
+                ) {
+                    Text(
+                        text = stringResource(R.string.export_as_kml),
                         color = MaterialTheme.colorScheme.tertiary,
                     )
                 }
@@ -147,12 +180,20 @@ fun JourneyDetailsScreen(
                     Loading()
                 }
 
+                journeyDetailsUIState.errorMsg != null -> {
+                    Text(
+                        journeyDetailsUIState.errorMsg!!,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp)
+                    )
+                }
+
                 journeyDetailsUIState.journey == null -> {
                     TravelNotFound()
                 }
 
                 else -> {
-                    JourneyDetailsContent(journeyDetailsUIState.journey!!, journeyDetailsViewModel)
+                    JourneyDetailsContent(journeyDetailsViewModel)
                 }
             }
         }

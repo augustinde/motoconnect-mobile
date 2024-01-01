@@ -14,7 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavController
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -32,17 +31,20 @@ import fr.motoconnect.data.utils.MapUtils
 import fr.motoconnect.data.utils.MarkerCustomUtils
 import fr.motoconnect.ui.screen.home.components.MapInfoMoto
 import fr.motoconnect.ui.screen.home.components.WeatherInfo
+import fr.motoconnect.ui.store.DisplayStore
 import fr.motoconnect.viewmodel.MapViewModel
 
 @SuppressLint("MissingPermission")
 @Composable
 fun HomeScreen(
-    navController: NavController,
     mapViewModel: MapViewModel,
 ) {
 
     val TAG = "HomeScreen"
     val context = LocalContext.current
+
+    val store = DisplayStore(context)
+    val darkmode = store.getDarkMode.collectAsState(initial = false)
 
     val mapUiState = mapViewModel.mapUiState.collectAsState()
 
@@ -118,10 +120,11 @@ fun HomeScreen(
         properties = MapProperties(
             isTrafficEnabled = true,
             mapType = MapType.NORMAL,
-            mapStyleOptions = MapStyleOptions.loadRawResourceStyle(
-                LocalContext.current,
-                R.raw.map_style
-            ),
+            mapStyleOptions = if (!darkmode.value) {
+                MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.map_style)
+            } else {
+                MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.map_style_dark)
+            }
         ),
         uiSettings = MapUiSettings(
             mapToolbarEnabled = false,
@@ -164,7 +167,6 @@ fun HomeScreen(
 
     if (mapUiState.value.currentMoto != null) {
         MapInfoMoto(
-            navController = navController,
             distanceBetweenDeviceAndMoto = distanceBetweenDeviceAndMoto,
             currentMoto = mapUiState.value.currentMoto!!,
             caseState = mapUiState.value.caseState!!

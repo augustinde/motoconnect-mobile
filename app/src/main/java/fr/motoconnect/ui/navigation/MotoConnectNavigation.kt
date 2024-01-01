@@ -19,9 +19,9 @@ import fr.motoconnect.viewmodel.AuthenticationViewModel
 import fr.motoconnect.viewmodel.MapViewModel
 
 enum class MotoConnectNavigationRoutes(@DrawableRes val icon: Int, val displayInBar: Boolean) {
-    Homepage(icon = R.drawable.homepage, displayInBar = true),
-    Journeys(icon = R.drawable.map, displayInBar = true),
-    JourneyDetails(icon = R.drawable.map, displayInBar = false),
+    Homepage(icon = R.drawable.home, displayInBar = true),
+    Journeys(icon = R.drawable.journey, displayInBar = true),
+    JourneyDetails(icon = R.drawable.journey, displayInBar = false),
     Moto(icon = R.drawable.moto, displayInBar = true),
     Profile(icon = R.drawable.profile, displayInBar = true)
 }
@@ -39,7 +39,7 @@ fun MotoConnectNavigation(
         startDestination = MotoConnectNavigationRoutes.Homepage.name,
     ) {
         composable(MotoConnectNavigationRoutes.Homepage.name) {
-            HomeScreen(navController = navController, mapViewModel = mapViewModel)
+            HomeScreen(mapViewModel = mapViewModel)
         }
 
         composable(MotoConnectNavigationRoutes.Journeys.name) {

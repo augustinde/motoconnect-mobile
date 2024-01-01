@@ -56,14 +56,16 @@
     <string name="version_code">Code de la version</string>
     <string name="displayname_textfield_label">Nom d\'utilisateur</string>
     <string name="coarse_location_warning">Activer position exacte</string>
-    <string name="journeys">Journeys</string>
-    <string name="no_journeys_yet">No journeys yet</string>
+    <string name="journeys">Trajets</string>
+    <string name="no_journeys_yet">Aucun voyage pour l\'instant</string>
     <string name="duration">Durée: %1$s</string>
-    <string name="see_more">Voir plus</string>
     <string name="journey_details">Détails du trajet</string>
     <string name="journey_not_found">Trajet introuvable</string>
     <string name="cancel">Annuler</string>
     <string name="export_as_gpx">Exporter en GPX</string>
     <string name="trajet_du">Trajet du %1$s</string>
-    <string name="ask_permission">Ask permission %1$s</string>
+    <string name="ask_permission">Demander la permission %1$s</string>
+    <string name="vitesse_max">Vitesse max</string>
+    <string name="duration_without_args">Durée</string>
+    <string name="export_as_kml">Export as KML</string>
 </resources>

@@ -20,18 +20,19 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import fr.motoconnect.R
-import fr.motoconnect.data.model.JourneyObject
 import fr.motoconnect.data.utils.MapUtils
 import fr.motoconnect.data.utils.MarkerCustomUtils
+import fr.motoconnect.ui.store.DisplayStore
 import fr.motoconnect.viewmodel.JourneyDetailsViewModel
-
 
 @Composable
 fun JourneyDetailsContent(
-    journey: JourneyObject,
     journeyDetailsViewModel: JourneyDetailsViewModel
 ) {
     val context = LocalContext.current
+
+    val store = DisplayStore(context)
+    val darkmode = store.getDarkMode.collectAsState(initial = false)
 
     val journeyDetailsUIState by journeyDetailsViewModel.journeyDetailsUiState.collectAsState()
 
@@ -52,7 +53,7 @@ fun JourneyDetailsContent(
         }!!
     }
 
-    LaunchedEffect(cameraPositionState){
+    LaunchedEffect(cameraPositionState) {
         cameraPositionState.move(
             CameraUpdateFactory.newLatLngBounds(
                 MapUtils().calculateZoomLevel(
@@ -65,7 +66,8 @@ fun JourneyDetailsContent(
                         journeyDetailsUIState.journey?.points?.last()?.geoPoint!!.longitude
                     ),
                 ), 300
-        ))
+            )
+        )
     }
 
     GoogleMap(
@@ -74,17 +76,18 @@ fun JourneyDetailsContent(
         properties = MapProperties(
             isTrafficEnabled = false,
             mapType = MapType.NORMAL,
-            mapStyleOptions = MapStyleOptions.loadRawResourceStyle(
-                LocalContext.current,
-                R.raw.map_style
-            ),
+            mapStyleOptions = if (!darkmode.value) {
+                MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.map_style)
+            } else {
+                MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.map_style_dark)
+            }
         ),
         uiSettings = MapUiSettings(
             mapToolbarEnabled = false,
             zoomControlsEnabled = false,
         ),
     ) {
-        DrawJourney(journey)
+        DrawJourney(journeyDetailsUIState.journey!!)
 
         if (journeyDetailsUIState.currentPoint != null) {
             Marker(
