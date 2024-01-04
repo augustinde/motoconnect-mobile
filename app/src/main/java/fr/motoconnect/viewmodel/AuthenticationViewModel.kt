@@ -1,6 +1,7 @@
 package fr.motoconnect.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -137,6 +138,34 @@ class AuthenticationViewModel(
     fun signOut() {
         auth.signOut()
         _authUiState.update { AuthUIState(isLogged = false, errorMessage = null, user = null) }
+    }
+
+    fun accountDelete(){
+        if(auth.currentUser != null){
+            db.collection("users")
+                .document(auth.currentUser!!.uid)
+                .delete().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        auth.currentUser!!.delete().addOnCompleteListener { task2 ->
+                            if (task2.isSuccessful) {
+                                _authUiState.update { AuthUIState(isLogged = false, errorMessage = null, user = null) }
+                            }
+                            else {
+                                Log.d("DELETE", context.getString(R.string.accountdelete_failed) + task2.exception!!.message)
+                            }
+                        }
+
+                    }
+                    else {
+                        Log.d("DELETE", context.getString(R.string.dbcollection_delete_failed) + task.exception!!.message)
+                    }
+                }
+        }
+        else {
+            Log.d("DELETE", context.getString(R.string.no_user_loged_in_user_is_null))
+        }
+
+
     }
 
     fun resetErrorMessage() {

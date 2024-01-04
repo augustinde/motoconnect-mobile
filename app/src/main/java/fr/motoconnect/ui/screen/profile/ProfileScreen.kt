@@ -33,10 +33,6 @@ import fr.motoconnect.ui.store.DisplayStore
 import fr.motoconnect.ui.theme.MotoConnectTheme
 import fr.motoconnect.viewmodel.AuthenticationViewModel
 
-fun onAccountDelete() {
-    //A faire plus tard
-}
-
 fun onAppVersion(context: Context) {
     Toast.makeText(
         context,
@@ -50,7 +46,8 @@ fun onAppVersion(context: Context) {
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ProfileScreen(
-    auth: FirebaseAuth, authenticationViewModel: AuthenticationViewModel
+    auth: FirebaseAuth,
+    authenticationViewModel: AuthenticationViewModel
 ) {
     val context = LocalContext.current
     val store = DisplayStore(context)
@@ -70,7 +67,8 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.primary)
-                .padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally
+                .padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
                 Text(
@@ -78,9 +76,7 @@ fun ProfileScreen(
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.tertiary, shape = CircleShape
-                        )
+                        .background(color = MaterialTheme.colorScheme.tertiary, shape = CircleShape)
                         .padding(8.dp)
                         .fillMaxWidth()
                 )

@@ -98,7 +98,7 @@ fun AboutCard(context: Context) {
                     Icon(
                         imageVector = Icons.Outlined.Info,
                         contentDescription = null,
-                        modifier = Modifier.size(SwitchDefaults.IconSize),
+                        modifier = Modifier.size(SwitchDefaults.IconSize.times(1.5f)),
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(

@@ -56,6 +56,15 @@
     <string name="version_code">Code de la version</string>
     <string name="displayname_textfield_label">Nom d\'utilisateur</string>
     <string name="coarse_location_warning">Activer position exacte</string>
+    <string name="AskNotificiation">Demande les notifications</string>
+    <string name="AcceptedNotification">A accepté les notifications</string>
+    <string name="askLocation">Demande la position</string>
+    <string name="acceptedLocation">A accepté la position</string>
+    <string name="delete_account_confirmation">Suppression du compte</string>
+    <string name="account_delete_confirmation_dialog">Êtes-vous sur de vouloir supprimer votre compte ?</string>
+    <string name="accountdelete_failed">"accountDelete échec : "</string>
+    <string name="dbcollection_delete_failed">"dbcollection suppresion échec : "</string>
+    <string name="no_user_loged_in_user_is_null">Pas d\'utilisateur connecté, user = null</string>
     <string name="journeys">Trajets</string>
     <string name="no_journeys_yet">Aucun voyage pour l\'instant</string>
     <string name="duration">Durée: %1$s</string>
