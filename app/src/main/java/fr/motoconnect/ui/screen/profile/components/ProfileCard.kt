@@ -40,7 +40,8 @@ fun ProfileCard(auth: FirebaseAuth, authenticationViewModel: AuthenticationViewM
     if (currentUser?.email != null) {
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.tertiary,
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.tertiary
             ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 6.dp
@@ -51,7 +52,6 @@ fun ProfileCard(auth: FirebaseAuth, authenticationViewModel: AuthenticationViewM
         {
             Text(
                 text = stringResource(R.string.profile),
-                color = MaterialTheme.colorScheme.primary,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(14.dp)
@@ -78,27 +78,23 @@ fun ProfileCard(auth: FirebaseAuth, authenticationViewModel: AuthenticationViewM
                 ) {
                     Text(
                         text = stringResource(R.string.username) + " :",
-                        color = MaterialTheme.colorScheme.primary,
                         fontSize = 15.sp,
                         textDecoration = TextDecoration.Underline,
                         modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp)
                     )
                     Text(
                         text = authUiState.user?.displayName.toString(),
-                        color = MaterialTheme.colorScheme.primary,
                         fontSize = 14.sp,
                         modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 16.dp)
                     )
                     Text(
                         text = stringResource(R.string.email_textfield_label) + " :",
-                        color = MaterialTheme.colorScheme.primary,
                         fontSize = 15.sp,
                         textDecoration = TextDecoration.Underline,
                         modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp)
                     )
                     Text(
                         text = currentUser.email!!,
-                        color = MaterialTheme.colorScheme.primary,
                         fontSize = 14.sp,
                     )
                 }

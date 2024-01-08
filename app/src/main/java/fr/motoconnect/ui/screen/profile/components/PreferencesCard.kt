@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -40,18 +39,17 @@ fun PreferencesCard(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiary,
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+            contentColor = MaterialTheme.colorScheme.tertiary
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         ), modifier = Modifier
-            .height(210.dp)
             .fillMaxWidth()
     )
     {
         Text(
             text = stringResource(R.string.preferences),
-            color = MaterialTheme.colorScheme.primary,
             fontSize = 15.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(14.dp)
@@ -70,7 +68,6 @@ fun PreferencesCard(
             ) {
                 Text(
                     text = stringResource(R.string.location),
-                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp)
@@ -85,7 +82,6 @@ fun PreferencesCard(
                     ) {
                         Text(
                             text = stringResource(R.string.coarse_location_warning),
-                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 } else if (!locationPermission.status.isGranted) {
@@ -97,13 +93,11 @@ fun PreferencesCard(
                     ) {
                         Text(
                             text = stringResource(R.string.Authorization),
-                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 } else {
                     Text(
                         text = stringResource(R.string.location_activated),
-                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -114,7 +108,6 @@ fun PreferencesCard(
             ) {
                 Text(
                     text = stringResource(R.string.notification),
-                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp)
@@ -129,13 +122,11 @@ fun PreferencesCard(
                     ) {
                         Text(
                             text = stringResource(R.string.Authorization),
-                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                 } else {
                     Text(
                         text = stringResource(R.string.notification_activated),
-                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -149,7 +140,6 @@ fun PreferencesCard(
             ) {
             Text(
                 text = stringResource(R.string.display),
-                color = MaterialTheme.colorScheme.primary,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 5.dp)

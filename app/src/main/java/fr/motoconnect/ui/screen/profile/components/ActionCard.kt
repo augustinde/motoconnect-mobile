@@ -42,18 +42,17 @@ fun ActionCard(authenticationViewModel: AuthenticationViewModel) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiary,
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+            contentColor = MaterialTheme.colorScheme.tertiary
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         ), modifier = Modifier
-            .height(210.dp)
             .fillMaxWidth()
     )
     {
         Text(
             text = stringResource(R.string.actions),
-            color = MaterialTheme.colorScheme.primary,
             fontSize = 15.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(14.dp)
@@ -71,7 +70,6 @@ fun ActionCard(authenticationViewModel: AuthenticationViewModel) {
             ) {
                 Text(
                     text = stringResource(id = R.string.sign_out),
-                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -87,7 +85,6 @@ fun ActionCard(authenticationViewModel: AuthenticationViewModel) {
                 ) {
                     Text(
                         text = stringResource(id = R.string.sign_out),
-                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -99,7 +96,6 @@ fun ActionCard(authenticationViewModel: AuthenticationViewModel) {
             {
                 Text(
                     text = stringResource(R.string.account_deletion),
-                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -107,12 +103,11 @@ fun ActionCard(authenticationViewModel: AuthenticationViewModel) {
                 Button(
                     onClick = { showDialogDeleteAccount = true },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
+                        containerColor = MaterialTheme.colorScheme.error
                     )
                 ) {
                     Text(
                         text = stringResource(R.string.delete),
-                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }

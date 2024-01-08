@@ -34,7 +34,7 @@ fun PointInfo(
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(30))
-            .background(MaterialTheme.colorScheme.tertiary)
+            .background(MaterialTheme.colorScheme.primary)
             .width(200.dp)
             .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -67,7 +67,7 @@ fun PointInfo(
                     .rotate(point.tilt.toFloat()),
             )
             Text(
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.tertiary,
                 text = "${getTilt(point)}°",
                 fontSize = 18.sp,
             )

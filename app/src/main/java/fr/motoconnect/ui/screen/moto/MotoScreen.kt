@@ -21,7 +21,7 @@ fun MotoScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.tertiary),
+            .background(MaterialTheme.colorScheme.primary),
     ) {
         if (motoUIState.value.moto == null) {
             CreateMotoComponent(

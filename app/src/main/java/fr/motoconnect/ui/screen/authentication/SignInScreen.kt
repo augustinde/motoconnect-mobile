@@ -15,7 +15,6 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +27,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -56,20 +54,22 @@ fun SignInScreen(
     val password = remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.tertiary),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.primary),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
         Text(
             text = stringResource(id = R.string.sign_in_title),
-            style = TextStyle(fontSize = 30.sp, color = MaterialTheme.colorScheme.primary),
+            style = TextStyle(fontSize = 30.sp, color = MaterialTheme.colorScheme.tertiary),
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(16.dp))
 
         TextField(
-            label = { Text(text = stringResource(id = R.string.email_textfield_label)) },
+            label = { Text(text = stringResource(id = R.string.email_textfield_label), color = MaterialTheme.colorScheme.secondary) },
             value = email.value,
             onValueChange = { email.value = it },
             isError = authUiState.errorMessage != null,
@@ -81,7 +81,7 @@ fun SignInScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
-            label = { Text(text = stringResource(id = R.string.password_textfield_label)) },
+            label = { Text(text = stringResource(id = R.string.password_textfield_label), color = MaterialTheme.colorScheme.secondary) },
             value = password.value,
             onValueChange = { password.value = it },
             isError = authUiState.errorMessage != null,
@@ -104,9 +104,14 @@ fun SignInScreen(
                 onClick = {
                     authenticationViewModel.signIn(email.value, password.value)
                 },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                ),
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()
+
                     .height(50.dp),
             ) {
                 Text(text = stringResource(id = R.string.sign_in))
@@ -125,7 +130,7 @@ fun SignInScreen(
                 fontSize = 14.sp,
                 fontFamily = FontFamily.Default,
                 textDecoration = TextDecoration.Underline,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.secondary
             )
         )
 
@@ -147,6 +152,10 @@ fun SignInScreen(
                 navController.navigate(AuthenticationNavigationRoutes.SignUp.name)
                 authenticationViewModel.resetErrorMessage()
             },
+            colors = ButtonDefaults.buttonColors(
+                contentColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.secondary,
+            ),
         ) {
             Text(text = stringResource(id = R.string.no_account))
         }

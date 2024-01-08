@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,14 +51,14 @@ fun ResetPasswordScreen(
     val email = remember { mutableStateOf(String()) }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.tertiary),
+        modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.primary),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
         Text(
             text = stringResource(id = R.string.reset_password_title),
-            style = TextStyle(fontSize = 30.sp, color = MaterialTheme.colorScheme.primary),
+            style = TextStyle(fontSize = 30.sp, color = MaterialTheme.colorScheme.tertiary),
             textAlign = TextAlign.Center
         )
 
@@ -66,7 +67,7 @@ fun ResetPasswordScreen(
             value = email.value,
             onValueChange = email::value::set,
             isError = authUiState.errorMessage != null,
-            label = { Text(text = stringResource(id = R.string.email_textfield_label)) },
+            label = { Text(text = stringResource(id = R.string.email_textfield_label), color = MaterialTheme.colorScheme.secondary) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Done
@@ -82,6 +83,10 @@ fun ResetPasswordScreen(
                 onClick = {
                     authenticationViewModel.resetPassword(email.value)
                 },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                ),
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,6 +113,10 @@ fun ResetPasswordScreen(
                 navController.navigate(AuthenticationNavigationRoutes.SignIn.name)
                 authenticationViewModel.resetErrorMessage()
             },
+            colors = ButtonDefaults.buttonColors(
+                contentColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.secondary,
+            ),
         ) {
             Text(text = stringResource(id = R.string.back_to_sign_in))
         }

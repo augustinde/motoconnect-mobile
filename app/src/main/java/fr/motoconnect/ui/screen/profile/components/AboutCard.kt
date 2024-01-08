@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -41,30 +40,28 @@ fun AboutCard(context: Context) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiary,
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+            contentColor = MaterialTheme.colorScheme.tertiary
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         ), modifier = Modifier
-            .height(210.dp)
             .fillMaxWidth()
     )
     {
         Text(
             text = stringResource(R.string.about),
-            color = MaterialTheme.colorScheme.primary,
             fontSize = 15.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(14.dp)
         )
-        Spacer(modifier = Modifier.height(25.dp))
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-        )
-        {
+                .padding(0.dp, 0.dp, 0.dp, 14.dp)
+        ) {
             Button(
                 onClick = { showDialogAppInfo = true },
                 colors = ButtonDefaults.buttonColors(
@@ -74,7 +71,6 @@ fun AboutCard(context: Context) {
             ) {
                 Text(
                     text = stringResource(R.string.application_infos),
-                    color = MaterialTheme.colorScheme.primary
                 )
             }
             Button(
@@ -85,7 +81,6 @@ fun AboutCard(context: Context) {
             ) {
                 Text(
                     text = stringResource(R.string.application_version),
-                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -98,12 +93,13 @@ fun AboutCard(context: Context) {
                     Icon(
                         imageVector = Icons.Outlined.Info,
                         contentDescription = null,
+                        tint = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.size(SwitchDefaults.IconSize.times(1.5f)),
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
                         text = stringResource(R.string.application_infos),
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.tertiary,
                     )
                 }
 
@@ -111,10 +107,10 @@ fun AboutCard(context: Context) {
             text = {
                 Text(
                     text = stringResource(R.string.app_info),
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.tertiary
                 )
             },
-            backgroundColor = MaterialTheme.colorScheme.tertiary,
+            backgroundColor = MaterialTheme.colorScheme.primary,
             confirmButton = {
                 Button(
                     onClick = { showDialogAppInfo = false },

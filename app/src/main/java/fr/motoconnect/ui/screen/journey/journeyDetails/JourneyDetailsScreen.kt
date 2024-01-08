@@ -37,6 +37,7 @@ import fr.motoconnect.R
 import fr.motoconnect.data.utils.ConverterGpxUtils
 import fr.motoconnect.data.utils.TimeUtils
 import fr.motoconnect.ui.component.Loading
+import fr.motoconnect.ui.navigation.MotoConnectNavigationRoutes
 import fr.motoconnect.ui.screen.journey.journeyDetails.components.JourneyDetailsContent
 import fr.motoconnect.ui.screen.journey.journeyDetails.components.TravelNotFound
 import fr.motoconnect.viewmodel.JourneyDetailsViewModel
@@ -86,7 +87,7 @@ fun JourneyDetailsScreen(
             }
         }
     Scaffold(topBar = {
-        TopAppBar(backgroundColor = MaterialTheme.colorScheme.primary, title = {
+        TopAppBar(backgroundColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.tertiary, title = {
             when (journeyDetailsUIState.journey) {
                 null -> {
                     Text(text = stringResource(R.string.journey_details))
@@ -104,7 +105,7 @@ fun JourneyDetailsScreen(
             }
         }, navigationIcon = {
             IconButton(onClick = {
-                navController.popBackStack()
+                navController.navigate(MotoConnectNavigationRoutes.Journeys.name)
             }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,

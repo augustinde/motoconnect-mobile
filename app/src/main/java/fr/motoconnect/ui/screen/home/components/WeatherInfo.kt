@@ -42,7 +42,7 @@ fun WeatherInfo(
                 .align(Alignment.TopEnd)
                 .height(40.dp)
                 .clip(RoundedCornerShape(20))
-                .background(MaterialTheme.colorScheme.tertiary)
+                .background(MaterialTheme.colorScheme.primary)
                 .padding(8.dp),
         ) {
             Image(
@@ -52,7 +52,10 @@ fun WeatherInfo(
                 painter = painter,
                 contentDescription = "",
             )
-            Text(text = "$temp°C")
+            Text(
+                text = "$temp°C",
+                color = MaterialTheme.colorScheme.tertiary,
+            )
         }
     }
 }

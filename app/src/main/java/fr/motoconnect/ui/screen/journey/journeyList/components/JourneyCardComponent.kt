@@ -114,7 +114,7 @@ fun JourneyCardComponent(
             .clickable { onClickSeeMore() },
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.primary,
+            containerColor = MaterialTheme.colorScheme.onPrimary,
         ),
     ) {
         Box(
@@ -162,7 +162,7 @@ fun JourneyCardComponent(
                         brush = Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                MaterialTheme.colorScheme.primary
+                                MaterialTheme.colorScheme.onPrimary
                             ),
                             startY = 400f,
                             endY = 500f

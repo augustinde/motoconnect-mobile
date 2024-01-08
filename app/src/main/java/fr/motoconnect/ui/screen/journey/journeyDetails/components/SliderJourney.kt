@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,7 +48,7 @@ fun SliderJourney(
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(30))
-            .background(MaterialTheme.colorScheme.tertiary)
+            .background(MaterialTheme.colorScheme.primary)
             .padding(16.dp, 4.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -60,7 +61,7 @@ fun SliderJourney(
                 )
             },
             modifier = Modifier
-                .background(Color(0xFF343333), RoundedCornerShape(50))
+                .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(50))
         ) {
             if (journeyDetailsUIState.playerState == JourneyPlayerState.PLAYING) {
                 Icon(
@@ -77,12 +78,24 @@ fun SliderJourney(
             }
         }
         Text(
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.tertiary,
             text = TimeUtils().toTime(journeyDetailsUIState.currentPoint?.time?.seconds!!),
             fontSize = 18.sp,
         )
 
         Slider(
+            colors = SliderDefaults.colors(
+                thumbColor = Color.Transparent,
+                activeTrackColor = MaterialTheme.colorScheme.secondary,
+                inactiveTrackColor = MaterialTheme.colorScheme.tertiary,
+                disabledThumbColor = Color.Transparent,
+                disabledActiveTrackColor = MaterialTheme.colorScheme.secondary,
+                disabledInactiveTrackColor = MaterialTheme.colorScheme.tertiary,
+                activeTickColor = Color.Transparent,
+                inactiveTickColor = Color.Transparent,
+                disabledActiveTickColor = Color.Transparent,
+                disabledInactiveTickColor = Color.Transparent,
+            ),
             value = journeyDetailsUIState.currentPoint?.let {
                 journeyDetailsUIState.journey?.points?.indexOf(
                     it

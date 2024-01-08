@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import fr.motoconnect.R
+import java.util.Locale
 
 @Composable
 fun MapInfoMoto(
@@ -48,19 +49,27 @@ fun MapInfoMoto(
             modifier = Modifier
                 .width(250.dp)
                 .clip(RoundedCornerShape(20))
-                .background(MaterialTheme.colorScheme.tertiary)
+                .background(MaterialTheme.colorScheme.primary)
                 .padding(16.dp),
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(text = currentMoto, fontWeight = FontWeight.Bold)
+                Text(
+                    text = currentMoto.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+              //  Spacer(modifier = Modifier.width(16.dp).height(2.dp).background(Color.Red))
                 Row(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(text = caseStateString)
+                    Text(
+                        text = caseStateString,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
                     Image(
                         painter = painterResource(id = R.drawable.moto_status),
                         contentDescription = "",
@@ -77,7 +86,10 @@ fun MapInfoMoto(
                 verticalAlignment = Alignment.Bottom
             ) {
 
-                Text(text = stringResource(R.string.distance, distanceBetweenDeviceAndMoto))
+                Text(
+                    text = stringResource(R.string.distance, distanceBetweenDeviceAndMoto),
+                    color = MaterialTheme.colorScheme.tertiary
+                )
             }
         }
     }

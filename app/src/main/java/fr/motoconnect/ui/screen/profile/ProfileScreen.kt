@@ -3,13 +3,15 @@ package fr.motoconnect.ui.screen.profile
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,8 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.firebase.auth.FirebaseAuth
@@ -30,7 +32,6 @@ import fr.motoconnect.ui.screen.profile.components.ActionCard
 import fr.motoconnect.ui.screen.profile.components.PreferencesCard
 import fr.motoconnect.ui.screen.profile.components.ProfileCard
 import fr.motoconnect.ui.store.DisplayStore
-import fr.motoconnect.ui.theme.MotoConnectTheme
 import fr.motoconnect.viewmodel.AuthenticationViewModel
 
 fun onAppVersion(context: Context) {
@@ -62,33 +63,37 @@ fun ProfileScreen(
     val locationPermissionCoarse = rememberPermissionState(
         permission = android.Manifest.permission.ACCESS_COARSE_LOCATION
     )
-    MotoConnectTheme(activated = darkmode.value) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ){
+
+        Box(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.secondary)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = stringResource(R.string.settings),
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = 24.sp,
+                modifier = Modifier.padding(0.dp, 20.dp)
+            )
+        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.primary)
-                .padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(16.dp, 0.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item {
-                Text(
-                    text = stringResource(R.string.settings),
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .background(color = MaterialTheme.colorScheme.tertiary, shape = CircleShape)
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                )
-            }
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(10.dp))
             }
             item {
                 ProfileCard(auth, authenticationViewModel)
-            }
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
             }
             item {
                 PreferencesCard(
@@ -101,16 +106,13 @@ fun ProfileScreen(
                 )
             }
             item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-            item {
                 ActionCard(authenticationViewModel)
             }
             item {
-                Spacer(modifier = Modifier.height(16.dp))
+                AboutCard(context)
             }
             item {
-                AboutCard(context)
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }

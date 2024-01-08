@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -51,20 +52,20 @@ fun SignUpScreen(
     val displayName = remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.tertiary),
+        modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.primary),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
         Text(
             text = stringResource(id = R.string.sign_up_title),
-            style = TextStyle(fontSize = 30.sp, color = MaterialTheme.colorScheme.primary),
+            style = TextStyle(fontSize = 30.sp, color = MaterialTheme.colorScheme.tertiary),
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.padding(16.dp))
 
         TextField(
-            label = { Text(text = stringResource(id = R.string.displayname_textfield_label)) },
+            label = { Text(text = stringResource(id = R.string.displayname_textfield_label), color = MaterialTheme.colorScheme.secondary) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
@@ -77,7 +78,7 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
-            label = { Text(text = stringResource(id = R.string.email_textfield_label)) },
+            label = { Text(text = stringResource(id = R.string.email_textfield_label), color = MaterialTheme.colorScheme.secondary) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
@@ -89,7 +90,7 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
-            label = { Text(text = stringResource(id = R.string.password_textfield_label)) },
+            label = { Text(text = stringResource(id = R.string.password_textfield_label), color = MaterialTheme.colorScheme.secondary) },
             value = password.value,
             isError = authUiState.errorMessage != null,
             visualTransformation = PasswordVisualTransformation(),
@@ -111,6 +112,10 @@ fun SignUpScreen(
                 onClick = {
                     authenticationViewModel.signUp(email.value, password.value, displayName.value)
                 },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                ),
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -138,6 +143,10 @@ fun SignUpScreen(
                 navController.navigate(AuthenticationNavigationRoutes.SignIn.name)
                 authenticationViewModel.resetErrorMessage()
             },
+            colors = ButtonDefaults.buttonColors(
+                contentColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.secondary,
+            ),
         ) {
             Text(text = stringResource(id = R.string.already_have_an_account))
         }

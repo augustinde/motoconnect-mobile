@@ -11,12 +11,16 @@ private val DarkColorScheme = darkColorScheme(
     primary = Primary1,
     secondary = Secondary1,
     tertiary = Tertiary1,
+    onPrimary = OnPrimary1,
+    error = Red,
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Primary2,
     secondary = Secondary2,
     tertiary = Tertiary2,
+    onPrimary = OnPrimary2,
+    error = Red,
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
