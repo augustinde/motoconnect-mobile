@@ -1,11 +1,15 @@
 package fr.motoconnect.viewmodel
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import fr.motoconnect.R
 import fr.motoconnect.data.model.UserObject
 import fr.motoconnect.viewmodel.uiState.AuthUIState
@@ -76,7 +80,7 @@ class AuthenticationViewModel(
             }
     }
 
-    fun signUp(email: String, password: String, displayName: String) {
+    fun signUp(email: String, password: String, displayName: String, imageProfile: Uri) {
         if (!isMandatoryFieldsFilled(email, password)) {
             _authUiState.value = AuthUIState(
                 isLogged = false,
@@ -100,6 +104,7 @@ class AuthenticationViewModel(
                             db.collection("users")
                                 .document(auth.currentUser!!.uid)
                                 .set(UserObject(displayName = displayName))
+                            changeProfilePicture(imageProfile)
                             viewModelScope.launch {
                                 getCurrentUser()
                             }
@@ -140,8 +145,9 @@ class AuthenticationViewModel(
         _authUiState.update { AuthUIState(isLogged = false, errorMessage = null, user = null) }
     }
 
-    fun accountDelete(){
-        if(auth.currentUser != null){
+    fun accountDelete() {
+        if (auth.currentUser != null) {
+            deleteProfilePicture()
             db.collection("users")
                 .document(auth.currentUser!!.uid)
                 .delete().addOnCompleteListener { task ->
@@ -160,8 +166,7 @@ class AuthenticationViewModel(
                         Log.d("DELETE", context.getString(R.string.dbcollection_delete_failed) + task.exception!!.message)
                     }
                 }
-        }
-        else {
+        } else {
             Log.d("DELETE", context.getString(R.string.no_user_loged_in_user_is_null))
         }
 
@@ -176,4 +181,62 @@ class AuthenticationViewModel(
         return email.isNotEmpty() && password.isNotEmpty()
     }
 
+    fun changeUsername(newUsername: String) {
+        db.collection("users").document(auth.currentUser!!.uid)
+            .update("displayName", newUsername).addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    Log.d("ChangeUsername", context.getString(R.string.the_username_has_been_changed))
+                    Toast.makeText(context, context.getString(R.string.the_username_has_been_changed), Toast.LENGTH_SHORT).show()
+                } else {
+                    Log.d("ChangeUsername", context.getString(R.string.the_username_has_not_been_changed))
+                }
+            }
+    }
+
+    fun changeProfilePicture(imageUri: Uri) {
+
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference.child(auth.currentUser!!.uid + "/profilePicture")
+
+        val uploadTask: UploadTask = storageRef.putFile(imageUri)
+
+        uploadTask.addOnProgressListener {
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.d("Upload", context.getString(R.string.upload_success))
+                Toast.makeText(context,
+                    context.getString(R.string.the_profile_picture_has_been_changed), Toast.LENGTH_SHORT).show()
+            } else {
+                Log.d("Upload", context.getString(R.string.upload_failed))
+                Toast.makeText(context,
+                    context.getString(R.string.the_profile_picture_couldn_t_be_changed), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun deleteProfilePicture(){
+
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference.child(auth.currentUser!!.uid + "/profilePicture")
+
+        storageRef.delete().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.d("Delete", context.getString(R.string.delete_success))
+            } else {
+                Log.d("Delete", context.getString(R.string.delete_failed))
+            }
+        }
+    }
+
+    fun changePassword(password: String) {
+        auth.currentUser!!.updatePassword(password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.d("Password", context.getString(R.string.the_password_has_been_changed))
+                Toast.makeText(context, context.getString(R.string.the_password_has_been_changed), Toast.LENGTH_SHORT).show()
+            } else {
+                Log.d("Password", context.getString(R.string.the_password_has_not_been_changed) + task.exception!!.message)
+                Toast.makeText(context, context.getString(R.string.error_the_password_has_not_been_changed_please_login_again), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 }

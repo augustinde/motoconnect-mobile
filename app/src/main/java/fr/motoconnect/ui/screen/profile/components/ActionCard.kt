@@ -32,11 +32,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import fr.motoconnect.R
+import fr.motoconnect.ui.navigation.ProfileNavigationRoutes
 import fr.motoconnect.viewmodel.AuthenticationViewModel
 
 @Composable
-fun ActionCard(authenticationViewModel: AuthenticationViewModel) {
+fun ActionCard(authenticationViewModel: AuthenticationViewModel, navController: NavController) {
 
     var showDialogDeleteAccount by remember { mutableStateOf(false) }
 
@@ -112,6 +114,29 @@ fun ActionCard(authenticationViewModel: AuthenticationViewModel) {
                 }
             }
         }
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(14.dp),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(stringResource(R.string.modification_compte), modifier = Modifier.padding(14.dp))
+                Button(
+                    onClick = {navController.navigate(ProfileNavigationRoutes.ModifyProfile.name)},
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    )
+                ) {
+                    Text(
+                        text = stringResource(R.string.modifier),
+                    )
+                }
+            }
+        }
     }
     if (showDialogDeleteAccount) {
         AlertDialog(
@@ -131,11 +156,11 @@ fun ActionCard(authenticationViewModel: AuthenticationViewModel) {
                 }
             },
             text = {
-                    Text(
-                        text = stringResource(R.string.account_delete_confirmation_dialog),
-                        color = MaterialTheme.colorScheme.primary,
-                        textAlign = TextAlign.Left,
-                    )
+                Text(
+                    text = stringResource(R.string.account_delete_confirmation_dialog),
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Left,
+                )
             },
             backgroundColor = MaterialTheme.colorScheme.tertiary,
             dismissButton = {

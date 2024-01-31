@@ -14,6 +14,7 @@ import fr.motoconnect.ui.screen.home.HomeScreen
 import fr.motoconnect.ui.screen.journey.journeyDetails.JourneyDetailsScreen
 import fr.motoconnect.ui.screen.journey.journeyList.JourneyListScreen
 import fr.motoconnect.ui.screen.moto.MotoScreen
+import fr.motoconnect.ui.screen.profile.ModifyProfileScreen
 import fr.motoconnect.ui.screen.profile.ProfileScreen
 import fr.motoconnect.viewmodel.AuthenticationViewModel
 import fr.motoconnect.viewmodel.MapViewModel
@@ -24,6 +25,10 @@ enum class MotoConnectNavigationRoutes(@DrawableRes val icon: Int, val displayIn
     JourneyDetails(icon = R.drawable.journeys, displayInBar = false),
     Moto(icon = R.drawable.moto, displayInBar = true),
     Profile(icon = R.drawable.profile, displayInBar = true)
+}
+
+enum class ProfileNavigationRoutes {
+    ModifyProfile,
 }
 
 @Composable
@@ -62,8 +67,11 @@ fun MotoConnectNavigation(
 
         composable(MotoConnectNavigationRoutes.Profile.name) {
             ProfileScreen(
-                auth = auth, authenticationViewModel = authenticationViewModel
+                auth = auth, authenticationViewModel = authenticationViewModel, navController = navController
             )
+        }
+        composable(route = ProfileNavigationRoutes.ModifyProfile.name) {
+            ModifyProfileScreen(authenticationViewModel = authenticationViewModel, navController = navController, auth = auth)
         }
     }
 

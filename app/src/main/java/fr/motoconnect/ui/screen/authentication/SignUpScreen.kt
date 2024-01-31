@@ -1,5 +1,9 @@
 package fr.motoconnect.ui.screen.authentication
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -24,8 +31,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -35,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import fr.motoconnect.R
 import fr.motoconnect.ui.navigation.AuthenticationNavigationRoutes
 import fr.motoconnect.viewmodel.AuthenticationViewModel
@@ -50,6 +60,16 @@ fun SignUpScreen(
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val displayName = remember { mutableStateOf("") }
+    var imageUri by remember { mutableStateOf(Uri.parse("android.resource://fr.motoconnect/${R.drawable.moto}")) }
+
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            uri?.let {
+                imageUri = it
+            }
+        }
+    )
 
     Column(
         modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.primary),
@@ -100,17 +120,47 @@ fun SignUpScreen(
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    authenticationViewModel.signUp(email.value, password.value, displayName.value)
+                    authenticationViewModel.signUp(email.value, password.value, displayName.value, imageUri!!)
                 }
             ),
             onValueChange = { password.value = it },
         )
 
         Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 0.dp, 0.dp, 15.dp),
+            horizontalArrangement = Arrangement.Center
+        ){
+            imageUri?.let {
+                Image(
+                    painter = rememberAsyncImagePainter(model = imageUri),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(100.dp, 100.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+            Button(
+                onClick = {
+                    galleryLauncher.launch("image/*")
+                }, colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                )
+            ) {
+                Text(text = stringResource(id = R.string.pick_image))
+            }
+        }
+        Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
-                    authenticationViewModel.signUp(email.value, password.value, displayName.value)
+                    authenticationViewModel.signUp(email.value, password.value, displayName.value, imageUri!!)
                 },
                 colors = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colorScheme.primary,

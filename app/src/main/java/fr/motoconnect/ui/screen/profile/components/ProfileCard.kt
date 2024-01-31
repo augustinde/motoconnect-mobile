@@ -1,6 +1,6 @@
 package fr.motoconnect.ui.screen.profile.components
 
-import androidx.compose.foundation.Image
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,17 +16,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import fr.motoconnect.R
 import fr.motoconnect.viewmodel.AuthenticationViewModel
 
@@ -36,6 +38,15 @@ fun ProfileCard(auth: FirebaseAuth, authenticationViewModel: AuthenticationViewM
     val currentUser = auth.currentUser
 
     val authUiState by authenticationViewModel.authUiState.collectAsState()
+
+    val imageUri = remember { mutableStateOf<Uri?>(null) }
+
+    val storage = FirebaseStorage.getInstance()
+    val imageRef = storage.reference.child( auth.currentUser!!.uid + "/profilePicture")
+
+    imageRef.downloadUrl.addOnSuccessListener { uri ->
+        imageUri.value = uri
+    }
 
     if (currentUser?.email != null) {
         Card(
@@ -62,10 +73,9 @@ fun ProfileCard(auth: FirebaseAuth, authenticationViewModel: AuthenticationViewM
                     horizontalAlignment = Alignment.CenterHorizontally
                 )
                 {
-                    Image(
-                        painter = painterResource(id = R.drawable.moto),
+                    AsyncImage(
+                        model = imageUri.value,
                         contentDescription = stringResource(R.string.profile_picture),
-                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .width(100.dp)
                             .height(100.dp)

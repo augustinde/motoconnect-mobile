@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.firebase.auth.FirebaseAuth
@@ -48,7 +49,8 @@ fun onAppVersion(context: Context) {
 @Composable
 fun ProfileScreen(
     auth: FirebaseAuth,
-    authenticationViewModel: AuthenticationViewModel
+    authenticationViewModel: AuthenticationViewModel,
+    navController: NavController
 ) {
     val context = LocalContext.current
     val store = DisplayStore(context)
@@ -106,7 +108,7 @@ fun ProfileScreen(
                 )
             }
             item {
-                ActionCard(authenticationViewModel)
+                ActionCard(authenticationViewModel, navController)
             }
             item {
                 AboutCard(context)
