@@ -104,4 +104,6 @@
     <string name="error_the_password_has_not_been_changed_please_login_again">Erreur, le mot de passe n\'a pas été changée, veuillez vous reconnecter</string>
     <string name="delete_success">L\'image a été supprimée</string>
     <string name="delete_failed">L\'image n\'a pas été supprimée</string>
+    <string name="error_email_or_password">Email ou mot de passe incorrect</string>
+    <string name="error_email">Email invalide</string>
 </resources>

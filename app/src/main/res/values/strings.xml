@@ -111,4 +111,6 @@
     <string name="error_the_password_has_not_been_changed_please_login_again">Error, the password has not been changed, please login again</string>
     <string name="delete_success">The Picture has been successfully deleted</string>
     <string name="delete_failed">The Picture was not deleted</string>
+    <string name="error_email_or_password">Invalid email or password</string>
+    <string name="error_email">Invalid email</string>
 </resources>

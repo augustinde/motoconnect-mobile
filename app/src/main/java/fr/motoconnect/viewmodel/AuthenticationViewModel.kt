@@ -60,10 +60,10 @@ class AuthenticationViewModel(
             return
         }
         auth.signInWithEmailAndPassword(email, password)
-            .addOnFailureListener() { exception ->
+            .addOnFailureListener {
                 _authUiState.value = AuthUIState(
                     isLogged = false,
-                    errorMessage = exception.message,
+                    errorMessage = context.getString(R.string.error_email_or_password),
                     user = null
                 )
             }
@@ -90,10 +90,10 @@ class AuthenticationViewModel(
             return
         }
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnFailureListener() { exception ->
+            .addOnFailureListener {
                 _authUiState.value = AuthUIState(
                     isLogged = false,
-                    errorMessage = exception.message,
+                    errorMessage = context.getString(R.string.error_email_or_password),
                     user = null
                 )
             }
@@ -122,9 +122,9 @@ class AuthenticationViewModel(
             return
         }
         auth.sendPasswordResetEmail(email)
-            .addOnFailureListener { exception ->
+            .addOnFailureListener {
                 _authUiState.value = AuthUIState(
-                    errorMessage = exception.message
+                    errorMessage = context.getString(R.string.error_email),
                 )
             }
             .addOnCompleteListener { task ->
