@@ -77,6 +77,11 @@
     <string name="vitesse_max">Vitesse max</string>
     <string name="duration_without_args">Durée</string>
     <string name="export_as_kml">Export as KML</string>
+    <string name="pairing_motoconnect">Jumelage MotoConnect</string>
+    <string name="pairing">Jumeler</string>
+    <string name="camera_activated">Caméra activée</string>
+    <string name="camera">Caméra</string>
+    <string name="device">Id du boitier</string>
     <string name="modification_compte">Modification Compte</string>
     <string name="modifier">Modifier</string>
     <string name="pick_image">Choisir une image</string>

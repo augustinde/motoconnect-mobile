@@ -15,7 +15,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,16 +27,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.firebase.auth.FirebaseAuth
 import firebase.com.protolitewrapper.BuildConfig
 import fr.motoconnect.R
+import fr.motoconnect.data.utils.BarcodeScanner
 import fr.motoconnect.ui.screen.profile.components.AboutCard
 import fr.motoconnect.ui.screen.profile.components.ActionCard
+import fr.motoconnect.ui.screen.profile.components.PairingCase
 import fr.motoconnect.ui.screen.profile.components.PreferencesCard
 import fr.motoconnect.ui.screen.profile.components.ProfileCard
 import fr.motoconnect.ui.store.DisplayStore
 import fr.motoconnect.viewmodel.AuthenticationViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 fun onAppVersion(context: Context) {
     Toast.makeText(
@@ -65,10 +73,27 @@ fun ProfileScreen(
     val locationPermissionCoarse = rememberPermissionState(
         permission = android.Manifest.permission.ACCESS_COARSE_LOCATION
     )
+    val cameraPermission = rememberPermissionState(
+        permission = android.Manifest.permission.CAMERA
+    )
+
+    val barcodeScanner = BarcodeScanner(context)
+
+    val barcodeResults = barcodeScanner.resultPairing.collectAsState()
+    val scope = rememberCoroutineScope()
+
+    val authUiState by authenticationViewModel.authUiState.collectAsState()
+
+    LaunchedEffect(barcodeResults.value) {
+        scope.launch(Dispatchers.IO) {
+            authenticationViewModel.getCurrentUser()
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-    ){
+    ) {
 
         Box(
             modifier = Modifier
@@ -94,14 +119,25 @@ fun ProfileScreen(
             item {
                 Spacer(modifier = Modifier.height(10.dp))
             }
+
+            if (cameraPermission.status.isGranted && authUiState.device == null) {
+                item {
+                    PairingCase(
+                        barcodeScanner,
+                    )
+                }
+            }
+
             item {
                 ProfileCard(auth, authenticationViewModel)
             }
+
             item {
                 PreferencesCard(
                     locationPermissionCoarse,
                     locationPermission,
                     notificationPermission,
+                    cameraPermission,
                     darkmode.value,
                     store,
                     context

@@ -46,9 +46,9 @@ fun HomeScreen(
     val store = DisplayStore(context)
     val darkmode = store.getDarkMode.collectAsState(initial = false)
 
-    val mapUiState = mapViewModel.mapUiState.collectAsState()
+    val mapUiState by mapViewModel.mapUiState.collectAsState()
 
-    val currentMotoPosition = mapUiState.value.currentMotoPosition?.let {
+    val currentMotoPosition = mapUiState.currentMotoPosition?.let {
         LatLng(it.latitude, it.longitude)
     }
 
@@ -92,7 +92,6 @@ fun HomeScreen(
         }
     }
 
-
     //Set camera position to moto position
     LaunchedEffect(currentMotoPosition) {
         if (currentMotoPosition != null) {
@@ -101,7 +100,7 @@ fun HomeScreen(
     }
 
     //Calculate distance between device and moto
-    LaunchedEffect(currentDevicePosition) {
+    LaunchedEffect(currentDevicePosition, currentMotoPosition) {
         if (currentDevicePosition.latitude != 0.0 && currentDevicePosition.longitude != 0.0 && currentMotoPosition != null) {
             distanceBetweenDeviceAndMoto = MapUtils().calculateDistanceBetweenTwoPoints(
                 currentDevicePosition,
@@ -139,7 +138,8 @@ fun HomeScreen(
                     context,
                     R.drawable.moto_position
                 ),
-                anchor = Offset(0.5f, 0.5f)
+                anchor = Offset(0.5f, 0.5f),
+                title = mapUiState.currentMoto,
             )
         }
 
@@ -158,18 +158,18 @@ fun HomeScreen(
 
     }
 
-    if (mapUiState.value.weather != null) {
+    if (mapUiState.weather != null) {
         WeatherInfo(
-            temp = mapUiState.value.weather!!.temp.toString(),
-            icon = "http:" + mapUiState.value.weather!!.icon
+            temp = mapUiState.weather!!.temp.toString(),
+            icon = "http:" + mapUiState.weather!!.icon
         )
     }
 
-    if (mapUiState.value.currentMoto != null) {
+    if (mapUiState.currentMoto != null) {
         MapInfoMoto(
             distanceBetweenDeviceAndMoto = distanceBetweenDeviceAndMoto,
-            currentMoto = mapUiState.value.currentMoto!!,
-            caseState = mapUiState.value.caseState!!
+            currentMoto = mapUiState.currentMoto!!,
+            deviceState = mapUiState.deviceState!!
         )
     }
 }

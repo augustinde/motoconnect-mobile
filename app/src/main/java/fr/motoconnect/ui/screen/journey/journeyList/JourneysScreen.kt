@@ -22,18 +22,21 @@ import androidx.navigation.NavController
 import fr.motoconnect.R
 import fr.motoconnect.ui.component.Loading
 import fr.motoconnect.ui.screen.journey.journeyList.components.JourneyListComponent
+import fr.motoconnect.viewmodel.AuthenticationViewModel
 import fr.motoconnect.viewmodel.JourneyViewModel
 
 @Composable
 fun JourneyListScreen(
     navController: NavController,
+    authenticationViewModel: AuthenticationViewModel
 ) {
 
     val journeyViewModel: JourneyViewModel = viewModel(factory = JourneyViewModel.Factory)
     val journeyUIState by journeyViewModel.journeyUiState.collectAsState()
+    val authUIState by authenticationViewModel.authUiState.collectAsState()
 
     LaunchedEffect(true) {
-        journeyViewModel.getJourneys()
+        journeyViewModel.getJourneys(deviceId = authUIState.device?.id!!)
     }
 
     Column(

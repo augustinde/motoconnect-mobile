@@ -84,6 +84,11 @@
     <string name="duration_without_args">Duration</string>
     <string name="distance_without_args" translatable="false">Distance</string>
     <string name="export_as_kml">Export as KML</string>
+    <string name="pairing_motoconnect">Pairing MotoConnect</string>
+    <string name="pairing">Pairing</string>
+    <string name="camera_activated">Camera activated</string>
+    <string name="camera">Camera</string>
+    <string name="device">Case ID</string>
     <string name="modification_compte">Modify Account</string>
     <string name="modifier">Modify</string>
     <string name="pick_image">Pick image</string>

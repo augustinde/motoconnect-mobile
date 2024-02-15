@@ -34,12 +34,26 @@ class MapViewModel(
     private val auth = Firebase.auth
 
     init {
-        getLiveData()
+        db.collection("users").document(auth.currentUser?.uid.toString()).get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+                    if(document.data?.get("device") != null){
+                        getLiveData(document.data?.get("device") as String)
+                    }
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
+
     }
 
-    private fun getLiveData() {
-        val dbRef = db.collection("users")
-            .document(auth.currentUser?.uid.toString())
+    private fun getLiveData(deviceId: String) {
+        val dbRef = db.collection("devices")
+            .document(deviceId)
         dbRef.addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Log.w(TAG, "Listen failed.", e)
@@ -52,7 +66,7 @@ class MapViewModel(
                     MapUIState(
                         currentMotoPosition = snapshot.data?.get("currentMotoPosition") as GeoPoint?,
                         currentMoto = snapshot.data?.get("currentMoto") as String?,
-                        caseState = snapshot.data?.get("caseState") as Boolean?
+                        deviceState = snapshot.data?.get("state") as Boolean?
                     )
             } else {
                 Log.d(TAG, "Current data: null")

@@ -32,6 +32,7 @@ fun PreferencesCard(
     locationPermissionCoarse: PermissionState,
     locationPermission: PermissionState,
     notificationPermission: PermissionState,
+    cameraPermission: PermissionState,
     darkmode: Boolean,
     store: DisplayStore,
     context: Context
@@ -127,6 +128,44 @@ fun PreferencesCard(
                 } else {
                     Text(
                         text = stringResource(R.string.notification_activated),
+                    )
+                }
+            }
+
+        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        {
+            Column(
+                modifier = Modifier.padding(5.dp),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(id = R.string.camera),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp)
+                )
+                if (!cameraPermission.status.isGranted) {
+                    Button(
+                        onClick = { PermissionUtils().askPermission(cameraPermission, context, "camera") },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                        )
+
+                    ) {
+                        Text(
+                            text = stringResource(R.string.Authorization),
+                        )
+                    }
+                } else {
+                    Text(
+                        text = stringResource(R.string.camera_activated),
                     )
                 }
             }

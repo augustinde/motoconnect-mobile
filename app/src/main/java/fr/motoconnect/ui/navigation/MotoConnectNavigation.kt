@@ -43,13 +43,18 @@ fun MotoConnectNavigation(
         navController = navController,
         startDestination = MotoConnectNavigationRoutes.Homepage.name,
 
-    ) {
+        ) {
         composable(MotoConnectNavigationRoutes.Homepage.name) {
-            HomeScreen(mapViewModel = mapViewModel)
+            HomeScreen(
+                mapViewModel = mapViewModel
+            )
         }
 
         composable(MotoConnectNavigationRoutes.Journeys.name) {
-            JourneyListScreen(navController = navController)
+            JourneyListScreen(
+                navController = navController,
+                authenticationViewModel = authenticationViewModel
+            )
         }
 
         composable(
@@ -57,7 +62,9 @@ fun MotoConnectNavigation(
             arguments = listOf(navArgument("journeyId") { type = NavType.StringType })
         ) {
             JourneyDetailsScreen(
-                it.arguments?.getString("journeyId"), navController = navController
+                it.arguments?.getString("journeyId"),
+                navController = navController,
+                authenticationViewModel = authenticationViewModel
             )
         }
 

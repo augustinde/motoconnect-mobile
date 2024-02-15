@@ -30,9 +30,9 @@ class JourneyDetailsViewModel : ViewModel() {
     val db = Firebase.firestore
     val auth = Firebase.auth
 
-    suspend fun getJourney(journeyId: String) {
-        val dbref = db.collection("users")
-            .document(auth.currentUser?.uid.toString())
+    suspend fun getJourney(journeyId: String, deviceId: String) {
+        val dbref = db.collection("devices")
+            .document(deviceId)
             .collection("journeys")
             .document(journeyId)
 
@@ -42,8 +42,8 @@ class JourneyDetailsViewModel : ViewModel() {
             if (document != null) {
                 val pointsList = coroutineScope {
                     async(Dispatchers.IO) {
-                        db.collection("users")
-                            .document(auth.currentUser?.uid.toString())
+                        db.collection("devices")
+                            .document(deviceId)
                             .collection("journeys")
                             .document(journeyId)
                             .collection("points")

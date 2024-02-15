@@ -40,21 +40,27 @@ import fr.motoconnect.ui.component.Loading
 import fr.motoconnect.ui.navigation.MotoConnectNavigationRoutes
 import fr.motoconnect.ui.screen.journey.journeyDetails.components.JourneyDetailsContent
 import fr.motoconnect.ui.screen.journey.journeyDetails.components.TravelNotFound
+import fr.motoconnect.viewmodel.AuthenticationViewModel
 import fr.motoconnect.viewmodel.JourneyDetailsViewModel
 
 @Composable
 fun JourneyDetailsScreen(
     journeyId: String?,
-    navController: NavController
+    navController: NavController,
+    authenticationViewModel: AuthenticationViewModel
 ) {
 
     val journeyDetailsViewModel: JourneyDetailsViewModel = viewModel()
     val journeyDetailsUIState by journeyDetailsViewModel.journeyDetailsUiState.collectAsState()
+    val authUIState by authenticationViewModel.authUiState.collectAsState()
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     LaunchedEffect(journeyId) {
-        journeyDetailsViewModel.getJourney(journeyId = journeyId!!)
+        journeyDetailsViewModel.getJourney(
+            journeyId = journeyId!!,
+            deviceId = authUIState.device?.id!!
+        )
     }
 
     val contentResolver = context.contentResolver
@@ -87,87 +93,92 @@ fun JourneyDetailsScreen(
             }
         }
     Scaffold(topBar = {
-        TopAppBar(backgroundColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.tertiary, title = {
-            when (journeyDetailsUIState.journey) {
-                null -> {
-                    Text(text = stringResource(R.string.journey_details))
-                }
+        TopAppBar(
+            backgroundColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.tertiary,
+            title = {
+                when (journeyDetailsUIState.journey) {
+                    null -> {
+                        Text(text = stringResource(R.string.journey_details))
+                    }
 
-                else -> {
-                    Text(
-                        text = stringResource(
-                            R.string.trajet_du, TimeUtils().toDateString(
-                                journeyDetailsUIState.journey?.startDateTime!!
+                    else -> {
+                        Text(
+                            text = stringResource(
+                                R.string.trajet_du, TimeUtils().toDateString(
+                                    journeyDetailsUIState.journey?.startDateTime!!
+                                )
+                            ),
+                        )
+                    }
+                }
+            },
+            navigationIcon = {
+                IconButton(onClick = {
+                    navController.navigate(MotoConnectNavigationRoutes.Journeys.name)
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = null,
+                    )
+                }
+            },
+            actions = {
+                IconButton(onClick = { expanded = true }) {
+                    Icon(
+                        imageVector = Icons.Filled.MoreVert,
+                        contentDescription = null,
+                    )
+                }
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.primary)
+                        .clip(RoundedCornerShape(10))
+                ) {
+                    DropdownMenuItem(
+                        onClick = {
+                            expanded = false
+                            launcherGpx.launch(
+                                "motoConnect-${
+                                    TimeUtils().toDateTimeString(
+                                        journeyDetailsUIState.journey?.startDateTime!!
+                                    )
+                                }.gpx"
                             )
-                        ),
-                    )
-                }
-            }
-        }, navigationIcon = {
-            IconButton(onClick = {
-                navController.navigate(MotoConnectNavigationRoutes.Journeys.name)
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = null,
-                )
-            }
-        }, actions = {
-            IconButton(onClick = { expanded = true }) {
-                Icon(
-                    imageVector = Icons.Filled.MoreVert,
-                    contentDescription = null,
-                )
-            }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.primary)
-                    .clip(RoundedCornerShape(10))
-            ) {
-                DropdownMenuItem(
-                    onClick = {
-                        expanded = false
-                        launcherGpx.launch(
-                            "motoConnect-${
-                                TimeUtils().toDateTimeString(
-                                    journeyDetailsUIState.journey?.startDateTime!!
-                                )
-                            }.gpx"
+                        },
+                    ) {
+                        Text(
+                            text = stringResource(R.string.export_as_gpx),
+                            color = MaterialTheme.colorScheme.tertiary,
                         )
-                    },
-                ) {
-                    Text(
-                        text = stringResource(R.string.export_as_gpx),
-                        color = MaterialTheme.colorScheme.tertiary,
-                    )
-                }
-                DropdownMenuItem(
-                    onClick = {
-                        expanded = false
-                        launcherKml.launch(
-                            "motoConnect-${
-                                TimeUtils().toDateTimeString(
-                                    journeyDetailsUIState.journey?.startDateTime!!
-                                )
-                            }.kml"
+                    }
+                    DropdownMenuItem(
+                        onClick = {
+                            expanded = false
+                            launcherKml.launch(
+                                "motoConnect-${
+                                    TimeUtils().toDateTimeString(
+                                        journeyDetailsUIState.journey?.startDateTime!!
+                                    )
+                                }.kml"
+                            )
+                        },
+                    ) {
+                        Text(
+                            text = stringResource(R.string.export_as_kml),
+                            color = MaterialTheme.colorScheme.tertiary,
                         )
-                    },
-                ) {
-                    Text(
-                        text = stringResource(R.string.export_as_kml),
-                        color = MaterialTheme.colorScheme.tertiary,
-                    )
+                    }
+                    DropdownMenuItem(onClick = { expanded = false }) {
+                        Text(
+                            text = stringResource(R.string.cancel),
+                            color = MaterialTheme.colorScheme.tertiary,
+                        )
+                    }
                 }
-                DropdownMenuItem(onClick = { expanded = false }) {
-                    Text(
-                        text = stringResource(R.string.cancel),
-                        color = MaterialTheme.colorScheme.tertiary,
-                    )
-                }
-            }
-        })
+            })
     }) {
         Box(
             modifier = Modifier

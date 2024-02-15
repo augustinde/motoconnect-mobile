@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import fr.motoconnect.R
+import fr.motoconnect.data.model.DeviceObject
 import fr.motoconnect.data.model.UserObject
 import fr.motoconnect.viewmodel.uiState.AuthUIState
 import kotlinx.coroutines.Dispatchers
@@ -42,12 +43,21 @@ class AuthenticationViewModel(
         }
     }
 
-    private suspend fun getCurrentUser() {
+    suspend fun getCurrentUser() {
         val user = db.collection("users")
             .document(auth.currentUser!!.uid)
             .get().await()
             .toObject(UserObject::class.java)
-        _authUiState.value = AuthUIState(isLogged = true, errorMessage = null, user = user)
+        if (user?.device == null) {
+            _authUiState.value = AuthUIState(isLogged = true, errorMessage = null, user = user, device = null)
+            return
+        }else{
+            val device = db.collection("devices")
+                .document(user.device)
+                .get().await()
+                .toObject(DeviceObject::class.java)
+            _authUiState.value = AuthUIState(isLogged = true, errorMessage = null, user = user, device = device)
+        }
     }
 
     fun signIn(email: String, password: String) {

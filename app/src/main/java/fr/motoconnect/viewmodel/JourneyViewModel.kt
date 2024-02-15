@@ -33,9 +33,9 @@ class JourneyViewModel(
     val db = Firebase.firestore
     val auth = Firebase.auth
 
-    fun getJourneys() {
-        val dbRef = db.collection("users")
-            .document(auth.currentUser?.uid.toString())
+    fun getJourneys(deviceId: String) {
+        val dbRef = db.collection("devices")
+            .document(deviceId)
             .collection("journeys")
 
         dbRef.addSnapshotListener { snapshot, e ->

@@ -31,13 +31,13 @@ import java.util.Locale
 fun MapInfoMoto(
     distanceBetweenDeviceAndMoto: String,
     currentMoto: String,
-    caseState: Boolean
+    deviceState: Boolean
 ) {
-    val caseStateString =
-        if (caseState) stringResource(id = R.string.moto_in_motion) else stringResource(
+    val deviceStateString =
+        if (deviceState) stringResource(id = R.string.moto_in_motion) else stringResource(
             id = R.string.moto_stationary
         )
-    val color = if (caseState) Color(0xFF52CA5E) else Color(0xFFEC6D50)
+    val color = if (deviceState) Color(0xFF52CA5E) else Color(0xFFEC6D50)
 
     Box(
         modifier = Modifier
@@ -61,13 +61,12 @@ fun MapInfoMoto(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.tertiary
                 )
-              //  Spacer(modifier = Modifier.width(16.dp).height(2.dp).background(Color.Red))
                 Row(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = caseStateString,
+                        text = deviceStateString,
                         color = MaterialTheme.colorScheme.tertiary
                     )
                     Image(

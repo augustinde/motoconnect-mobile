@@ -58,6 +58,11 @@ android {
 }
 
 dependencies {
+    implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0")
+    implementation("androidx.camera:camera-camera2:1.3.1")
+    implementation("androidx.camera:camera-lifecycle:1.3.1")
+    implementation("androidx.camera:camera-view:1.3.1")
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
     implementation("com.google.maps.android:maps-compose-utils:2.11.4")
     implementation("com.google.maps.android:maps-compose-widgets:2.11.4")
     implementation("io.coil-kt:coil-compose:2.4.0")
@@ -86,6 +91,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-android:1.5.4")
     implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
