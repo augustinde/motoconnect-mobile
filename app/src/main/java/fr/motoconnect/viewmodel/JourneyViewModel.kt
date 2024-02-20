@@ -1,5 +1,6 @@
 package fr.motoconnect.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +11,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import fr.motoconnect.R
 import fr.motoconnect.architecture.MotoConnectApplication
 import fr.motoconnect.data.model.JourneyObject
 import fr.motoconnect.data.model.PointObject
@@ -23,6 +25,7 @@ import kotlinx.coroutines.withContext
 
 class JourneyViewModel(
     private val geocodingRepository: GeocodingRepository,
+    private val context: Context
 ) : ViewModel() {
 
     private val TAG = "JourneyViewModel"
@@ -33,9 +36,9 @@ class JourneyViewModel(
     val db = Firebase.firestore
     val auth = Firebase.auth
 
-    fun getJourneys(deviceId: String) {
+    fun getJourneys(deviceId: String?) {
         val dbRef = db.collection("devices")
-            .document(deviceId)
+            .document(deviceId ?: "null")
             .collection("journeys")
 
         dbRef.addSnapshotListener { snapshot, e ->
@@ -90,7 +93,7 @@ class JourneyViewModel(
                 Log.d(TAG, "Current data: null")
                 _journeyUiState.value = JourneyUIState(
                     isLoading = false,
-                    errorMsg = "No journeys yet",
+                    errorMsg = context.getString(R.string.journey_not_found),
                     journeys = emptyList()
                 )
             }
@@ -109,7 +112,7 @@ class JourneyViewModel(
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MotoConnectApplication)
                 val geocodingRepository = application.container.geocodingRepository
-                JourneyViewModel(geocodingRepository = geocodingRepository)
+                JourneyViewModel(geocodingRepository = geocodingRepository, context = application.applicationContext)
             }
         }
     }

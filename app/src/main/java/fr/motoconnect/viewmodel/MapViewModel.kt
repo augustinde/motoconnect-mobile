@@ -39,7 +39,7 @@ class MapViewModel(
                 if (document != null) {
                     Log.d(TAG, "DocumentSnapshot data: ${document.data}")
                     if(document.data?.get("device") != null){
-                        getLiveData(document.data?.get("device") as String)
+                        getLiveData(document.data?.get("device") as String, document.data?.get("currentMoto") as String)
                     }
                 } else {
                     Log.d(TAG, "No such document")
@@ -51,7 +51,7 @@ class MapViewModel(
 
     }
 
-    private fun getLiveData(deviceId: String) {
+    private fun getLiveData(deviceId: String, currentMoto: String) {
         val dbRef = db.collection("devices")
             .document(deviceId)
         dbRef.addSnapshotListener { snapshot, e ->
@@ -62,12 +62,12 @@ class MapViewModel(
 
             if (snapshot != null && snapshot.exists()) {
                 Log.d(TAG, "Current data: ${snapshot.data}")
-                _mapUiState.value =
-                    MapUIState(
-                        currentMotoPosition = snapshot.data?.get("currentMotoPosition") as GeoPoint?,
-                        currentMoto = snapshot.data?.get("currentMoto") as String?,
-                        deviceState = snapshot.data?.get("state") as Boolean?
-                    )
+                _mapUiState.value = _mapUiState.value.copy(
+                    currentMotoPosition = snapshot.data?.get("currentMotoPosition") as GeoPoint?,
+                    deviceState = snapshot.data?.get("state") as Boolean?,
+                    currentMoto = currentMoto
+                )
+
             } else {
                 Log.d(TAG, "Current data: null")
             }

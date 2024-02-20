@@ -1,6 +1,8 @@
 package fr.motoconnect.ui.screen.journey.journeyList
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,7 +39,7 @@ fun JourneyListScreen(
     val authUIState by authenticationViewModel.authUiState.collectAsState()
 
     LaunchedEffect(true) {
-        journeyViewModel.getJourneys(deviceId = authUIState.device?.id!!)
+        journeyViewModel.getJourneys(deviceId = authUIState.device?.id)
     }
 
     Column(
@@ -66,12 +69,21 @@ fun JourneyListScreen(
             }
 
             journeyUIState.errorMsg != null -> {
-                Text(
-                    journeyUIState.errorMsg!!,
-                    color = MaterialTheme.colorScheme.error,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp)
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.travel_not_found),
+                        contentDescription = null
+                    )
+                    Text(
+                        journeyUIState.errorMsg!!,
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontSize = 16.sp,
+                    )
+                }
             }
 
             journeyUIState.journeys.isEmpty() -> {
