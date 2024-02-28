@@ -33,8 +33,8 @@
     <string name="moto_break_fluid">Liquide de frein</string>
     <string name="moto_chain_greasing">Graissage chaîne</string>
     <string name="moto_journeys">Trajets</string>
-    <string name="moto_number_of_journeys">"Nombre de trajets : "</string>
-    <string name="moto_total_distance">"Distance totale : "</string>
+    <string name="moto_number_of_journeys">Nombre de trajets</string>
+    <string name="moto_total_distance">Distance totale</string>
     <string name="settings">Paramètres</string>
     <string name="profile">Profil</string>
     <string name="profile_picture">Photo de profil</string>

@@ -85,14 +85,14 @@ class MotoViewModel: ViewModel() {
         }
     }
 
-    fun resetBreakFluid() {
+    fun resetBrakeFluid() {
         try {
             db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .collection("motos")
                 .document(motoUiState.value.moto?.name.toString())
                 .update(
-                    "breakFluid", 0
+                    "brakeFluid", 0
                 )
         } catch (e: Exception) {
             e.printStackTrace()

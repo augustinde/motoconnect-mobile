@@ -1,9 +1,11 @@
 package fr.motoconnect.ui.screen.profile.components
 
 import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,11 +23,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
@@ -42,7 +46,7 @@ fun ProfileCard(auth: FirebaseAuth, authenticationViewModel: AuthenticationViewM
     val imageUri = remember { mutableStateOf<Uri?>(null) }
 
     val storage = FirebaseStorage.getInstance()
-    val imageRef = storage.reference.child( auth.currentUser!!.uid + "/profilePicture")
+    val imageRef = storage.reference.child(auth.currentUser!!.uid + "/profilePicture")
 
     imageRef.downloadUrl.addOnSuccessListener { uri ->
         imageUri.value = uri
@@ -73,14 +77,7 @@ fun ProfileCard(auth: FirebaseAuth, authenticationViewModel: AuthenticationViewM
                     horizontalAlignment = Alignment.CenterHorizontally
                 )
                 {
-                    AsyncImage(
-                        model = imageUri.value,
-                        contentDescription = stringResource(R.string.profile_picture),
-                        modifier = Modifier
-                            .width(100.dp)
-                            .height(100.dp)
-                            .clip(shape = CircleShape)
-                    )
+                    ClickableZoomableImage(imageUri.value.toString())
                 }
                 Column(
                     modifier = Modifier.padding(14.dp),
@@ -109,6 +106,35 @@ fun ProfileCard(auth: FirebaseAuth, authenticationViewModel: AuthenticationViewM
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ClickableZoomableImage(imageUri: String) {
+    val showDialog = remember { mutableStateOf(false) }
+
+    AsyncImage(
+        model = imageUri,
+        contentDescription = stringResource(R.string.profile_picture),
+        modifier = Modifier
+            .width(100.dp)
+            .height(100.dp)
+            .clip(shape = CircleShape)
+            .clickable(onClick = { showDialog.value = true }),
+    )
+
+    if (showDialog.value) {
+        Dialog(onDismissRequest = { showDialog.value = false }) {
+            AsyncImage(
+                model = imageUri,
+                contentDescription = stringResource(R.string.profile_picture),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(shape = CircleShape)
+                    .clickable(onClick = { showDialog.value = false }),
+                contentScale = ContentScale.Fit
+            )
         }
     }
 }

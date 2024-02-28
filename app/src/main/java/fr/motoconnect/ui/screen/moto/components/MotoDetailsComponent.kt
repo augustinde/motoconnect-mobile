@@ -15,8 +15,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import fr.motoconnect.R
 import fr.motoconnect.viewmodel.MotoViewModel
 
 @Composable
@@ -42,7 +44,7 @@ fun MotoDetailsComponent(
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = motoUIState.moto?.name!!.uppercase(),
+                text = motoUIState.moto?.name!!.uppercase() + " - " + stringResource(R.string.moto_maintenance),
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = 24.sp,
                 modifier = Modifier.padding(0.dp, 20.dp)
@@ -54,8 +56,8 @@ fun MotoDetailsComponent(
             resetEngineOil = {
                 motoViewModel.resetEngineOil()
             },
-            resetBreakFluid = {
-                motoViewModel.resetBreakFluid()
+            resetBrakeFluid = {
+                motoViewModel.resetBrakeFluid()
             },
             resetChainLubrication = {
                 motoViewModel.resetChainLubrication()

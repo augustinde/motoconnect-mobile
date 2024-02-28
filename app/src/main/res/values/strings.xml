@@ -33,11 +33,11 @@
     <string name="moto_maintenance">Maintenance</string>
     <string name="moto_engine_oil">Engine oil</string>
     <string name="moto_reset">Reset</string>
-    <string name="moto_break_fluid">Break fluid</string>
+    <string name="moto_break_fluid">Brake fluid</string>
     <string name="moto_chain_greasing">Chain greasing</string>
     <string name="moto_journeys">Journeys</string>
-    <string name="moto_number_of_journeys">"Number of journeys: "</string>
-    <string name="moto_total_distance">"Total distance : "</string>
+    <string name="moto_number_of_journeys">Number of journeys</string>
+    <string name="moto_total_distance">Total distance</string>
     <string name="settings">Settings</string>
     <string name="profile">Profile</string>
     <string name="profile_picture">Profile picture</string>
