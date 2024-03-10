@@ -111,4 +111,6 @@
     <string name="delete_failed">L\'image n\'a pas été supprimée</string>
     <string name="error_email_or_password">Email ou mot de passe incorrect</string>
     <string name="error_email">Email invalide</string>
+    <string name="cannot_pair_device">Impossible de jumeler le boitier MotoConnect</string>
+    <string name="device_paired">Boitier MotoConnect correctement jumelé</string>
 </resources>

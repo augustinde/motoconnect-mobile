@@ -118,4 +118,6 @@
     <string name="delete_failed">The Picture was not deleted</string>
     <string name="error_email_or_password">Invalid email or password</string>
     <string name="error_email">Invalid email</string>
+    <string name="cannot_pair_device">Unable to pair MotoConnect device</string>
+    <string name="device_paired">Correctly paired MotoConnect device</string>
 </resources>
