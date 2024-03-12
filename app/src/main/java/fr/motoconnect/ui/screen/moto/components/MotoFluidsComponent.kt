@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -42,7 +41,7 @@ fun MotoFluidsComponent(
     val brakeFluidPercentage = motoUIState.moto?.brakeFluid?.toFloat()?.div(BaseDistance.BRAKE_FLUID.distance.toFloat()) ?: 0f
     val chainLubricationPercentage = motoUIState.moto?.chainLubrication?.toFloat()?.div(BaseDistance.CHAIN_LUBRICATION.distance.toFloat()) ?: 0f
 
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
@@ -50,26 +49,31 @@ fun MotoFluidsComponent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        item {
-            Spacer(modifier = Modifier.height(10.dp))
-        }
-        item {
-            MotoFluidsCard(fluidPercentage = engineOilPercentage, reset = resetEngineOil, fluidName = stringResource(R.string.moto_engine_oil), limit = "${motoUIState.moto?.engineOil}/${BaseDistance.ENGINE_OIL.distance} km")
-        }
-        item {
-            MotoFluidsCard(fluidPercentage = brakeFluidPercentage, reset = resetBrakeFluid, fluidName = stringResource(R.string.moto_break_fluid), limit = "${motoUIState.moto?.brakeFluid}/${BaseDistance.BRAKE_FLUID.distance} km")
-        }
-        item {
-            MotoFluidsCard(fluidPercentage = chainLubricationPercentage, reset = resetChainLubrication, fluidName = stringResource(R.string.moto_chain_greasing), limit = "${motoUIState.moto?.chainLubrication}/${BaseDistance.CHAIN_LUBRICATION.distance} km")
-        }
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-        }
+        Spacer(modifier = Modifier.height(10.dp))
+        MotoFluidsCard(
+            fluidPercentage = engineOilPercentage,
+            reset = resetEngineOil,
+            fluidName = stringResource(R.string.moto_engine_oil),
+            limit = "${motoUIState.moto?.engineOil}/${BaseDistance.ENGINE_OIL.distance} km"
+        )
+        MotoFluidsCard(
+            fluidPercentage = brakeFluidPercentage,
+            reset = resetBrakeFluid,
+            fluidName = stringResource(R.string.moto_break_fluid),
+            limit = "${motoUIState.moto?.brakeFluid}/${BaseDistance.BRAKE_FLUID.distance} km"
+        )
+        MotoFluidsCard(
+            fluidPercentage = chainLubricationPercentage,
+            reset = resetChainLubrication,
+            fluidName = stringResource(R.string.moto_chain_greasing),
+            limit = "${motoUIState.moto?.chainLubrication}/${BaseDistance.CHAIN_LUBRICATION.distance} km"
+        )
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
 @Composable
-fun MotoFluidsCard(fluidPercentage: Float, reset: () -> Unit, fluidName : String,limit : String){
+fun MotoFluidsCard(fluidPercentage: Float, reset: () -> Unit, fluidName: String, limit: String) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.onPrimary,
@@ -99,7 +103,10 @@ fun MotoFluidsCard(fluidPercentage: Float, reset: () -> Unit, fluidName : String
                     Spacer(modifier = Modifier.height(8.dp))
                     LinearProgressMotoFuilds(fluidPercentage = fluidPercentage)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
                         Button(
                             onClick = { reset() },
                             colors = ButtonDefaults.buttonColors(
@@ -114,10 +121,9 @@ fun MotoFluidsCard(fluidPercentage: Float, reset: () -> Unit, fluidName : String
                             color = MaterialTheme.colorScheme.tertiary,
                             fontSize = 20.sp,
                             textAlign = TextAlign.End,
-                            modifier= Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
+                            modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
                         )
                     }
-
                 }
             }
         }
@@ -127,14 +133,14 @@ fun MotoFluidsCard(fluidPercentage: Float, reset: () -> Unit, fluidName : String
 @Composable
 fun LinearProgressMotoFuilds(fluidPercentage: Float) {
     val color = when {
-        fluidPercentage >=  1f -> colorResource(id = R.color.red)
-        fluidPercentage >  2f /  3 -> colorResource(id = R.color.orange)
-        fluidPercentage >  1f /  3 -> colorResource(id = R.color.yellow)
+        fluidPercentage >= 1f -> colorResource(id = R.color.red)
+        fluidPercentage > 2f / 3 -> colorResource(id = R.color.orange)
+        fluidPercentage > 1f / 3 -> colorResource(id = R.color.yellow)
         else -> MaterialTheme.colorScheme.secondary
     }
 
     LinearProgressIndicator(
-        progress = if (fluidPercentage >  1f)  1f else fluidPercentage,
+        progress = if (fluidPercentage > 1f) 1f else fluidPercentage,
         color = color,
         modifier = Modifier.fillMaxWidth()
     )

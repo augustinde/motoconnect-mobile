@@ -39,6 +39,7 @@ fun ScanQrCode(
             }) {
             Text(
                 text = stringResource(id = R.string.pairing),
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }

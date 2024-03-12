@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +29,7 @@ import fr.motoconnect.viewmodel.uiState.MotoUIState
 fun MotoJourneysComponent(
     motoUIState: MotoUIState,
 ) {
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
@@ -38,21 +37,24 @@ fun MotoJourneysComponent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        item {
-            MotoJourneysCard(stats = motoUIState.moto?.totalJourney.toString(), text = stringResource(R.string.moto_number_of_journeys),60,0)
-        }
-        item {
-            MotoJourneysCard(stats = "${motoUIState.moto?.distance} km", text = stringResource(R.string.moto_total_distance),0,10)
-        }
-        item {
-            Spacer(modifier = Modifier.padding(0.dp, 16.dp))
-        }
+        MotoJourneysCard(
+            stats = motoUIState.moto?.totalJourney.toString(),
+            text = stringResource(R.string.moto_number_of_journeys),
+            60,
+            0
+        )
+        MotoJourneysCard(
+            stats = "${motoUIState.moto?.distance} km",
+            text = stringResource(R.string.moto_total_distance),
+            0,
+            10
+        )
+        Spacer(modifier = Modifier.padding(0.dp, 16.dp))
     }
-
 }
 
 @Composable
-fun MotoJourneysCard(stats: String, text : String,gap : Int,gap2: Int){
+fun MotoJourneysCard(stats: String, text: String, gap: Int, gap2: Int) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.onPrimary,

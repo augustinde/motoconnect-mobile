@@ -25,7 +25,6 @@ import fr.motoconnect.viewmodel.MotoViewModel
 fun MotoDetailsComponent(
     motoViewModel: MotoViewModel,
 ) {
-
     val motoUIState by motoViewModel.motoUiState.collectAsState()
     LaunchedEffect(motoUIState.moto) {
         motoViewModel.getCurrentMoto()
@@ -50,7 +49,6 @@ fun MotoDetailsComponent(
                 modifier = Modifier.padding(0.dp, 20.dp)
             )
         }
-
         MotoFluidsComponent(
             motoUIState = motoUIState,
             resetEngineOil = {
@@ -63,8 +61,15 @@ fun MotoDetailsComponent(
                 motoViewModel.resetChainLubrication()
             }
         )
-
+        MotoTyresComponent(
+            motoUIState = motoUIState,
+            resetFrontTyre = {
+                motoViewModel.resetFrontTyre()
+            },
+            resetRearTyre = {
+                motoViewModel.resetRearTyre()
+            }
+        )
         MotoJourneysComponent(motoUIState = motoUIState)
-
     }
 }

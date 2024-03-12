@@ -83,6 +83,7 @@ fun PreferencesCard(
                     ) {
                         Text(
                             text = stringResource(R.string.coarse_location_warning),
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 } else if (!locationPermission.status.isGranted) {
@@ -94,6 +95,7 @@ fun PreferencesCard(
                     ) {
                         Text(
                             text = stringResource(R.string.Authorization),
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 } else {
@@ -123,6 +125,7 @@ fun PreferencesCard(
                     ) {
                         Text(
                             text = stringResource(R.string.Authorization),
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 } else {
@@ -161,6 +164,7 @@ fun PreferencesCard(
                     ) {
                         Text(
                             text = stringResource(R.string.Authorization),
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 } else {

@@ -115,4 +115,34 @@ class MotoViewModel: ViewModel() {
         }
     }
 
+    fun resetFrontTyre() {
+        try {
+            db.collection("users")
+                .document(auth.currentUser?.uid.toString())
+                .collection("motos")
+                .document(motoUiState.value.moto?.name.toString())
+                .update(
+                    "frontTyreWear", 0
+                )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _motoUiState.value = MotoUIState(errorMsg = e.message)
+        }
+    }
+
+    fun resetRearTyre() {
+        try {
+            db.collection("users")
+                .document(auth.currentUser?.uid.toString())
+                .collection("motos")
+                .document(motoUiState.value.moto?.name.toString())
+                .update(
+                    "rearTyreWear", 0
+                )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _motoUiState.value = MotoUIState(errorMsg = e.message)
+        }
+    }
+
 }

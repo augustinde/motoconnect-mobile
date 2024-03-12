@@ -71,6 +71,7 @@ fun AboutCard(context: Context) {
             ) {
                 Text(
                     text = stringResource(R.string.application_infos),
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
             Button(
@@ -81,6 +82,7 @@ fun AboutCard(context: Context) {
             ) {
                 Text(
                     text = stringResource(R.string.application_version),
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }

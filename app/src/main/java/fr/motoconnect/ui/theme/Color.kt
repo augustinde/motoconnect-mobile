@@ -3,7 +3,7 @@ package fr.motoconnect.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val Primary1 = Color(0xFFFFFFFF)
-val OnPrimary1 = Color(0xFFFAFAFA)
+val OnPrimary1 = Color(0xFFe9e7e9)
 val Secondary1 = Color(0xFF2ECC71)
 val Tertiary1 = Color(0xFF252429)
 

@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
+import androidx.compose.material.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -41,7 +41,6 @@ class MainActivity : ComponentActivity() {
 
     val TAG = "MainActivity"
 
-    //TODO: We need to refactor the permission request process to be more optimized
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val locationPermissionRequest = registerForActivityResult(
@@ -110,7 +109,7 @@ fun MainScreen(
         Scaffold(
             bottomBar = {
                 BottomNavigation(
-                    backgroundColor = MaterialTheme.colorScheme.primary,
+                    backgroundColor = MaterialTheme.colorScheme.onPrimary,
                     contentColor = MaterialTheme.colorScheme.tertiary
                 ) {
                     MotoConnectNavigationRoutes.values().forEach { item ->
@@ -118,6 +117,7 @@ fun MainScreen(
                             BottomNavigationItem(
                                 selected = currentDestination?.hierarchy?.any { it.route == item.name } == true,
                                 selectedContentColor = MaterialTheme.colorScheme.secondary,
+                                unselectedContentColor = MaterialTheme.colorScheme.tertiary,
                                 onClick = {
                                     navController.navigate(item.name) {
                                         popUpTo(navController.graph.findStartDestination().id) {
@@ -134,7 +134,6 @@ fun MainScreen(
                                         modifier = Modifier
                                             .size(30.dp)
                                             .padding(0.dp, 0.dp, 0.dp, 0.dp),
-                                        tint = MaterialTheme.colorScheme.secondary
                                     )
                                 }
                             )

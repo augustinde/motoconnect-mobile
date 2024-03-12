@@ -48,7 +48,7 @@
     <string name="notification" translatable="false">Notification</string>
     <string name="notification_activated">Notification activated</string>
     <string name="Authorization">Authorize</string>
-    <string name="display">Display</string>
+    <string name="display">Theme choice</string>
     <string name="actions" translatable="false">Actions</string>
     <string name="account_deletion">Account deletion</string>
     <string name="delete">Delete</string>
@@ -120,4 +120,7 @@
     <string name="error_email">Invalid email</string>
     <string name="cannot_pair_device">Unable to pair MotoConnect device</string>
     <string name="device_paired">Correctly paired MotoConnect device</string>
+    <string name="front_wheel">Front tyre</string>
+    <string name="rear_wheel">Rear tyre</string>
+    <string name="etat_des_roues">Tyre status</string>
 </resources>
