@@ -123,4 +123,9 @@
     <string name="front_wheel">Front tyre</string>
     <string name="rear_wheel">Rear tyre</string>
     <string name="etat_des_roues">Tyre status</string>
+    <string name="device_number">Device n° : %1$s</string>
+    <string name="your_motoconnect_device">Your motoConnect device</string>
+    <string name="device_is_already_paired_with_user">Device is already paired with an user</string>
+    <string name="error_during_unpairing_device">Error during unpairing device</string>
+    <string name="device_unpaired">Device unpaired with success</string>
 </resources>

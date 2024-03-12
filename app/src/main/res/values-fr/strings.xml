@@ -116,4 +116,9 @@
     <string name="etat_des_roues">État des roues</string>
     <string name="cannot_pair_device">Impossible de jumeler le boitier MotoConnect</string>
     <string name="device_paired">Boitier MotoConnect correctement jumelé</string>
+    <string name="device_number">Boitier n° : %1$s</string>
+    <string name="your_motoconnect_device">Votre boitier motoConnect</string>
+    <string name="device_is_already_paired_with_user">L\'appareil est déjà apparié à un utilisateur</string>
+    <string name="error_during_unpairing_device">Impossible de désapparier le boitier motoConnect</string>
+    <string name="device_unpaired">Dispositif désapparié avec succès</string>
 </resources>

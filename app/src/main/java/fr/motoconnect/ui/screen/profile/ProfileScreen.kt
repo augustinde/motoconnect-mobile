@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -35,11 +36,13 @@ import fr.motoconnect.R
 import fr.motoconnect.data.utils.BarcodeScanner
 import fr.motoconnect.ui.screen.profile.components.AboutCard
 import fr.motoconnect.ui.screen.profile.components.ActionCard
-import fr.motoconnect.ui.screen.profile.components.PairingCase
+import fr.motoconnect.ui.screen.profile.components.DeviceInfo
+import fr.motoconnect.ui.screen.profile.components.PairingDevice
 import fr.motoconnect.ui.screen.profile.components.PreferencesCard
 import fr.motoconnect.ui.screen.profile.components.ProfileCard
 import fr.motoconnect.ui.store.DisplayStore
 import fr.motoconnect.viewmodel.AuthenticationViewModel
+import fr.motoconnect.viewmodel.DeviceViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -76,18 +79,25 @@ fun ProfileScreen(
     val cameraPermission = rememberPermissionState(
         permission = android.Manifest.permission.CAMERA
     )
+    val deviceViewModel: DeviceViewModel = viewModel(factory = DeviceViewModel.Factory)
 
-    val barcodeScanner = BarcodeScanner(context)
+    val barcodeScanner = BarcodeScanner(context, deviceViewModel)
 
     val barcodeResults = barcodeScanner.resultPairing.collectAsState()
     val scope = rememberCoroutineScope()
 
     val authUiState by authenticationViewModel.authUiState.collectAsState()
+    val deviceUISate by deviceViewModel.deviceUiState.collectAsState()
 
     LaunchedEffect(barcodeResults.value) {
         scope.launch(Dispatchers.IO) {
             authenticationViewModel.getCurrentUser()
+            deviceViewModel.getUserDevice()
         }
+    }
+
+    LaunchedEffect(true){
+        deviceViewModel.getUserDevice()
     }
 
     Column(
@@ -120,10 +130,16 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(10.dp))
             }
 
-            if (cameraPermission.status.isGranted && authUiState.device == null) {
+            if (cameraPermission.status.isGranted && deviceUISate.device == null) {
                 item {
-                    PairingCase(
+                    PairingDevice(
                         barcodeScanner,
+                    )
+                }
+            }else if(deviceUISate.device != null){
+                item {
+                    DeviceInfo(
+                        deviceViewModel
                     )
                 }
             }
