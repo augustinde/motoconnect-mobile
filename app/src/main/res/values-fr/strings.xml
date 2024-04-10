@@ -76,7 +76,7 @@
     <string name="ask_permission">Demander la permission %1$s</string>
     <string name="vitesse_max">Vitesse max</string>
     <string name="duration_without_args">Durée</string>
-    <string name="export_as_kml">Export as KML</string>
+    <string name="export_as_kml">Exporter en KML</string>
     <string name="pairing_motoconnect">Jumelage MotoConnect</string>
     <string name="pairing">Jumeler</string>
     <string name="camera_activated">Caméra activée</string>
@@ -111,14 +111,19 @@
     <string name="delete_failed">L\'image n\'a pas été supprimée</string>
     <string name="error_email_or_password">Email ou mot de passe incorrect</string>
     <string name="error_email">Email invalide</string>
-    <string name="front_wheel">Roue avant</string>
-    <string name="rear_wheel">Roue arrière</string>
-    <string name="etat_des_roues">État des roues</string>
+    <string name="front_wheel">Pneu avant</string>
+    <string name="rear_wheel">Pneu arrière</string>
+    <string name="etat_des_roues">État des pneus</string>
     <string name="cannot_pair_device">Impossible de jumeler le boitier MotoConnect</string>
     <string name="device_paired">Boitier MotoConnect correctement jumelé</string>
     <string name="device_number">Boitier n° : %1$s</string>
     <string name="your_motoconnect_device">Votre boitier motoConnect</string>
-    <string name="device_is_already_paired_with_user">L\'appareil est déjà apparié à un utilisateur</string>
-    <string name="error_during_unpairing_device">Impossible de désapparier le boitier motoConnect</string>
-    <string name="device_unpaired">Dispositif désapparié avec succès</string>
+    <string name="device_is_already_paired_with_user">L\'appareil est déjà lié à un utilisateur</string>
+    <string name="error_during_unpairing_device">Impossible de déconnecter le boitier motoConnect</string>
+    <string name="device_unpaired">Dispositif déconnecté avec succès</string>
+    <string name="unpair">Déconnecter</string>
+    <string name="fluid_level_alert">Alerte niveau liquide</string>
+    <string name="danger_level">%1$s a atteint la distance maximale recommandée! Le changement doit être effectué.</string>
+    <string name="warning_level">%1$s se rapproche de la distance maximale recommandée! Pensez à bientôt le changer.</string>
+    <string name="alert_tyre_wear">Alerte usure pneu</string>
 </resources>

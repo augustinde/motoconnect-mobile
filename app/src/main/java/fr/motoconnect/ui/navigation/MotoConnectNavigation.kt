@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.google.firebase.auth.FirebaseAuth
 import fr.motoconnect.R
 import fr.motoconnect.ui.screen.home.HomeScreen
@@ -39,6 +40,8 @@ fun MotoConnectNavigation(
     mapViewModel: MapViewModel
 ) {
 
+    val uri = "https://motoconnect.com"
+
     NavHost(
         navController = navController,
         startDestination = MotoConnectNavigationRoutes.Homepage.name,
@@ -68,7 +71,7 @@ fun MotoConnectNavigation(
             )
         }
 
-        composable(MotoConnectNavigationRoutes.Moto.name) {
+        composable(MotoConnectNavigationRoutes.Moto.name, deepLinks = listOf(navDeepLink { uriPattern = "$uri/moto" })) {
             MotoScreen()
         }
 

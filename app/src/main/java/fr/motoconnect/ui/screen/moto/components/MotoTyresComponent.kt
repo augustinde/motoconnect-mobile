@@ -27,7 +27,9 @@ import fr.motoconnect.data.model.BaseDistance
 import fr.motoconnect.viewmodel.uiState.MotoUIState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import fr.motoconnect.data.utils.NotificationService
 
 @Composable
 fun MotoTyresComponent(
@@ -79,7 +81,7 @@ fun MotoTyresComponent(
                         limit = "${motoUIState.moto?.frontTyreWear}/${BaseDistance.FRONT_TYRE.distance} km"
                     )
                 }
-                Spacer(modifier = Modifier.width(20.dp))
+                Spacer(modifier = Modifier.width(10.dp))
                 Column (horizontalAlignment = Alignment.CenterHorizontally){
                     MotoTyresCard(
                         tyreWearPercentage = rearTyreWearPercentage,
@@ -117,10 +119,10 @@ fun MotoTyresCard(
         Button(
             onClick = { reset() },
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.tertiary,
+                containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.primary
             ),
-            modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
+            modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 10.dp)
         ) {
             Text(text = stringResource(R.string.moto_reset))
         }
@@ -148,4 +150,25 @@ fun CircularProgressMotoTyres(tyreWearPercentage: Float) {
         strokeWidth = 5.dp,
         modifier = Modifier.padding(50.dp, 0.dp, 0.dp, 0.dp)
     )
+}
+
+@Composable
+fun MotoTyresNotifications(tyreWearPercentage: Float, wheelPosition: String, notificationID : Int){
+
+
+    val title = stringResource(R.string.alert_tyre_wear)
+    val msgDanger = stringResource(R.string.danger_level, wheelPosition)
+    val msgWarning = stringResource(R.string.warning_level, wheelPosition)
+
+    val notificationService = NotificationService(LocalContext.current)
+
+    if (tyreWearPercentage >= 1f) {
+        notificationService.sendNotification(title, msgDanger, notificationID) {
+            notificationService.getActiveNotification(notificationID)
+        }
+    } else if (tyreWearPercentage > 2f / 3) {
+        notificationService.sendNotification(title, msgWarning, notificationID){
+            notificationService.getActiveNotification(notificationID)
+        }
+    }
 }

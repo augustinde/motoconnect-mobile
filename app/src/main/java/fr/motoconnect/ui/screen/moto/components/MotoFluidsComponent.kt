@@ -26,8 +26,10 @@ import fr.motoconnect.R
 import fr.motoconnect.data.model.BaseDistance
 import fr.motoconnect.viewmodel.uiState.MotoUIState
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
+import fr.motoconnect.data.utils.NotificationService
 
 @Composable
 fun MotoFluidsComponent(
@@ -36,7 +38,6 @@ fun MotoFluidsComponent(
     resetBrakeFluid: () -> Unit,
     resetChainLubrication: () -> Unit,
 ) {
-
     val engineOilPercentage = motoUIState.moto?.engineOil?.toFloat()?.div(BaseDistance.ENGINE_OIL.distance.toFloat()) ?: 0f
     val brakeFluidPercentage = motoUIState.moto?.brakeFluid?.toFloat()?.div(BaseDistance.BRAKE_FLUID.distance.toFloat()) ?: 0f
     val chainLubricationPercentage = motoUIState.moto?.chainLubrication?.toFloat()?.div(BaseDistance.CHAIN_LUBRICATION.distance.toFloat()) ?: 0f
@@ -110,7 +111,7 @@ fun MotoFluidsCard(fluidPercentage: Float, reset: () -> Unit, fluidName: String,
                         Button(
                             onClick = { reset() },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.tertiary,
+                                containerColor = MaterialTheme.colorScheme.secondary,
                                 contentColor = MaterialTheme.colorScheme.primary
                             )
                         ) {
@@ -132,9 +133,14 @@ fun MotoFluidsCard(fluidPercentage: Float, reset: () -> Unit, fluidName: String,
 
 @Composable
 fun LinearProgressMotoFuilds(fluidPercentage: Float) {
+
     val color = when {
-        fluidPercentage >= 1f -> colorResource(id = R.color.red)
-        fluidPercentage > 2f / 3 -> colorResource(id = R.color.orange)
+        fluidPercentage >= 1f -> {
+            colorResource(id = R.color.red)
+        }
+        fluidPercentage > 2f / 3 -> {
+            colorResource(id = R.color.orange)
+        }
         fluidPercentage > 1f / 3 -> colorResource(id = R.color.yellow)
         else -> MaterialTheme.colorScheme.secondary
     }
@@ -144,5 +150,25 @@ fun LinearProgressMotoFuilds(fluidPercentage: Float) {
         color = color,
         modifier = Modifier.fillMaxWidth()
     )
+}
+
+@Composable
+fun MotoFluidsNotifications(fluidPercentage: Float,fluidName: String, notificationID : Int){
+
+    val title = stringResource(R.string.fluid_level_alert)
+    val msgDanger = stringResource(R.string.danger_level, fluidName)
+    val msgWarning = stringResource(R.string.warning_level, fluidName)
+
+    val notificationService = NotificationService(LocalContext.current)
+
+    if (fluidPercentage >= 1f) {
+        notificationService.sendNotification(title, msgDanger, notificationID) {
+            notificationService.getActiveNotification(notificationID)
+        }
+    } else if (fluidPercentage > 2f / 3) {
+        notificationService.sendNotification(title, msgWarning, notificationID) {
+            notificationService.getActiveNotification(notificationID)
+        }
+    }
 }
 

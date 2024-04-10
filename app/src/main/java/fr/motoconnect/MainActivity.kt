@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -29,14 +30,17 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import fr.motoconnect.data.model.BaseDistance
 import fr.motoconnect.ui.navigation.AuthenticationNavigation
 import fr.motoconnect.ui.navigation.MotoConnectNavigation
 import fr.motoconnect.ui.navigation.MotoConnectNavigationRoutes
+import fr.motoconnect.ui.screen.moto.components.MotoFluidsNotifications
+import fr.motoconnect.ui.screen.moto.components.MotoTyresNotifications
 import fr.motoconnect.ui.store.DisplayStore
 import fr.motoconnect.ui.theme.MotoConnectTheme
 import fr.motoconnect.viewmodel.AuthenticationViewModel
 import fr.motoconnect.viewmodel.MapViewModel
-
+import fr.motoconnect.viewmodel.MotoViewModel
 class MainActivity : ComponentActivity() {
 
     val TAG = "MainActivity"
@@ -83,7 +87,7 @@ class MainActivity : ComponentActivity() {
             MotoConnectTheme(activated = getDisplayStore(applicationContext)) {
                 MainScreen(
                     auth = auth,
-                    authenticationViewModel = authenticationViewModel
+                    authenticationViewModel = authenticationViewModel,
                 )
             }
         }
@@ -94,7 +98,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(
     auth: FirebaseAuth,
-    authenticationViewModel: AuthenticationViewModel
+    authenticationViewModel: AuthenticationViewModel,
 ) {
     val navController = rememberNavController()
     val mapViewModel: MapViewModel = viewModel(factory = MapViewModel.Factory)
@@ -102,6 +106,15 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val authUIState by authenticationViewModel.authUiState.collectAsState()
+
+    val motoUIState = MotoViewModel().motoUiState.collectAsState()
+
+    val frontTyreWearPercentage = motoUIState.value.moto?.frontTyreWear?.toFloat()?.div(BaseDistance.FRONT_TYRE.distance.toFloat()) ?: 0f
+    val rearTyreWearPercentage = motoUIState.value.moto?.rearTyreWear?.toFloat()?.div(BaseDistance.REAR_TYRE.distance.toFloat()) ?: 0f
+
+    val engineOilPercentage = motoUIState.value.moto?.engineOil?.toFloat()?.div(BaseDistance.ENGINE_OIL.distance.toFloat()) ?: 0f
+    val brakeFluidPercentage = motoUIState.value.moto?.brakeFluid?.toFloat()?.div(BaseDistance.BRAKE_FLUID.distance.toFloat()) ?: 0f
+    val chainLubricationPercentage = motoUIState.value.moto?.chainLubrication?.toFloat()?.div(BaseDistance.CHAIN_LUBRICATION.distance.toFloat()) ?: 0f
 
     Log.d("TAG", "MainScreen: " + auth.currentUser?.email + " " + authUIState.isLogged)
 
@@ -151,6 +164,13 @@ fun MainScreen(
                     mapViewModel = mapViewModel
                 )
             }
+        }
+        if (motoUIState.value.moto != null) {
+            MotoTyresNotifications(tyreWearPercentage = frontTyreWearPercentage, wheelPosition = stringResource(R.string.front_wheel),100)
+            MotoTyresNotifications(tyreWearPercentage = rearTyreWearPercentage, wheelPosition = stringResource(R.string.rear_wheel),101)
+            MotoFluidsNotifications(fluidPercentage = engineOilPercentage, fluidName = stringResource(R.string.moto_engine_oil),103)
+            MotoFluidsNotifications(fluidPercentage = brakeFluidPercentage, fluidName = stringResource(R.string.moto_break_fluid),104)
+            MotoFluidsNotifications(fluidPercentage = chainLubricationPercentage, fluidName = stringResource(R.string.moto_chain_greasing),105)
         }
     } else {
         AuthenticationNavigation(authenticationViewModel = authenticationViewModel)

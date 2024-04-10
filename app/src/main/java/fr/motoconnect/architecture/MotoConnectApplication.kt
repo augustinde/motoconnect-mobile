@@ -1,6 +1,7 @@
 package fr.motoconnect.architecture
 
 import android.app.Application
+import fr.motoconnect.data.utils.NotificationService
 
 class MotoConnectApplication: Application() {
     lateinit var container: AppContainer
@@ -12,5 +13,10 @@ class MotoConnectApplication: Application() {
         super.onCreate()
         container = DefaultAppContainer()
         instance = this
+
+        val notificationService = NotificationService(this)
+        notificationService.createNotificationChannel()
+
     }
+
 }

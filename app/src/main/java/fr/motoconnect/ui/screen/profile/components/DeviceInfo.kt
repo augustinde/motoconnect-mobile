@@ -70,7 +70,7 @@ fun DeviceInfo(
                         }
                     }) {
                     Text(
-                        text = "Unpair",
+                        text = stringResource(R.string.unpair),
                     )
                 }
             }
