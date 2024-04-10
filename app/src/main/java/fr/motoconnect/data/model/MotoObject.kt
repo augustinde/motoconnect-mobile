@@ -2,6 +2,7 @@ package fr.motoconnect.data.model
 
 data class MotoObject(
     val name: String? = null,
+    var id: String? = null,
     val brakeFluid: Int? = 0,
     val chainLubrication: Int? = 0,
     val current: Boolean? = false,

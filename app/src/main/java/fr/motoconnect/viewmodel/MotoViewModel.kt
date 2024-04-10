@@ -38,6 +38,7 @@ class MotoViewModel: ViewModel() {
                 if (snapshot != null && snapshot.documents.isNotEmpty()) {
                     Log.d("MotoViewModel", "Current data: ${snapshot.documents}")
                     val moto = snapshot.documents[0].toObject(MotoObject::class.java)
+                    moto?.id = snapshot.documents[0].id
                     _motoUiState.value = MotoUIState(moto = moto, errorMsg = null)
                 } else {
                     Log.d("MotoViewModel", "Current data: null")
@@ -55,8 +56,7 @@ class MotoViewModel: ViewModel() {
             db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .collection("motos")
-                .document(motoName)
-                .set(moto)
+                .add(moto)
             db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .update(
@@ -75,7 +75,7 @@ class MotoViewModel: ViewModel() {
             db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .collection("motos")
-                .document(motoUiState.value.moto?.name.toString())
+                .document(motoUiState.value.moto?.id.toString())
                 .update(
                     "engineOil", 0
                 )
@@ -90,7 +90,7 @@ class MotoViewModel: ViewModel() {
             db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .collection("motos")
-                .document(motoUiState.value.moto?.name.toString())
+                .document(motoUiState.value.moto?.id.toString())
                 .update(
                     "brakeFluid", 0
                 )
@@ -105,7 +105,7 @@ class MotoViewModel: ViewModel() {
             db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .collection("motos")
-                .document(motoUiState.value.moto?.name.toString())
+                .document(motoUiState.value.moto?.id.toString())
                 .update(
                     "chainLubrication", 0
                 )
@@ -120,7 +120,7 @@ class MotoViewModel: ViewModel() {
             db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .collection("motos")
-                .document(motoUiState.value.moto?.name.toString())
+                .document(motoUiState.value.moto?.id.toString())
                 .update(
                     "frontTyreWear", 0
                 )
@@ -135,7 +135,7 @@ class MotoViewModel: ViewModel() {
             db.collection("users")
                 .document(auth.currentUser?.uid.toString())
                 .collection("motos")
-                .document(motoUiState.value.moto?.name.toString())
+                .document(motoUiState.value.moto?.id.toString())
                 .update(
                     "rearTyreWear", 0
                 )

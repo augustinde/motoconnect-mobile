@@ -168,8 +168,7 @@ fun HomeScreen(
     if (mapUiState.currentMoto != null) {
         MapInfoMoto(
             distanceBetweenDeviceAndMoto = distanceBetweenDeviceAndMoto,
-            currentMoto = mapUiState.currentMoto!!,
-            deviceState = mapUiState.deviceState!!
+            currentMoto = mapUiState.currentMoto!!
         )
     }
 }

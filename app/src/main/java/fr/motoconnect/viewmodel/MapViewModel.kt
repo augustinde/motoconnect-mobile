@@ -38,7 +38,7 @@ class MapViewModel(
             .addOnSuccessListener { document ->
                 if (document != null) {
                     Log.d(TAG, "DocumentSnapshot data: ${document.data}")
-                    if(document.data?.get("device") != null){
+                    if(document.data?.get("device") != null && document.data?.get("currentMoto") != null){
                         getLiveData(document.data?.get("device") as String, document.data?.get("currentMoto") as String)
                     }
                 } else {
@@ -51,7 +51,7 @@ class MapViewModel(
 
     }
 
-    private fun getLiveData(deviceId: String, currentMoto: String) {
+    private fun getLiveData(deviceId: String, currentMoto: String?) {
         val dbRef = db.collection("devices")
             .document(deviceId)
         dbRef.addSnapshotListener { snapshot, e ->
@@ -64,7 +64,6 @@ class MapViewModel(
                 Log.d(TAG, "Current data: ${snapshot.data}")
                 _mapUiState.value = _mapUiState.value.copy(
                     currentMotoPosition = snapshot.data?.get("currentMotoPosition") as GeoPoint?,
-                    deviceState = snapshot.data?.get("state") as Boolean?,
                     currentMoto = currentMoto
                 )
 
