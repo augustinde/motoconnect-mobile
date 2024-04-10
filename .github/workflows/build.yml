@@ -1,8 +1,6 @@
-name: Android CI
+name: Gradle build
 
 on:
-  push:
-    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
