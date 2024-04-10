@@ -67,7 +67,6 @@ class JourneyDetailsViewModel : ViewModel() {
                     duration = document.get("duration") as Long?,
                     endDateTime = document.get("endDateTime") as Timestamp?,
                     maxSpeed = document.get("maxSpeed") as Long?,
-                    finished = document.get("finished") as Boolean?,
                     points = pointsList,
                 )
                 _journeyDetailsUiState.value = JourneyDetailsUIState(

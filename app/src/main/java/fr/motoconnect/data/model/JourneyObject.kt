@@ -11,7 +11,6 @@ data class JourneyObject(
     val duration: Long?,
     val endDateTime: Timestamp?,
     val maxSpeed: Long?,
-    val finished: Boolean?,
     val points: List<PointObject> = emptyList(),
 ){
     override fun toString(): String = Uri.encode(Gson().toJson(this))

@@ -41,7 +41,7 @@ class JourneyViewModel(
             .document(deviceId ?: "null")
             .collection("journeys")
 
-        dbRef.addSnapshotListener { snapshot, e ->
+        dbRef.whereNotEqualTo("endDateTime", null).addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Log.w(TAG, "Listen failed.", e)
                 return@addSnapshotListener
@@ -77,7 +77,6 @@ class JourneyViewModel(
                                         duration = document.get("duration") as Long?,
                                         endDateTime = document.get("endDateTime") as Timestamp?,
                                         maxSpeed = document.get("maxSpeed") as Long?,
-                                        finished = document.get("finished") as Boolean?,
                                         points = points
                                     )
                                 )
