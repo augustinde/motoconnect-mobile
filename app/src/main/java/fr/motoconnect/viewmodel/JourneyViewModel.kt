@@ -16,6 +16,7 @@ import fr.motoconnect.architecture.MotoConnectApplication
 import fr.motoconnect.data.model.JourneyObject
 import fr.motoconnect.data.model.PointObject
 import fr.motoconnect.data.repository.GeocodingRepository
+import fr.motoconnect.data.utils.JourneyUtils
 import fr.motoconnect.viewmodel.uiState.JourneyUIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,6 +59,12 @@ class JourneyViewModel(
 
                         pointsRef.get().addOnCompleteListener() { task ->
                             if (task.isSuccessful) {
+                                Log.d(TAG, "DocumentSnapshot data: ${task.result}")
+                                val duration = JourneyUtils().computeDurationInMinutes(
+                                    task.result!!.first().get("time") as Timestamp,
+                                    task.result!!.last().get("time") as Timestamp
+                                )
+                                Log.d(TAG, "duration: $duration")
                                 val points = mutableListOf<PointObject>()
                                 for (point in task.result!!) {
                                     points.add(
@@ -69,14 +76,17 @@ class JourneyViewModel(
                                         )
                                     )
                                 }
+                                Log.d(TAG, "first point: ${points.first()}")
+                                Log.d(TAG, "last point: ${points.last()}")
+
                                 journeys.add(
                                     JourneyObject(
                                         id = document.id,
                                         startDateTime = document.get("startDateTime") as Timestamp?,
-                                        distance = document.get("distance") as Long?,
-                                        duration = document.get("duration") as Long?,
+                                        distance = JourneyUtils().computeDistanceInKm(points),
+                                        duration = duration,
                                         endDateTime = document.get("endDateTime") as Timestamp?,
-                                        maxSpeed = document.get("maxSpeed") as Long?,
+                                        maxSpeed = JourneyUtils().computeMaxSpeed(points),
                                         points = points
                                     )
                                 )

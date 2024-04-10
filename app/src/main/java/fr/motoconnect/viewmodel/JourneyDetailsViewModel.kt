@@ -63,10 +63,7 @@ class JourneyDetailsViewModel : ViewModel() {
                 val journey = JourneyObject(
                     id = document.id,
                     startDateTime = document.get("startDateTime") as Timestamp?,
-                    distance = document.get("distance") as Long?,
-                    duration = document.get("duration") as Long?,
                     endDateTime = document.get("endDateTime") as Timestamp?,
-                    maxSpeed = document.get("maxSpeed") as Long?,
                     points = pointsList,
                 )
                 _journeyDetailsUiState.value = JourneyDetailsUIState(
