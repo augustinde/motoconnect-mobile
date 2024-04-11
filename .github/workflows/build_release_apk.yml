@@ -18,6 +18,11 @@ on:
         description: "Release notes"
         required: true
         default: "Release notes for v1.0"
+      upload_play_store:
+        description: "Upload to Play Store"
+        required: true
+        default: "false"
+
 jobs:
   build:
 
@@ -105,4 +110,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
-
+    - name: Upload to Play Store
+      if: ${{ github.event.inputs.upload_play_store == 'true' }}
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
+        packageName: fr.motoconnect
+        releaseFiles: app/build/outputs/bundle/release/app-release.aab
+        track: production
