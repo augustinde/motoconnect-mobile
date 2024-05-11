@@ -53,6 +53,7 @@ class JourneyViewModel(
 
                 for (document in snapshot.documents) {
                     if (document != null) {
+                        Log.d(TAG, "Start date time: ${document.get("startDateTime")}")
                         val pointsRef = dbRef.document(document.id)
                             .collection("points")
                             .orderBy("time")
@@ -60,11 +61,7 @@ class JourneyViewModel(
                         pointsRef.get().addOnCompleteListener() { task ->
                             if (task.isSuccessful) {
                                 Log.d(TAG, "DocumentSnapshot data: ${task.result}")
-                                val duration = JourneyUtils().computeDurationInMinutes(
-                                    task.result!!.first().get("time") as Timestamp,
-                                    task.result!!.last().get("time") as Timestamp
-                                )
-                                Log.d(TAG, "duration: $duration")
+
                                 val points = mutableListOf<PointObject>()
                                 for (point in task.result!!) {
                                     points.add(
@@ -84,7 +81,10 @@ class JourneyViewModel(
                                         id = document.id,
                                         startDateTime = document.get("startDateTime") as Timestamp?,
                                         distance = JourneyUtils().computeDistanceInKm(points),
-                                        duration = duration,
+                                        duration = JourneyUtils().computeDurationInMinutes(
+                                            document.get("startDateTime") as Timestamp,
+                                            document.get("endDateTime") as Timestamp
+                                        ),
                                         endDateTime = document.get("endDateTime") as Timestamp?,
                                         maxSpeed = JourneyUtils().computeMaxSpeed(points),
                                         points = points

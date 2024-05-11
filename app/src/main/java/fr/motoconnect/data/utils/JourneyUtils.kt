@@ -27,12 +27,20 @@ class JourneyUtils {
      * Compute the duration of a journey in minutes
      */
     fun computeDurationInMinutes(startTimestamp: Timestamp, endTimestamp: Timestamp): Long {
-
         val startDateTimeMillis = startTimestamp.seconds * 1000
         val endDateTimeMillis = endTimestamp.seconds * 1000
 
-        return ((endDateTimeMillis - startDateTimeMillis) / 100) / 60
+        val durationInMillis = endDateTimeMillis - startDateTimeMillis
+        val durationInMinutes = durationInMillis / 60000 // Conversion en minutes
+
+        return if (durationInMillis % 60000 != 0L) {
+            durationInMinutes + 1
+        } else {
+            durationInMinutes
+        }
     }
+
+
 
     /**
      * Compute the distance of a journey in km
