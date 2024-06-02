@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import fr.motoconnect.R
@@ -42,11 +43,8 @@ class JourneyViewModel(
             .document(deviceId ?: "null")
             .collection("journeys")
 
-        dbRef.whereNotEqualTo("endDateTime", null).addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                Log.w(TAG, "Listen failed.", e)
-                return@addSnapshotListener
-            }
+        dbRef.whereNotEqualTo("endDateTime", null).get()
+            .addOnSuccessListener { snapshot ->
 
             if (snapshot != null && snapshot.documents.isNotEmpty()) {
                 val journeys = mutableListOf<JourneyObject>()
@@ -57,44 +55,29 @@ class JourneyViewModel(
                         val pointsRef = dbRef.document(document.id)
                             .collection("points")
                             .orderBy("time")
+                            .limit(200)
 
-                        pointsRef.get().addOnCompleteListener() { task ->
-                            if (task.isSuccessful) {
-                                Log.d(TAG, "DocumentSnapshot data: ${task.result}")
+                        getPointsInBatches(pointsRef, mutableListOf()) { points ->
+                            Log.d(TAG, "first point: ${points.first()}")
+                            Log.d(TAG, "last point: ${points.last()}")
 
-                                val points = mutableListOf<PointObject>()
-                                for (point in task.result!!) {
-                                    points.add(
-                                        PointObject(
-                                            geoPoint = point.get("geoPoint") as GeoPoint,
-                                            speed = point.get("speed") as Long,
-                                            time = point.get("time") as Timestamp,
-                                            tilt = point.get("tilt") as Long,
-                                        )
-                                    )
-                                }
-                                Log.d(TAG, "first point: ${points.first()}")
-                                Log.d(TAG, "last point: ${points.last()}")
-
-                                journeys.add(
-                                    JourneyObject(
-                                        id = document.id,
-                                        startDateTime = document.get("startDateTime") as Timestamp?,
-                                        distance = JourneyUtils().computeDistanceInKm(points),
-                                        duration = JourneyUtils().computeDurationInMinutes(
-                                            document.get("startDateTime") as Timestamp,
-                                            document.get("endDateTime") as Timestamp
-                                        ),
-                                        endDateTime = document.get("endDateTime") as Timestamp?,
-                                        maxSpeed = JourneyUtils().computeMaxSpeed(points),
-                                        points = points
-                                    )
+                            journeys.add(
+                                JourneyObject(
+                                    id = document.id,
+                                    startDateTime = document.get("startDateTime") as Timestamp?,
+                                    distance = JourneyUtils().computeDistanceInKm(points),
+                                    duration = JourneyUtils().computeDurationInMinutes(
+                                        document.get("startDateTime") as Timestamp,
+                                        document.get("endDateTime") as Timestamp
+                                    ),
+                                    endDateTime = document.get("endDateTime") as Timestamp?,
+                                    maxSpeed = JourneyUtils().computeMaxSpeed(points),
+                                    points = points
                                 )
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.exception)
-                            }
+                            )
                         }
                     }
+
                 }
                 _journeyUiState.value =
                     JourneyUIState(journeys = journeys, isLoading = false, errorMsg = null)
@@ -109,6 +92,27 @@ class JourneyViewModel(
         }
     }
 
+    private fun getPointsInBatches(pointsRef: Query, points: MutableList<PointObject>, onComplete: (List<PointObject>) -> Unit) {
+        pointsRef.get().addOnSuccessListener { snapshot ->
+            for (document in snapshot.documents) {
+                points.add(
+                    PointObject(
+                        geoPoint = document.get("geoPoint") as GeoPoint,
+                        speed = document.get("speed") as Long,
+                        time = document.get("time") as Timestamp,
+                        tilt = document.get("tilt") as Long,
+                    )
+                )
+            }
+
+            if (snapshot.size() == 200) { // If the maximum number of points was fetched, there might be more
+                val lastVisible = snapshot.documents[snapshot.size() - 1]
+                getPointsInBatches(pointsRef.startAfter(lastVisible), points, onComplete) // Fetch the next batch
+            } else {
+                onComplete(points) // All points were fetched, continue processing
+            }
+        }
+    }
     suspend fun reverseGeocoding(point: GeoPoint): String {
         return withContext(Dispatchers.IO) {
             geocodingRepository.getCity(point.latitude, point.longitude)
