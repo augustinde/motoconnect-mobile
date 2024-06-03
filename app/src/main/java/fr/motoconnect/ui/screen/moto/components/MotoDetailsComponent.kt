@@ -19,15 +19,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.motoconnect.R
+import fr.motoconnect.viewmodel.AuthenticationViewModel
+import fr.motoconnect.viewmodel.JourneyViewModel
 import fr.motoconnect.viewmodel.MotoViewModel
 
 @Composable
 fun MotoDetailsComponent(
     motoViewModel: MotoViewModel,
+    journeyViewModel: JourneyViewModel,
+    authenticationViewModel: AuthenticationViewModel
 ) {
     val motoUIState by motoViewModel.motoUiState.collectAsState()
+    val journeyUIState by journeyViewModel.journeyUiState.collectAsState()
+    val authUIState by authenticationViewModel.authUiState.collectAsState()
+
+
     LaunchedEffect(motoUIState.moto) {
         motoViewModel.getCurrentMoto()
+        journeyViewModel.getJourneysCount(authUIState.device?.id)
     }
     Column(
         modifier = Modifier
@@ -70,6 +79,6 @@ fun MotoDetailsComponent(
                 motoViewModel.resetRearTyre()
             }
         )
-        MotoJourneysComponent(motoUIState = motoUIState)
+        MotoJourneysComponent(journeyUIState = journeyUIState)
     }
 }

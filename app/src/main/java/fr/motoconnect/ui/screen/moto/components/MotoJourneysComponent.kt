@@ -23,11 +23,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.motoconnect.R
+import fr.motoconnect.viewmodel.uiState.JourneyUIState
 import fr.motoconnect.viewmodel.uiState.MotoUIState
 
 @Composable
 fun MotoJourneysComponent(
-    motoUIState: MotoUIState,
+    journeyUIState: JourneyUIState
 ) {
     Column(
         modifier = Modifier
@@ -38,17 +39,17 @@ fun MotoJourneysComponent(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         MotoJourneysCard(
-            stats = motoUIState.moto?.totalJourney.toString(),
+            stats = journeyUIState.journeyCount.toString(),
             text = stringResource(R.string.moto_number_of_journeys),
             60,
             0
         )
-        MotoJourneysCard(
-            stats = "${motoUIState.moto?.distance} km",
+        /*MotoJourneysCard(
+            stats = "4 km",
             text = stringResource(R.string.moto_total_distance),
             0,
             10
-        )
+        )*/
         Spacer(modifier = Modifier.padding(0.dp, 16.dp))
     }
 }

@@ -72,7 +72,7 @@ fun MotoConnectNavigation(
         }
 
         composable(MotoConnectNavigationRoutes.Moto.name, deepLinks = listOf(navDeepLink { uriPattern = "$uri/moto" })) {
-            MotoScreen()
+            MotoScreen(authenticationViewModel = authenticationViewModel)
         }
 
         composable(MotoConnectNavigationRoutes.Profile.name) {

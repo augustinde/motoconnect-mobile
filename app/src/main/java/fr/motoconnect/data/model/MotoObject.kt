@@ -7,7 +7,6 @@ data class MotoObject(
     val chainLubrication: Int? = 0,
     val current: Boolean? = false,
     val engineOil: Int? = 0,
-    val distance: Int? = 0,
     val totalJourney: Int? = 0,
     val frontTyreWear: Int? = 0,
     val rearTyreWear: Int? = 0,

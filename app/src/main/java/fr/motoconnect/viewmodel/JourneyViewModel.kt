@@ -92,6 +92,29 @@ class JourneyViewModel(
         }
     }
 
+    fun getJourneysCount(deviceId: String?){
+        val dbRef = db.collection("devices")
+            .document(deviceId ?: "null")
+            .collection("journeys")
+
+        dbRef.whereNotEqualTo("endDateTime", null).get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot != null && snapshot.documents.isNotEmpty()) {
+                    _journeyUiState.value = JourneyUIState(
+                        journeyCount = snapshot.documents.size,
+                        isLoading = false,
+                        errorMsg = null
+                    )
+                } else {
+                    _journeyUiState.value = JourneyUIState(
+                        isLoading = false,
+                        errorMsg = context.getString(R.string.journey_not_found),
+                        journeyCount = 0
+                    )
+                }
+            }
+    }
+
     private fun getPointsInBatches(pointsRef: Query, points: MutableList<PointObject>, onComplete: (List<PointObject>) -> Unit) {
         pointsRef.get().addOnSuccessListener { snapshot ->
             for (document in snapshot.documents) {

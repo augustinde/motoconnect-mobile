@@ -10,12 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.motoconnect.ui.screen.moto.components.CreateMotoComponent
 import fr.motoconnect.ui.screen.moto.components.MotoDetailsComponent
+import fr.motoconnect.viewmodel.AuthenticationViewModel
+import fr.motoconnect.viewmodel.JourneyViewModel
 import fr.motoconnect.viewmodel.MotoViewModel
 
 @Composable
 fun MotoScreen(
+    authenticationViewModel: AuthenticationViewModel
 ) {
     val motoViewModel: MotoViewModel = viewModel()
+    val journeyViewModel: JourneyViewModel = viewModel(factory = JourneyViewModel.Factory)
     val motoUIState = motoViewModel.motoUiState.collectAsState()
 
     LazyColumn(
@@ -29,7 +33,7 @@ fun MotoScreen(
                     motoViewModel = motoViewModel,
                 )
             } else {
-                MotoDetailsComponent(motoViewModel = motoViewModel)
+                MotoDetailsComponent(motoViewModel = motoViewModel, journeyViewModel = journeyViewModel, authenticationViewModel = authenticationViewModel)
             }
         }
     }
