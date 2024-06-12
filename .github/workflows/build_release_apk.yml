@@ -110,11 +110,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
-    - name: Upload to Play Store
-      if: ${{ github.event.inputs.upload_play_store == 'true' }}
-      uses: r0adkll/upload-google-play@v1
-      with:
-        serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
-        packageName: fr.motoconnect
-        releaseFiles: app/build/outputs/bundle/release/app-release.aab
-        track: production
+#    - name: Upload to Play Store
+#      if: ${{ github.event.inputs.upload_play_store == 'true' }}
+#      uses: r0adkll/upload-google-play@v1
+#      with:
+#        serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
+#        packageName: fr.motoconnect
+#        releaseFiles: app/build/outputs/bundle/release/app-release.aab
+#        track: production
