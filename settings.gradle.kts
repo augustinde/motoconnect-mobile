@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MotoConnect"
+rootProject.name = "MotoSecure"
 include(":app")

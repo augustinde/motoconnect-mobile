@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "fr.motoconnect"
+    namespace = "fr.motosecure"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "fr.motoconnect"
+        applicationId = "fr.motosecure"
         minSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -19,8 +19,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        buildConfigField("String", "WEATHER_API_KEY", "\"${System.getenv("WEATHER_API_KEY")}\"")
         buildConfigField("String", "GEOCODING_API_KEY", "\"${System.getenv("GEOCODING_API_KEY")}\"")
     }
 
