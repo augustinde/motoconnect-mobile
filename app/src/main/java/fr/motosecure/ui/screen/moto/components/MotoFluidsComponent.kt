@@ -29,17 +29,23 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
+import fr.motosecure.viewmodel.uiState.JourneyUIState
 
 @Composable
 fun MotoFluidsComponent(
     motoUIState: MotoUIState,
+    journeyUIState: JourneyUIState,
     resetEngineOil: () -> Unit,
     resetBrakeFluid: () -> Unit,
     resetChainLubrication: () -> Unit,
 ) {
-    val engineOilPercentage = motoUIState.moto?.engineOil?.toFloat()?.div(BaseDistance.ENGINE_OIL.distance.toFloat()) ?: 0f
-    val brakeFluidPercentage = motoUIState.moto?.brakeFluid?.toFloat()?.div(BaseDistance.BRAKE_FLUID.distance.toFloat()) ?: 0f
-    val chainLubricationPercentage = motoUIState.moto?.chainLubrication?.toFloat()?.div(BaseDistance.CHAIN_LUBRICATION.distance.toFloat()) ?: 0f
+    val currentLubrication = journeyUIState.distanceTotal.minus(motoUIState.moto?.chainLubrication ?: 0)
+    val currentBrakeFluid = journeyUIState.distanceTotal.minus(motoUIState.moto?.brakeFluid ?: 0)
+    val currentEngineOil = journeyUIState.distanceTotal.minus(motoUIState.moto?.engineOil ?: 0)
+
+    val engineOilPercentage = currentEngineOil?.toFloat()?.div(BaseDistance.ENGINE_OIL.distance) ?: 0f
+    val brakeFluidPercentage = currentBrakeFluid?.toFloat()?.div(BaseDistance.BRAKE_FLUID.distance) ?: 0f
+    val chainLubricationPercentage = currentLubrication?.toFloat()?.div(BaseDistance.CHAIN_LUBRICATION.distance) ?: 0f
 
     Column(
         modifier = Modifier
@@ -54,19 +60,19 @@ fun MotoFluidsComponent(
             fluidPercentage = engineOilPercentage,
             reset = resetEngineOil,
             fluidName = stringResource(R.string.moto_engine_oil),
-            limit = "${motoUIState.moto?.engineOil}/${BaseDistance.ENGINE_OIL.distance} km"
+            limit = "${currentEngineOil}/${BaseDistance.ENGINE_OIL.distance} km"
         )
         MotoFluidsCard(
             fluidPercentage = brakeFluidPercentage,
             reset = resetBrakeFluid,
             fluidName = stringResource(R.string.moto_break_fluid),
-            limit = "${motoUIState.moto?.brakeFluid}/${BaseDistance.BRAKE_FLUID.distance} km"
+            limit = "${currentBrakeFluid}/${BaseDistance.BRAKE_FLUID.distance} km"
         )
         MotoFluidsCard(
             fluidPercentage = chainLubricationPercentage,
             reset = resetChainLubrication,
             fluidName = stringResource(R.string.moto_chain_greasing),
-            limit = "${motoUIState.moto?.chainLubrication}/${BaseDistance.CHAIN_LUBRICATION.distance} km"
+            limit = "${currentLubrication}/${BaseDistance.CHAIN_LUBRICATION.distance} km"
         )
         Spacer(modifier = Modifier.height(8.dp))
     }
@@ -83,6 +89,7 @@ fun MotoFluidsCard(fluidPercentage: Float, reset: () -> Unit, fluidName: String,
             defaultElevation = 6.dp
         ), modifier = Modifier
             .fillMaxWidth()
+            .height(100.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(

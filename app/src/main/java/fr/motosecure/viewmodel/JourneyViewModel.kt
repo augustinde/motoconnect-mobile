@@ -2,11 +2,14 @@ package fr.motosecure.viewmodel
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -23,6 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
+import kotlin.math.log
 
 class JourneyViewModel(
     private val geocodingRepository: GeocodingRepository,
@@ -90,7 +94,30 @@ class JourneyViewModel(
         }
     }
 
-    fun getJourneysCount(){
+    private fun processDocument(
+        dbRef: CollectionReference,
+        documents: List<DocumentSnapshot>,
+        index: Int,
+        distanceTotal: Long,
+        onComplete: (Long) -> Unit
+    ) {
+        if (index < documents.size) {
+            val document = documents[index]
+            val pointsRef = dbRef.document(document.id)
+                .collection("points")
+                .orderBy("time")
+                .limit(200)
+
+            getPointsInBatches(pointsRef, mutableListOf()) { points ->
+                val newDistanceTotal = distanceTotal + JourneyUtils().computeDistanceInKm(points)
+                processDocument(dbRef, documents, index + 1, newDistanceTotal, onComplete)
+            }
+        } else {
+            onComplete(distanceTotal)
+        }
+    }
+
+    fun getJourneysDistanceTotal() {
         val dbRef = db.collection("motos")
             .document("Bandit 650")
             .collection("journeys")
@@ -98,16 +125,21 @@ class JourneyViewModel(
         dbRef.whereNotEqualTo("endDateTime", null).get()
             .addOnSuccessListener { snapshot ->
                 if (snapshot != null && snapshot.documents.isNotEmpty()) {
-                    _journeyUiState.value = JourneyUIState(
-                        journeyCount = snapshot.documents.size,
-                        isLoading = false,
-                        errorMsg = null
-                    )
+                    val documents = snapshot.documents
+                    processDocument(dbRef, documents, 0, 0L) { distanceTotal ->
+                        _journeyUiState.value = JourneyUIState(
+                            distanceTotal = distanceTotal,
+                            journeyCount = documents.size,
+                            isLoading = false,
+                            errorMsg = null
+                        )
+                    }
                 } else {
                     _journeyUiState.value = JourneyUIState(
                         isLoading = false,
+                        journeyCount = 0,
                         errorMsg = context.getString(R.string.journey_not_found),
-                        journeyCount = 0
+                        distanceTotal = 0L
                     )
                 }
             }

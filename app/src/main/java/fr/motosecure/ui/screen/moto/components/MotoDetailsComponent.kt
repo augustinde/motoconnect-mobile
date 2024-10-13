@@ -21,19 +21,16 @@ import androidx.compose.ui.unit.sp
 import fr.motosecure.R
 import fr.motosecure.viewmodel.JourneyViewModel
 import fr.motosecure.viewmodel.MotoViewModel
+import fr.motosecure.viewmodel.uiState.JourneyUIState
+import fr.motosecure.viewmodel.uiState.MotoUIState
 
 @Composable
 fun MotoDetailsComponent(
     motoViewModel: MotoViewModel,
-    journeyViewModel: JourneyViewModel,
+    motoUIState: MotoUIState,
+    journeyUIState: JourneyUIState
 ) {
-    val motoUIState by motoViewModel.motoUiState.collectAsState()
-    val journeyUIState by journeyViewModel.journeyUiState.collectAsState()
 
-    LaunchedEffect(motoUIState.moto) {
-        motoViewModel.getCurrentMoto()
-        journeyViewModel.getJourneysCount()
-    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,23 +40,25 @@ fun MotoDetailsComponent(
     ) {
         MotoFluidsComponent(
             motoUIState = motoUIState,
+            journeyUIState = journeyUIState,
             resetEngineOil = {
-                motoViewModel.resetEngineOil()
+                motoViewModel.resetEngineOil(journeyUIState.distanceTotal)
             },
             resetBrakeFluid = {
-                motoViewModel.resetBrakeFluid()
+                motoViewModel.resetBrakeFluid(journeyUIState.distanceTotal)
             },
             resetChainLubrication = {
-                motoViewModel.resetChainLubrication()
+                motoViewModel.resetChainLubrication(journeyUIState.distanceTotal)
             }
         )
         MotoTyresComponent(
             motoUIState = motoUIState,
+            journeyUIState = journeyUIState,
             resetFrontTyre = {
-                motoViewModel.resetFrontTyre()
+                motoViewModel.resetFrontTyre(journeyUIState.distanceTotal)
             },
             resetRearTyre = {
-                motoViewModel.resetRearTyre()
+                motoViewModel.resetRearTyre(journeyUIState.distanceTotal)
             }
         )
         MotoJourneysComponent(journeyUIState = journeyUIState)

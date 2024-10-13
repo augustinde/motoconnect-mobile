@@ -43,12 +43,12 @@ fun MotoJourneysComponent(
             60,
             0
         )
-        /*MotoJourneysCard(
-            stats = "4 km",
+        MotoJourneysCard(
+            stats = "${journeyUIState.distanceTotal} km",
             text = stringResource(R.string.moto_total_distance),
             0,
             10
-        )*/
+        )
         Spacer(modifier = Modifier.padding(0.dp, 16.dp))
     }
 }

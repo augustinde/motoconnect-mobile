@@ -46,12 +46,12 @@ class MotoViewModel: ViewModel() {
         }
     }
 
-    fun resetEngineOil() {
+    fun resetEngineOil(value: Long) {
         try {
             db.collection("motos")
                 .document("Bandit 650")
                 .update(
-                    "engineOil", 0
+                    "engineOil", value
                 )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -59,12 +59,12 @@ class MotoViewModel: ViewModel() {
         }
     }
 
-    fun resetBrakeFluid() {
+    fun resetBrakeFluid(value: Long) {
         try {
             db.collection("motos")
                 .document("Bandit 650")
                 .update(
-                    "brakeFluid", 0
+                    "brakeFluid", value
                 )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -72,12 +72,26 @@ class MotoViewModel: ViewModel() {
         }
     }
 
-    fun resetChainLubrication() {
+    fun resetChainLubrication(value: Long) {
         try {
             db.collection("motos")
                 .document("Bandit 650")
                 .update(
-                    "chainLubrication", 0
+                    "chainLubrication", value
+                )
+            Log.d("MOTOVIEWMODEL", "resetChainLubrication: $value")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _motoUiState.value = MotoUIState(errorMsg = e.message)
+        }
+    }
+
+    fun resetFrontTyre(value: Long) {
+        try {
+            db.collection("motos")
+                .document("Bandit 650")
+                .update(
+                    "frontTyreWear", value
                 )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -85,25 +99,12 @@ class MotoViewModel: ViewModel() {
         }
     }
 
-    fun resetFrontTyre() {
+    fun resetRearTyre(value: Long) {
         try {
             db.collection("motos")
                 .document("Bandit 650")
                 .update(
-                    "frontTyreWear", 0
-                )
-        } catch (e: Exception) {
-            e.printStackTrace()
-            _motoUiState.value = MotoUIState(errorMsg = e.message)
-        }
-    }
-
-    fun resetRearTyre() {
-        try {
-            db.collection("motos")
-                .document("Bandit 650")
-                .update(
-                    "rearTyreWear", 0
+                    "rearTyreWear", value
                 )
         } catch (e: Exception) {
             e.printStackTrace()

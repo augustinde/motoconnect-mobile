@@ -29,16 +29,21 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import fr.motosecure.viewmodel.uiState.JourneyUIState
 
 @Composable
 fun MotoTyresComponent(
     motoUIState: MotoUIState,
+    journeyUIState: JourneyUIState,
     resetFrontTyre: () -> Unit,
     resetRearTyre: () -> Unit,
 ) {
 
-    val frontTyreWearPercentage = motoUIState.moto?.frontTyreWear?.toFloat()?.div(BaseDistance.FRONT_TYRE.distance.toFloat()) ?: 0f
-    val rearTyreWearPercentage = motoUIState.moto?.rearTyreWear?.toFloat()?.div(BaseDistance.REAR_TYRE.distance.toFloat()) ?: 0f
+    val currentFrontWear = journeyUIState.distanceTotal.minus(motoUIState.moto?.frontTyreWear ?: 0)
+    val currentRearWear = journeyUIState.distanceTotal.minus(motoUIState.moto?.rearTyreWear ?: 0)
+
+    val frontTyreWearPercentage = currentFrontWear?.toFloat()?.div(BaseDistance.FRONT_TYRE.distance) ?: 0f
+    val rearTyreWearPercentage = currentRearWear?.toFloat()?.div(BaseDistance.REAR_TYRE.distance) ?: 0f
 
     Column(
         modifier = Modifier
@@ -77,7 +82,7 @@ fun MotoTyresComponent(
                         wheelPosition = stringResource(
                             R.string.front_wheel
                         ),
-                        limit = "${motoUIState.moto?.frontTyreWear}/${BaseDistance.FRONT_TYRE.distance} km"
+                        limit = "${currentFrontWear}/${BaseDistance.FRONT_TYRE.distance} km"
                     )
                 }
                 Spacer(modifier = Modifier.width(10.dp))
@@ -88,7 +93,7 @@ fun MotoTyresComponent(
                         wheelPosition = stringResource(
                             R.string.rear_wheel
                         ),
-                        limit = "${motoUIState.moto?.rearTyreWear}/${BaseDistance.REAR_TYRE.distance} km"
+                        limit = "${currentRearWear}/${BaseDistance.REAR_TYRE.distance} km"
                     )
                 }
             }

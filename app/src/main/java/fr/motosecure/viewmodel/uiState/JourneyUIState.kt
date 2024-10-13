@@ -7,4 +7,5 @@ data class JourneyUIState(
     val journeyCount: Int = 0,
     val isLoading: Boolean = true,
     val errorMsg: String? = null,
+    val distanceTotal: Long = 0,
 )
