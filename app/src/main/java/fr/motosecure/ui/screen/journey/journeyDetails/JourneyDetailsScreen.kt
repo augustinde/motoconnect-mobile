@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import fr.motosecure.R
-import fr.motosecure.data.utils.ConverterGpxUtils
 import fr.motosecure.data.utils.TimeUtils
 import fr.motosecure.ui.component.Loading
 import fr.motosecure.ui.navigation.MotoConnectNavigationRoutes
@@ -50,8 +49,6 @@ fun JourneyDetailsScreen(
 
     val journeyDetailsViewModel: JourneyDetailsViewModel = viewModel()
     val journeyDetailsUIState by journeyDetailsViewModel.journeyDetailsUiState.collectAsState()
-    var expanded by remember { mutableStateOf(false) }
-    val context = LocalContext.current
 
     LaunchedEffect(journeyId) {
         journeyDetailsViewModel.getJourney(
@@ -59,35 +56,6 @@ fun JourneyDetailsScreen(
         )
     }
 
-    val contentResolver = context.contentResolver
-
-    val launcherGpx =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/gpx+xml")) { selectedUri ->
-            if (selectedUri != null) {
-                contentResolver.openOutputStream(selectedUri)?.use {
-                    val bytes =
-                        ConverterGpxUtils().convertGpxAndReturnString(journeyDetailsUIState.journey!!)
-                            .toByteArray()
-                    it.write(bytes)
-                }
-            } else {
-                Log.d("GenerateGpx", "Uri is null")
-            }
-        }
-
-    val launcherKml =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.google-earth.kml+xml")) { selectedUri ->
-            if (selectedUri != null) {
-                contentResolver.openOutputStream(selectedUri)?.use {
-                    val bytes =
-                        ConverterGpxUtils().convertKmlAndReturnString(journeyDetailsUIState.journey!!)
-                            .toByteArray()
-                    it.write(bytes)
-                }
-            } else {
-                Log.d("GenerateKml", "Uri is null")
-            }
-        }
     Scaffold(topBar = {
         TopAppBar(
             backgroundColor = MaterialTheme.colorScheme.primary,
@@ -117,62 +85,6 @@ fun JourneyDetailsScreen(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = null,
                     )
-                }
-            },
-            actions = {
-                IconButton(onClick = { expanded = true }) {
-                    Icon(
-                        imageVector = Icons.Filled.MoreVert,
-                        contentDescription = null,
-                    )
-                }
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.primary)
-                        .clip(RoundedCornerShape(10))
-                ) {
-                    DropdownMenuItem(
-                        onClick = {
-                            expanded = false
-                            launcherGpx.launch(
-                                "motoConnect-${
-                                    TimeUtils().toDateTimeString(
-                                        journeyDetailsUIState.journey?.startDateTime!!
-                                    )
-                                }.gpx"
-                            )
-                        },
-                    ) {
-                        Text(
-                            text = stringResource(R.string.export_as_gpx),
-                            color = MaterialTheme.colorScheme.tertiary,
-                        )
-                    }
-                    DropdownMenuItem(
-                        onClick = {
-                            expanded = false
-                            launcherKml.launch(
-                                "motoConnect-${
-                                    TimeUtils().toDateTimeString(
-                                        journeyDetailsUIState.journey?.startDateTime!!
-                                    )
-                                }.kml"
-                            )
-                        },
-                    ) {
-                        Text(
-                            text = stringResource(R.string.export_as_kml),
-                            color = MaterialTheme.colorScheme.tertiary,
-                        )
-                    }
-                    DropdownMenuItem(onClick = { expanded = false }) {
-                        Text(
-                            text = stringResource(R.string.cancel),
-                            color = MaterialTheme.colorScheme.tertiary,
-                        )
-                    }
                 }
             })
     }) {

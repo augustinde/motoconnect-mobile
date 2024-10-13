@@ -64,48 +64,13 @@ fun JourneyCardComponent(
     val journeyViewModel: JourneyViewModel = viewModel(factory = JourneyViewModel.Factory)
     val context = LocalContext.current
 
-    val store = DisplayStore(context)
-    val darkmode = store.getDarkMode.collectAsState(initial = false)
-
     var startCity by remember { mutableStateOf(context.resources.getString(R.string.unknown)) }
     var endCity by remember { mutableStateOf(context.resources.getString(R.string.unknown)) }
-
-    val cameraPositionState = rememberCameraPositionState {
-        position = journey.points.first().geoPoint.let {
-            CameraPosition.fromLatLngZoom(
-                MapUtils().calculateMidPoint(
-                    LatLng(
-                        journey.points.first().geoPoint.latitude,
-                        journey.points.first().geoPoint.longitude
-                    ),
-                    LatLng(
-                        journey.points.last().geoPoint.latitude,
-                        journey.points.last().geoPoint.longitude
-                    ),
-                ), 13f
-            )
-        }
-    }
 
     LaunchedEffect(journey) {
 
         startCity = journeyViewModel.reverseGeocoding(journey.points.first().geoPoint)
         endCity = journeyViewModel.reverseGeocoding(journey.points.last().geoPoint)
-
-        cameraPositionState.move(
-            CameraUpdateFactory.newLatLngBounds(
-                MapUtils().calculateZoomLevel(
-                    LatLng(
-                        journey.points.first().geoPoint.latitude,
-                        journey.points.first().geoPoint.longitude
-                    ),
-                    LatLng(
-                        journey.points.last().geoPoint.latitude,
-                        journey.points.last().geoPoint.longitude
-                    ),
-                ), 150
-            )
-        )
     }
     ElevatedCard(
         modifier = Modifier
@@ -117,60 +82,6 @@ fun JourneyCardComponent(
             containerColor = MaterialTheme.colorScheme.onPrimary,
         ),
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .height(150.dp)
-        ) {
-            GoogleMap(
-                uiSettings = MapUiSettings(
-                    compassEnabled = false,
-                    myLocationButtonEnabled = false,
-                    indoorLevelPickerEnabled = false,
-                    mapToolbarEnabled = false,
-                    rotationGesturesEnabled = false,
-                    scrollGesturesEnabled = false,
-                    scrollGesturesEnabledDuringRotateOrZoom = false,
-                    tiltGesturesEnabled = false,
-                    zoomControlsEnabled = false,
-                    zoomGesturesEnabled = false,
-                ),
-                properties = MapProperties(
-                    isTrafficEnabled = false,
-                    mapType = MapType.NORMAL,
-                    mapStyleOptions = if (!darkmode.value) {
-                        MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.map_style)
-                    } else {
-                        MapStyleOptions.loadRawResourceStyle(
-                            LocalContext.current,
-                            R.raw.map_style_dark
-                        )
-                    }
-                ),
-                cameraPositionState = cameraPositionState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-            ) {
-                DrawJourney(journey = journey)
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .height(150.dp)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                MaterialTheme.colorScheme.onPrimary
-                            ),
-                            startY = 400f,
-                            endY = 500f
-                        )
-                    )
-            )
-        }
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()

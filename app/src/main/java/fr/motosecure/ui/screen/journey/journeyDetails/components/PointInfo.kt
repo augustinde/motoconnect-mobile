@@ -46,7 +46,7 @@ fun PointInfo(
                 .drawBehind {
                     drawCircle(
                         color = Color(0xFF343333),
-                        radius = 160f,
+                        radius = 100f,
                     )
                 },
             textAlign = TextAlign.Center,
